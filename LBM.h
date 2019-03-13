@@ -1,6 +1,7 @@
 #pragma once
 #include "SolverFactory.h"
 #include <iostream>
+#include <fstream>
 
 class LBM : public SolverFactory
 {
@@ -10,7 +11,7 @@ class LBM : public SolverFactory
 	size_t m0, n0; //bump parameters
 	int tstep;	//current time step
 	double w[9], cx[9], cy[9]; //weights and lattice velcities
-	double u0, alfa;
+	double u0, rho0, alfa, omega;
 	double *tSpan, **rho, **u, **v; //macroscopic quantities vectors
 	double **feq[9];	//equlibrium distribution vector
 	double*** u_ref[9]; //trajectory vector
@@ -26,10 +27,11 @@ public:
 	void SetDomainParameters(double L_, double H_, double p_) { L = L_; H = H_; p = p_; }
 
 	//Main loop methods
-	void CalculateEqulibrium();
+	void ApplyBC();
 	void CalculateMacroscopic();
 	void CollisionStep(); //Involves applying BC
 	virtual void Exectue();
+	void PostProcess();
 	void StreamingStep();
 	
 	
