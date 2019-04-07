@@ -97,6 +97,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="adBuffer.cpp" />
+    <ClCompile Include="adStack.cpp" />
+    <ClCompile Include="Derivatives.cpp" />
     <ClCompile Include="LBM.cpp" />
     <ClCompile Include="LSS.cpp" />
     <ClCompile Include="main.cpp" />
@@ -104,6 +107,9 @@
     <ClCompile Include="winbgi2.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="adBuffer.h" />
+    <ClInclude Include="adStack.h" />
+    <ClInclude Include="Derivatives.h" />
     <ClInclude Include="LBM.h" />
     <ClInclude Include="LSS.h" />
     <ClInclude Include="AuxFunctions.h" />

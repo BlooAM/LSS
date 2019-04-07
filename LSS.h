@@ -10,7 +10,8 @@ public:
 	LSS();
 	~LSS();
 
-	void CreateCase() { ref_trajectory = SolverFactory::Create(SolverFactory::LB); }
+	void CreateCase() { ref_trajectory = SolverFactory::Create(SolverFactory::LB); } //One solver available
+	void SetCase(double s) { ref_trajectory->SetParameter(s); }
 	void SolveCase() { ref_trajectory->Exectue(); }
 
 };

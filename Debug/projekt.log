@@ -1,27 +1,12 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (LSS.vcxproj).  This can lead to incorrect clean and rebuild behavior.
 cl : Command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
-  LBM.cpp
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(11): warning C4244: '=': conversion from 'double' to 'size_t', possible loss of data
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(36): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(39): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(42): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(54): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(58): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(68): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(74): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(88): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(96): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(105): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(107): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(137): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(146): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(153): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(161): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(169): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(174): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(176): warning C4018: '<': signed/unsigned mismatch
-c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(180): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(16): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(191): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(192): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(236): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
   Generating Code...
   Skipping... (no relevant changes detected)
-  SolverFactory.cpp
+  LSS.cpp
   projekt.vcxproj -> C:\Users\adam\Desktop\PracaMgr\Code\CPP\Projekt\Debug\WinBGI.exe

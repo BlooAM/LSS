@@ -30,6 +30,15 @@
     <ClCompile Include="LBM.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Derivatives.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="adBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="adStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="winbgi2.h">
@@ -45,6 +54,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="LBM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Derivatives.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="adStack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

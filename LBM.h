@@ -1,5 +1,6 @@
 #pragma once
 #include "SolverFactory.h"
+#include "Derivatives.h"
 #include <iostream>
 #include <fstream>
 
@@ -15,6 +16,7 @@ class LBM : public SolverFactory
 	double *tSpan, **rho, **u, **v; //macroscopic quantities vectors
 	double **feq[9];	//equlibrium distribution vector
 	double*** u_ref[9]; //trajectory vector
+	double**** f; //trajectory in another representation
 	
 public:
 
@@ -24,18 +26,37 @@ public:
 	//Set functions
 	void SetGridRefinementLevel(size_t m_) { m = m_, n = 25 * m_; }
 	void SetNoTimeSteps(size_t mstep_) { mstep = mstep_; }
-	void SetDomainParameters(double L_, double H_, double p_) { L = L_; H = H_; p = p_; }
+	void SetDomainParameters(double L_, double H_) { L = L_; H = H_; }
+	void SetParameter(double p_) { p = p_; }
 
 	//Main loop methods
 	void ApplyBC();
 	void CalculateMacroscopic();
-	void CollisionStep(); //Involves applying BC
-	virtual void Exectue();
+	void CollisionStep(); 
 	void PostProcess();
 	void StreamingStep();
-	
-	
 
+	//Virtual methods
+	virtual void Exectue(); //Perform simulation
+
+	//Friend functions
+	friend void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy,
+		double *w, double **rho, double **u, double **v, double omega, double ***feq,
+		double*** fin, double*** fout);
+	friend void dfds_b(double p, double u0, double *u0b, int m, int n, double *cx,
+		double *cy, double *w, double **rho, double **u, double **v, double
+		omega, double ***feq, double ***feqb, double ***fin, double ***fout,
+		double ***foutb);
+	friend void dfds_d(double p, double u0, double u0d, int m, int n, double *cx,
+		double *cy, double *w, double **rho, double **u, double **v, double
+		omega, double ***feq, double ***feqd, double ***fin, double ***fout,
+		double ***foutd);
+	friend void dfdu_b(double p, double u0, int m, int n, double *cx, double *cy, double *w,
+		double **rho, double **u, double **v, double omega, double ***feq, double ***feqb,
+		double ***fin, double ***finb, double ***fout, double ***foutb);
+	friend void dfdu_d(double p, double u0, int m, int n, double *cx, double *cy, double *w,
+		double **rho, double **u, double **v, double omega, double ***feq, double ***feqd,
+		double ***fin, double ***find, double ***fout, double ***foutd);
 
 
 };
