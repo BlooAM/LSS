@@ -11,6 +11,7 @@ public:
 
 	virtual void Exectue() = 0; //Perform simulation
 	virtual void SetParameter(double) = 0;
+	virtual double GetObjectiveFunction() = 0;
 	static SolverFactory* Create(SolverType);
 };
 

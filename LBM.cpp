@@ -11,12 +11,13 @@ LBM::LBM()
 	m0 = p * m; n0 = m;
 	u0 = 0.1, rho0 = 5, alfa = 0.01;
 	omega = 0;
+	J = 0; Jbar = 0;
 
 	//Grid constants
-	w[0] = 4./9.;
+	w[0] = 4. / 9.;
 	for (int i = 1; i < 5; i++)
 	{
-		w[i] = 1./9.;
+		w[i] = 1. / 9.;
 	}
 	for (int i = 5; i < 9; i++)
 	{
@@ -51,16 +52,16 @@ LBM::LBM()
 		}
 	}*/
 	f = new double ***[mstep];
-	for (int iter = 0; iter < mstep; ++iter) 
+	for (int iter = 0; iter < mstep; ++iter)
 	{
 		f[iter] = new double **[n];
-		for (int i = 0; i < n; ++i) 
+		for (int i = 0; i < n; ++i)
 		{
 			f[iter][i] = new double*[m];
-			for (int j = 0; j < m; ++j) 
+			for (int j = 0; j < m; ++j)
 			{
 				f[iter][i][j] = new double[9];
-				for (int k = 0; k < 9; ++k) 
+				for (int k = 0; k < 9; ++k)
 				{
 					f[iter][i][j][k] = 0;
 				}
@@ -91,7 +92,6 @@ LBM::LBM()
 		rho[j] = new double[m];
 		u[j] = new double[m];
 		v[j] = new double[m];
-
 		for (int k = 0; k < m; ++k)
 		{
 			rho[j][k] = rho0;
@@ -148,7 +148,6 @@ LBM::~LBM()
 		}
 		delete[] f[iter];
 	}
-
 }
 
 void LBM::ApplyBC()
@@ -158,10 +157,10 @@ void LBM::ApplyBC()
 	//Inlet
 	for (int j = m0; j < m; j++)
 	{
-		rhow = (u_ref[0][tstep][0][j]+ u_ref[2][tstep][0][j]+ u_ref[4][tstep][0][j]+2*(u_ref[3][tstep][0][j]+ u_ref[6][tstep][0][j]+ u_ref[7][tstep][0][j])) / (1 - u0);
-		u_ref[1][tstep][0][j] = u_ref[3][tstep][0][j] + 2*rhow*u0 / 3;
-		u_ref[5][tstep][0][j] = u_ref[7][tstep][0][j] +  rhow*u0 / 6;
-		u_ref[8][tstep][0][j] = u_ref[6][tstep][0][j] + rhow*u0 / 6;
+		rhow = (u_ref[0][tstep][0][j] + u_ref[2][tstep][0][j] + u_ref[4][tstep][0][j] + 2 * (u_ref[3][tstep][0][j] + u_ref[6][tstep][0][j] + u_ref[7][tstep][0][j])) / (1 - u0);
+		u_ref[1][tstep][0][j] = u_ref[3][tstep][0][j] + 2 * rhow*u0 / 3;
+		u_ref[5][tstep][0][j] = u_ref[7][tstep][0][j] + rhow * u0 / 6;
+		u_ref[8][tstep][0][j] = u_ref[6][tstep][0][j] + rhow * u0 / 6;
 	}
 	//South
 	for (int i = 0; i < n; i++)
@@ -201,7 +200,7 @@ void LBM::ApplyBC()
 
 void LBM::CalculateMacroscopic()
 {
-	double ssum,usum,vsum;
+	double ssum, usum, vsum;
 	for (int j = 0; j < m; j++)
 	{
 		for (int i = 0; i < n; i++)
@@ -251,7 +250,7 @@ void LBM::CalculateMacroscopic()
 }
 void LBM::CollisionStep()
 {
-	double temp1,temp2;
+	double temp1, temp2;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
@@ -260,8 +259,8 @@ void LBM::CollisionStep()
 			for (int k = 0; k < 9; k++)
 			{
 				temp2 = u[i][j] * cx[k] + v[i][j] * cy[k];
-				feq[k][i][j] = rho[i][j] * w[k] * (1 + 3*temp2 + 4.5*temp2*temp2 - 1.5*temp1);
-				u_ref[k][tstep+1][i][j] = omega * feq[k][i][j] + (1 - omega)*u_ref[k][tstep][i][j];
+				feq[k][i][j] = rho[i][j] * w[k] * (1 + 3 * temp2 + 4.5*temp2*temp2 - 1.5*temp1);
+				u_ref[k][tstep + 1][i][j] = omega * feq[k][i][j] + (1 - omega)*u_ref[k][tstep][i][j];
 			}
 		}
 	}
@@ -307,30 +306,38 @@ void LBM::CollisionStep()
 	}
 	for (int j = 0; j < m0; j++)
 	{
-		u_ref[1][tstep+1][n0 - 1][j] = u_ref[3][tstep + 1][n0 - 1][j];
-		u_ref[5][tstep+1][n0 - 1][j] = u_ref[7][tstep + 1][n0 - 1][j];
-		u_ref[8][tstep+1][n0 - 1][j] = u_ref[6][tstep + 1][n0 - 1][j]; //???
+		u_ref[1][tstep + 1][n0 - 1][j] = u_ref[3][tstep + 1][n0 - 1][j];
+		u_ref[5][tstep + 1][n0 - 1][j] = u_ref[7][tstep + 1][n0 - 1][j];
+		u_ref[8][tstep + 1][n0 - 1][j] = u_ref[6][tstep + 1][n0 - 1][j]; //???
 	}
 }
 void LBM::Exectue()
 {
 	//Parameters for back-facing step case
-	double sumvel = 0;
+	double sumvel = 0, pin, pout, temp;
 	omega = 1 / (3 * alfa + 0.5);
 	std::cout << "Reynolds number: " << u0 * m / alfa << std::endl;
-	
-	for (int i = 0; i < mstep-1; i++) //mstep-1
+	J = 0; Jbar = 0; temp = 0;
+	for (int i = 0; i < mstep - 1; i++) //mstep-1
 	{
-		std::cout << i << std::endl;
+		pin = 0; pout = 0;
+		//std::cout << i << std::endl;
 		//CollisionStep();
 		//StreamingStep();
 		//CalculateMacroscopic();
-		SolveTimeStep(p, u0, m, n, cx, cy, w, rho, u, v, omega, feq, f[i], f[i+1]);
+		SolveTimeStep(p, u0, m, n, cx, cy, w, rho, u, v, omega, feq, f[i], f[i + 1]);
+		for (int j = m0; j < m; j++)	pin += rho[0][j] / 3;
+		for (int j = 0; j < m; j++)	pout += rho[n - 1][j] / 3;
+		pin /= (m - m0); pout /= m;
+		if (i > 0) J += (pin - pout + temp) / 2;
+		temp = pin - pout;
 	}
+	Jbar = J / (mstep - 1);
+	std::cout << "Long-time average pressure drop: " << Jbar << "\n\n";
 	PostProcess();
 }
 
-void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy, double *w, double **rho, double **u, double **v,double omega, double ***feq, double*** fin, double*** fout) //Friend function
+void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy, double *w, double **rho, double **u, double **v, double omega, double ***feq, double*** fin, double*** fout) //Friend function
 {
 	int m0 = p * m, n0 = m;
 	//Collision step

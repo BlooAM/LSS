@@ -6,7 +6,4 @@ c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(191): warning C42
 c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(192): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(236): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  LSS.cpp
   projekt.vcxproj -> C:\Users\adam\Desktop\PracaMgr\Code\CPP\Projekt\Debug\WinBGI.exe

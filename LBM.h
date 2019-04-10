@@ -11,8 +11,9 @@ class LBM : public SolverFactory
 	double L, H, p; //domain parameters
 	size_t m0, n0; //bump parameters
 	int tstep;	//current time step
+	double J, Jbar; //Temporary and long-time average of objective function
 	double w[9], cx[9], cy[9]; //weights and lattice velcities
-	double u0, rho0, alfa, omega;
+	double u0, rho0, alfa, omega; //additional parameters
 	double *tSpan, **rho, **u, **v; //macroscopic quantities vectors
 	double **feq[9];	//equlibrium distribution vector
 	double*** u_ref[9]; //trajectory vector
@@ -27,7 +28,10 @@ public:
 	void SetGridRefinementLevel(size_t m_) { m = m_, n = 25 * m_; }
 	void SetNoTimeSteps(size_t mstep_) { mstep = mstep_; }
 	void SetDomainParameters(double L_, double H_) { L = L_; H = H_; }
-	void SetParameter(double p_) { p = p_; }
+	void SetParameter(double u0_) { u0 = u0_; }
+
+	//Get functions
+	virtual double GetObjectiveFunction() { return Jbar; }
 
 	//Main loop methods
 	void ApplyBC();
