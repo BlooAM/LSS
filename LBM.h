@@ -3,13 +3,14 @@
 #include "Derivatives.h"
 #include <iostream>
 #include <fstream>
+#include "LSS.h"
 
 class LBM : public SolverFactory
 {
-	size_t m,n; //grid refinement
-	size_t mstep; //number of time steps
+	int m,n; //grid refinement
+	int mstep; //number of time steps
 	double L, H, p; //domain parameters
-	size_t m0, n0; //bump parameters
+	int m0, n0; //bump parameters
 	int tstep;	//current time step
 	double J, Jbar; //Temporary and long-time average of objective function
 	double w[9], cx[9], cy[9]; //weights and lattice velcities
@@ -17,7 +18,7 @@ class LBM : public SolverFactory
 	double *tSpan, **rho, **u, **v; //macroscopic quantities vectors
 	double **feq[9];	//equlibrium distribution vector
 	double*** u_ref[9]; //trajectory vector
-	double**** f; //trajectory in another representation
+	double**** f; //trajectory vectory in another representation
 	
 public:
 
@@ -32,6 +33,11 @@ public:
 
 	//Get functions
 	virtual double GetObjectiveFunction() { return Jbar; }
+	virtual double**** GetTrajectory() { return f; }
+	virtual double GetNoTimeSteps() { return mstep; }
+	virtual double GetGridRefinementX() { return n; }
+	virtual double GetGridRefinementY() { return m; }
+	virtual int GetLatticeNo() { return 9; }
 
 	//Main loop methods
 	void ApplyBC();
@@ -61,6 +67,7 @@ public:
 	friend void dfdu_d(double p, double u0, int m, int n, double *cx, double *cy, double *w,
 		double **rho, double **u, double **v, double omega, double ***feq, double ***feqd,
 		double ***fin, double ***find, double ***fout, double ***foutd);
+	friend void LSS::AssemblyArray(double *x, double *y, double *d, int N);
 
 
 };

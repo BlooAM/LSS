@@ -1,9 +1,60 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (LSS.vcxproj).  This can lead to incorrect clean and rebuild behavior.
 cl : Command line warning D9035: option 'Gm' has been deprecated and will be removed in a future release
+  LSS.cpp
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\lss.cpp(64): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\lss.cpp(65): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\lss.cpp(66): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\lss.cpp(87): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\lss.cpp(88): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
+  Compiling...
   main.cpp
 c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(16): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
 c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(191): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(192): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(236): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
 c:\users\adam\desktop\pracamgr\code\cpp\projekt\auxfunctions.h(237): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  SolverFactory.cpp
+  LBM.cpp
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(11): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\lbm.cpp(342): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+  Derivatives.cpp
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(9): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(12): warning C4101: 'ssum': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(12): warning C4101: 'vsum': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(12): warning C4101: 'usum': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(37): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(38): warning C4101: 'tmp0': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(39): warning C4101: 'tmp1': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(44): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(47): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(52): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(55): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(58): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(63): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(66): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(69): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(246): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(403): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(406): warning C4101: 'temp2': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(406): warning C4101: 'ssum': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(406): warning C4101: 'rhow': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(406): warning C4101: 'vsum': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(406): warning C4101: 'usum': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(406): warning C4101: 'temp1': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(409): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(410): warning C4101: 'tmp0': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(411): warning C4101: 'tmp1': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(416): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(419): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(424): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(427): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(430): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(435): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(438): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(441): warning C4101: 'tmp': unreferenced local variable
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(608): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\derivatives.cpp(26): warning C4700: uninitialized local variable 'rhow' used
+c:\users\adam\desktop\pracamgr\code\cpp\projekt\solverfactory.cpp(18): warning C4715: 'SolverFactory::Create': not all control paths return a value
   projekt.vcxproj -> C:\Users\adam\Desktop\PracaMgr\Code\CPP\Projekt\Debug\WinBGI.exe
