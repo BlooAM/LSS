@@ -4,6 +4,21 @@ void dfds_b(double p, double u0, double *u0b, int m, int n, double *cx,
 	double *cy, double *w, double **rho, double **u, double **v, double
 	omega, double ***feq, double ***feqb, double ***fin, double ***fout,
 	double ***foutb) {
+	double*** foutBuffer = new double**[n];
+	for (int i = 0; i < n; ++i)
+	{
+		foutBuffer[i] = new double*[m];
+
+		for (int j = 0; j < m; ++j)
+		{
+			foutBuffer[i][j] = new double[9];
+
+			for (int k = 0; k < 9; ++k)
+			{
+				foutBuffer[i][j][k] = fout[i][j][k];
+			}
+		}
+	}
 	//Friend function
 	int m0, n0;
 	m0 = p * m;
@@ -231,6 +246,24 @@ void dfds_b(double p, double u0, double *u0b, int m, int n, double *cx,
 		for (int j = m - 1; j > -1; --j)
 			for (int k = 8; k > -1; --k)
 				foutb[i][j][k] = 0.0;
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			for (int k = 0; k < 9; ++k)
+			{
+				fout[i][j][k] = foutBuffer[i][j][k];
+			}
+		}
+	}
+	for (int iter = 0; iter < n; ++iter)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			delete[] foutBuffer[iter][j];
+		}
+		delete[] foutBuffer[iter];
+	}
 }
 
 ///******************************************************************
@@ -248,6 +281,21 @@ void dfds_d(double p, double u0, double u0d, int m, int n, double *cx,
 	//Collision step
 	double temp1, temp2, rhow, ssum, usum, vsum;
 	double rhowd;
+	double*** foutBuffer = new double**[n];
+	for (int i = 0; i < n; ++i)
+	{
+		foutBuffer[i] = new double*[m];
+
+		for (int j = 0; j < m; ++j)
+		{
+			foutBuffer[i][j] = new double[9];
+
+			for (int k = 0; k < 9; ++k)
+			{
+				foutBuffer[i][j][k] = fout[i][j][k];
+			}
+		}
+	}
 	for (int i = 0; i < n; ++i)
 		for (int j = 0; j < m; ++j) {
 			temp1 = u[i][j] * u[i][j] + v[i][j] * v[i][j];
@@ -389,6 +437,24 @@ void dfds_d(double p, double u0, double u0d, int m, int n, double *cx,
 			u[i][j] = 0;
 			v[i][j] = 0;
 		}
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			for (int k = 0; k < 9; ++k)
+			{
+				fout[i][j][k] = foutBuffer[i][j][k];
+			}
+		}
+	}
+	for (int iter = 0; iter < n; ++iter)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			delete[] foutBuffer[iter][j];
+		}
+		delete[] foutBuffer[iter];
+	}
 }
 
 ///******************************************************************
@@ -611,6 +677,21 @@ void dfdu_d(double p, double u0, int m, int n, double *cx, double *cy
 	double temp1, temp2, rhow, ssum, usum, vsum;
 	double rhowd;
 	***foutd = 0.0;
+	double*** foutBuffer = new double**[n];
+	for (int i = 0; i < n; ++i)
+	{
+		foutBuffer[i] = new double*[m];
+
+		for (int j = 0; j < m; ++j)
+		{
+			foutBuffer[i][j] = new double[9];
+
+			for (int k = 0; k < 9; ++k)
+			{
+				foutBuffer[i][j][k] = fout[i][j][k];
+			}
+		}
+	}
 	for (int i = 0; i < n; ++i)
 		for (int j = 0; j < m; ++j) {
 			temp1 = u[i][j] * u[i][j] + v[i][j] * v[i][j];
@@ -748,4 +829,22 @@ void dfdu_d(double p, double u0, int m, int n, double *cx, double *cy
 			u[i][j] = 0;
 			v[i][j] = 0;
 		}
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			for (int k = 0; k < 9; ++k)
+			{
+				fout[i][j][k] = foutBuffer[i][j][k];
+			}
+		}
+	}
+	for (int iter = 0; iter < n; ++iter)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			delete[] foutBuffer[iter][j];
+		}
+		delete[] foutBuffer[iter];
+	}
 }
