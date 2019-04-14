@@ -337,6 +337,40 @@ void LBM::Exectue()
 	PostProcess();
 }
 
+void LBM::GetMacroscopic(int i, double** a, double** b, double** c)
+{
+	tstep = i - 1;
+	CalculateMacroscopic();
+	a = rho;	b = u;	c = v;
+	tstep = i;
+	CalculateMacroscopic();
+	for (int j = 0; j < n; ++j)
+		for (int k = 0; k < m; ++k)
+		{
+			a[j][k] = (a[j][k] + rho[j][k]) / 2;
+			b[j][k] = (b[j][k] + rho[j][k]) / 2;
+			c[j][k] = (c[j][k] + rho[j][k]) / 2;
+		}	
+	
+}
+
+void LBM::GetEqulibrium(int i, double** rho, double** u, double** v, double ***eq)
+{
+	double temp1, temp2;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			temp1 = u[i][j] * u[i][j] + v[i][j] * v[i][j];
+			for (int k = 0; k < 9; k++)
+			{
+				temp2 = u[i][j] * cx[k] + v[i][j] * cy[k];
+				eq[k][i][j] = rho[i][j] * w[k] * (1 + 3 * temp2 + 4.5*temp2*temp2 - 1.5*temp1);
+			}
+		}
+	}
+}
+
 void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy, double *w, double **rho, double **u, double **v, double omega, double ***feq, double*** fin, double*** fout) //Friend function
 {
 	int m0 = p * m, n0 = m;

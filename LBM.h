@@ -38,6 +38,18 @@ public:
 	virtual double GetGridRefinementX() { return n; }
 	virtual double GetGridRefinementY() { return m; }
 	virtual int GetLatticeNo() { return 9; }
+	virtual double* GetLatticeVeliocityX() { return cx; }
+	virtual double* GetLatticeVeliocityY() { return cy; }
+	virtual double* GetLatticeWeights() { return w; }
+	virtual double GetOmega() { return omega; }
+	virtual double GetStepParameter() { return p; }
+	virtual double GetInletVelocity() { return u0; }
+	virtual double** GetRho() { return rho; }
+	virtual double** GetVelocityX() { return u; }
+	virtual double** GetVelocityY() { return v; }
+	virtual void GetMacroscopic(int,double**,double**,double**);
+	virtual void GetEqulibrium(int, double**, double**, double**, double***);
+
 
 	//Main loop methods
 	void ApplyBC();
@@ -67,7 +79,7 @@ public:
 	friend void dfdu_d(double p, double u0, int m, int n, double *cx, double *cy, double *w,
 		double **rho, double **u, double **v, double omega, double ***feq, double ***feqd,
 		double ***fin, double ***find, double ***fout, double ***foutd);
-	friend void LSS::AssemblyArray(double *x, double *y, double *d, int N);
+	friend class LSS;
 
 
 };
