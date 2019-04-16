@@ -60,6 +60,13 @@ int main(int argc, char* argv[])
 	else if (std::string(argv[1]) == std::string("LSS"))
 	{
 		LSS obj;
+		if (argc > 2)
+		{
+			s = atof(argv[2]);	tsteps = atoi(argv[3]);
+			m = atoi(argv[4]);	mx = atoi(argv[5]);
+			std::cout << "Number of passed parameters: " << argc << "\n";
+			std::cout << "Passed parameters: u0 = " << s << "\ttsteps = " << tsteps << "\t m = " << m << "\tn/m = " << mx << "\n";
+		}
 		//Solve LB case to obtain base trajectory
 		obj.CreateCase(s,tsteps,m,mx);
 		obj.SolveCase();

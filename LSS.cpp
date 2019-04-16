@@ -437,7 +437,7 @@ void LSS::CreateRHSVector()
 void LSS::SolveKKT()
 {
 	//CGM parameters
-	bool ExportFlag = 0;
+	bool ExportFlag = 1;
 	std::ofstream CGM("CGM.txt");
 	int N = mstep * m * n * Q; //System size
 	int d = 6, D = 1;// pow(10.0, double(d / 2));
@@ -541,28 +541,28 @@ void LSS::SolveKKT()
 	}
 	std::cout << "Total number of iterations: " << iter << std::endl;
 	if (ExportFlag) CGM.close();
+	Export(x);
 	delete[] temp, p, res, res_n, res_b, res_b_n;
 }
 
 //Export results
 void LSS::Export(double ****w)
 {
-	std::ofstream file("Vector.txt");
-	file << "u0\tdJds\n";
-	for (int i = 0; i < mstep - 1; i++)
+	std::ofstream file("KKTSolution.txt");
+	for (int i = 0; i < mstep - 2; i++)
 	{
-		file << "Time step no: " << i;
 		for (int j = 0; j < n; j++)
 		{
 			for (int k = 0; k < m; k++)
 			{
 				for (int l = 0; l < Q; l++)
 				{
-					file << "\t" << w[i][j][k][l];
+					file << w[i][j][k][l] ;
+					if (~((j == n - 1) && (k == m - 1) && (l == Q - 1))) file << "\t";
 				}
 			}
 		}
-		file << "\t";
+		file << "\n";
 	}
 
 	file.close();
