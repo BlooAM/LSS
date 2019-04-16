@@ -5,6 +5,7 @@
 #include <fstream>
 #include "LSS.h"
 
+
 class LBM : public SolverFactory
 {
 	int m,n; //grid refinement
@@ -23,11 +24,12 @@ class LBM : public SolverFactory
 public:
 
 	LBM();
+	LBM(double,int,int,int);
 	virtual ~LBM();
 	
 	//Set functions
-	void SetGridRefinementLevel(size_t m_) { m = m_, n = 25 * m_; }
-	void SetNoTimeSteps(size_t mstep_) { mstep = mstep_; }
+	void SetGridRefinementLevel(int m_, int mult) { m = m_, n = mult * m_; }
+	void SetNoTimeSteps(int mstep_) { mstep = mstep_; }
 	void SetDomainParameters(double L_, double H_) { L = L_; H = H_; }
 	void SetParameter(double u0_) { u0 = u0_; }
 
@@ -47,7 +49,6 @@ public:
 	virtual double** GetRho() { return rho; }
 	virtual double** GetVelocityX() { return u; }
 	virtual double** GetVelocityY() { return v; }
-	virtual void GetMacroscopic(int,double**,double**,double**);
 	virtual void GetEqulibrium(int, double**, double**, double**, double***);
 
 

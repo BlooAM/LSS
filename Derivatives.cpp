@@ -301,13 +301,12 @@ void dfds_d(double p, double u0, double u0d, int m, int n, double *cx,
 			temp1 = u[i][j] * u[i][j] + v[i][j] * v[i][j];
 			for (int k = 0; k < 9; ++k) {
 				temp2 = u[i][j] * cx[k] + v[i][j] * cy[k];
-				feq[k][i][j] = rho[i][j] * w[k] * (1 + 3 * temp2 + 4.5*temp2*temp2 - 1.5*
-					temp1);
+				feq[k][i][j] = rho[i][j] * w[k] * (1 + 3 * temp2 + 4.5*temp2*temp2 - 1.5*temp1);
 				foutd[i][j][k] = 0.0;
 				fout[i][j][k] = omega * feq[k][i][j] + (1 - omega)*fin[i][j][k];
 			}
 		}
-	***foutd = 0.0;
+	//***foutd = 0.0;
 	//Apply BC
 	//Inlet
 	for (int j = m0; j < m; ++j) {
@@ -471,6 +470,21 @@ void dfdu_b(double p, double u0, int m, int n, double *cx, double *cy
 	//Collision step
 	double temp1, temp2, rhow, ssum, usum, vsum;
 	double rhowb;
+	double*** foutbBuffer = new double**[n];
+	for (int i = 0; i < n; ++i)
+	{
+		foutbBuffer[i] = new double*[m];
+
+		for (int j = 0; j < m; ++j)
+		{
+			foutbBuffer[i][j] = new double[9];
+
+			for (int k = 0; k < 9; ++k)
+			{
+				foutbBuffer[i][j][k] = foutb[i][j][k];
+			}
+		}
+	}
 	{
 		double tmp;
 		double tmp0;
@@ -660,6 +674,24 @@ void dfdu_b(double p, double u0, int m, int n, double *cx, double *cy
 				finb[i][j][k] = finb[i][j][k] + (1 - omega)*foutb[i][j][k];
 				foutb[i][j][k] = 0.0;
 			}
+	for (int i = 0; i < n; ++i)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			for (int k = 0; k < 9; ++k)
+			{
+				foutb[i][j][k] = foutbBuffer[i][j][k];
+			}
+		}
+	}
+	for (int iter = 0; iter < n; ++iter)
+	{
+		for (int j = 0; j < m; ++j)
+		{
+			delete[] foutbBuffer[iter][j];
+		}
+		delete[] foutbBuffer[iter];
+	}
 }
 
 ///******************************************************************
@@ -676,7 +708,7 @@ void dfdu_d(double p, double u0, int m, int n, double *cx, double *cy
 	//Collision step
 	double temp1, temp2, rhow, ssum, usum, vsum;
 	double rhowd;
-	***foutd = 0.0;
+	//***foutd = 0.0;
 	double*** foutBuffer = new double**[n];
 	for (int i = 0; i < n; ++i)
 	{

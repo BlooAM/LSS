@@ -11,6 +11,8 @@ public:
 
 	virtual void Exectue() = 0; //Perform simulation
 	virtual void SetParameter(double) = 0;
+	virtual void SetGridRefinementLevel(int, int) = 0;
+	virtual void SetNoTimeSteps(int) = 0;
 	virtual double GetObjectiveFunction() = 0;
 	virtual double**** GetTrajectory() = 0;
 	virtual double GetNoTimeSteps() = 0;
@@ -26,9 +28,8 @@ public:
 	virtual double** GetRho() = 0;
 	virtual double** GetVelocityX() = 0;
 	virtual double** GetVelocityY() = 0;
-	virtual void GetMacroscopic(int, double**, double**, double**) = 0;
 	virtual void GetEqulibrium(int, double**, double**, double**, double***) = 0;
 
-	static SolverFactory* Create(SolverType);
+	static SolverFactory* Create(SolverType,double,int,int,int);
 };
 

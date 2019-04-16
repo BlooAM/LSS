@@ -7,7 +7,7 @@ LBM::LBM()
 	tstep = 0;
 	L = 50; H = 2;	p = 0.5;
 	m = 20; n = 10 * m; //m = 40, n = 25m
-	mstep = 3000; //4000
+	mstep = 50; //4000
 	m0 = p * m; n0 = m;
 	u0 = 0.1, rho0 = 5, alfa = 0.01;
 	omega = 0;
@@ -106,6 +106,94 @@ LBM::LBM()
 	}
 }
 
+LBM::LBM(double u0_, int mstep_, int m_, int mx)
+{
+	//Case parameters
+	tstep = 0;
+	L = 50; H = 2;	p = 0.5;
+	u0 = u0_; mstep = mstep_;
+	m = m_; n = mx * m;
+	m0 = p * m; n0 = m;
+	rho0 = 5, alfa = 0.01;
+	omega = 0;
+	J = 0; Jbar = 0;
+
+	//Grid constants
+	w[0] = 4. / 9.;
+	for (int i = 1; i < 5; i++)
+	{
+		w[i] = 1. / 9.;
+	}
+	for (int i = 5; i < 9; i++)
+	{
+		w[i] = 1. / 36.;
+	}
+	cx[0] = 0; cy[0] = 0;
+	cx[1] = 1; cy[1] = 0;
+	cx[2] = 0; cy[2] = 1;
+	cx[3] = -1; cy[3] = 0;
+	cx[4] = 0; cy[4] = -1;
+	cx[5] = 1; cy[5] = 1;
+	cx[6] = -1; cy[6] = 1;
+	cx[7] = -1; cy[7] = -1;
+	cx[8] = 1; cy[8] = -1;
+
+	//Pointers
+	tSpan = nullptr;
+	f = new double ***[mstep];
+	for (int iter = 0; iter < mstep; ++iter)
+	{
+		f[iter] = new double **[n];
+		for (int i = 0; i < n; ++i)
+		{
+			f[iter][i] = new double*[m];
+			for (int j = 0; j < m; ++j)
+			{
+				f[iter][i][j] = new double[9];
+				for (int k = 0; k < 9; ++k)
+				{
+					f[iter][i][j][k] = 0;
+				}
+			}
+		}
+	}
+
+	for (int iter = 0; iter < 9; ++iter)
+	{
+		feq[iter] = new double*[n];
+
+		for (int j = 0; j < n; ++j)
+		{
+			feq[iter][j] = new double[m];
+
+			for (int k = 0; k < m; ++k)
+			{
+				feq[iter][j][k] = 0;
+			}
+		}
+	}
+
+	rho = new double *[n];
+	u = new double *[n];
+	v = new double *[n];
+	for (int j = 0; j < n; ++j)
+	{
+		rho[j] = new double[m];
+		u[j] = new double[m];
+		v[j] = new double[m];
+		for (int k = 0; k < m; ++k)
+		{
+			rho[j][k] = rho0;
+			u[j][k] = 0;
+			v[j][k] = 0;
+		}
+	}
+	for (int i = 1; i < m - 1; i++)
+	{
+		u[0][i] = u0;
+		v[0][i] = 0;
+	}
+}
 LBM::~LBM()
 {
 	for (int j = 0; j < n; ++j)
@@ -318,6 +406,7 @@ void LBM::Exectue()
 	omega = 1 / (3 * alfa + 0.5);
 	std::cout << "Reynolds number: " << u0 * m / alfa << std::endl;
 	J = 0; Jbar = 0; temp = 0;
+	std::cout << "\nSOLVING TRAJECTORY\n";
 	for (int i = 0; i < mstep - 1; i++) //mstep-1
 	{
 		pin = 0; pout = 0;
@@ -332,27 +421,12 @@ void LBM::Exectue()
 		if (i > 0) J += (pin - pout + temp) / 2;
 		temp = pin - pout;
 	}
+	std::cout << "DONE\n";
 	Jbar = J / (mstep - 1);
 	std::cout << "Long-time average pressure drop: " << Jbar << "\n\n";
 	PostProcess();
 }
 
-void LBM::GetMacroscopic(int i, double** a, double** b, double** c)
-{
-	tstep = i - 1;
-	CalculateMacroscopic();
-	a = rho;	b = u;	c = v;
-	tstep = i;
-	CalculateMacroscopic();
-	for (int j = 0; j < n; ++j)
-		for (int k = 0; k < m; ++k)
-		{
-			a[j][k] = (a[j][k] + rho[j][k]) / 2;
-			b[j][k] = (b[j][k] + rho[j][k]) / 2;
-			c[j][k] = (c[j][k] + rho[j][k]) / 2;
-		}	
-	
-}
 
 void LBM::GetEqulibrium(int i, double** rho, double** u, double** v, double ***eq)
 {
