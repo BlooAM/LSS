@@ -2,6 +2,8 @@
 #include "LSS.h"
 #include "AuxFunctions.h"
 #include <fstream>
+#include <string>
+#include <cstdlib>
 
 double *xs; //for tests
 const int N = 7;
@@ -10,7 +12,7 @@ double **C = AuxFun::new_random_matrix(N, N); //Global random matrix as a base f
 int main(int argc, char* argv[])
 {
 	double s = 0.1;
-	int tsteps = 50, m = 20, mx = 10;
+	int tsteps = 100, m = 20, mx = 5;
 	if (std::string(argv[1]) == std::string("test"))
 	{
 		AuxFun::Calculate();
@@ -68,12 +70,111 @@ int main(int argc, char* argv[])
 			std::cout << "Passed parameters: u0 = " << s << "\ttsteps = " << tsteps << "\t m = " << m << "\tn/m = " << mx << "\n";
 		}
 		//Solve LB case to obtain base trajectory
-		obj.CreateCase(s,tsteps,m,mx);
+		obj.CreateCase(s, tsteps, m, mx);
 		obj.SolveCase();
 		//Solve KKT system with Shur compliment
 		obj.Preprocess();
 		obj.SolveKKT();
 	}
-
+	else if (std::string(argv[1]) == std::string("SensitivityLSS"))
+	{
+		LSS obj;
+		double ****w, u0;
+		int mstep, n, m, mx, Q;
+		//Read KKT result for this case
+		std::string line;
+		std::ifstream file("KKTSolution.txt", std::ifstream::in);
+		if (file.is_open())
+		{
+			for (int iter = 1; iter < 6; iter++)
+			{
+				getline(file, line);
+				switch (iter)
+				{
+				case 1:
+				{
+					u0 = strtod(line.c_str(), nullptr);
+					break;
+				}
+				case 2:
+				{
+					mstep = atoi(line.c_str());
+					break;
+				}
+				case 3:
+				{
+					n = atoi(line.c_str());
+					break;
+				}
+				case 4:
+				{
+					m = atoi(line.c_str());
+					mx = n / m;
+					break;
+				}
+				case 5:
+				{
+					Q = atoi(line.c_str());
+					std::cout << "Case parameters: \nu0 = " << u0 << "\nmstep = " << mstep << "\nm = " << m << "\nn = " << n << "\nQ = " << Q << std::endl;
+					//Create solution vectors
+					std::cout << "CRETING VECTOR FOR KKT SOLUTION\n";
+					auto start = std::chrono::steady_clock::now();
+					w = new double ***[mstep - 1];
+					for (int i = 0; i < mstep - 1; i++)
+					{
+						w[i] = new double **[n];
+						for (int j = 0; j < n; j++)
+						{
+							w[i][j] = new double *[m];
+							for (int k = 0; k < m; k++)
+							{
+								w[i][j][k] = new double[Q];
+								for (int l = 0; l < Q; l++)
+									w[i][j][k][l] = 0;
+							}
+						}
+						std::cout << "#";
+					}
+					std::cout << "\nCRETING VECTOR FOR KKT SOLUTION DONE\n";
+					auto end = std::chrono::steady_clock::now();
+					std::cout << "ELAPSED TIME: " << std::chrono::duration_cast<std::chrono::seconds>(end - start).count() << std::endl;
+					break;
+				}
+				}
+			}
+			std::cout << "\nREADING KKT SOLUTION\n";
+			auto start = std::chrono::steady_clock::now();
+			for (int i = 0; i < mstep - 1; i++)
+			{
+				for (int j = 0; j < n; j++)
+				{
+					for (int k = 0; k < m; k++)
+					{
+						for (int l = 0; l < Q; l++)
+						{
+							getline(file, line);
+							w[i][j][k][l] = strtod(line.c_str(), nullptr);
+							if (w[i][j][k][l] != w[i][j][k][l]) std::cerr<<"NaN in KKT solution.";
+						}
+							
+					}
+				}
+				std::cout << "#";
+			}
+			file.close();
+			auto end = std::chrono::steady_clock::now();
+			std::cout << "\nREADING KKT SOLUTION DONE\n";
+			std::cout<<"ELAPSED TIME: "<< std::chrono::duration_cast<std::chrono::seconds>(end - start).count() << std::endl;
+		}
+		else
+		{
+			std::cerr << "Couldn't open the file";
+		}
+		//Solve LB case to obtain base trajectory
+		obj.CreateCase(u0, mstep, m, mx);
+		obj.SolveCase();
+		obj.Preprocess();
+		obj.CalculateSensitivity(w);
+	}
 	return 0;
 }

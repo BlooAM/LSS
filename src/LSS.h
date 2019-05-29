@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 #include <iomanip>
+#include <chrono>
+
 
 class LSS
 {
@@ -20,6 +22,9 @@ public:
 	LSS();
 	~LSS();
 
+	//Friend functions
+	friend void Obj(double p, double u0, int m, int n, double *cx, double *cy, double *w, double **rho, double **u, double **v, double omega, double ***feq, double*** fin, double*** fout, double *J);
+
 	//Baseline solvers
 	void CreateCase(double u0_, int tsteps_, int m_, int mx) { solver = SolverFactory::Create(SolverFactory::LB,u0_,tsteps_,m_,mx); } //One solver available
 	void SetCase(double s, int t, int m, int mx);
@@ -35,6 +40,7 @@ public:
 
 	//LSS functions
 	void AssemblyArray(double****,double****);
+	double CalculateSensitivity(double****);
 	void CreateRHSVector();
 	void GetMacroscopic(int);
 	void Precond(int, double *, double*, double*);

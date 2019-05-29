@@ -8,7 +8,7 @@ LBM::LBM()
 	L = 50; H = 2;	p = 0.5;
 	m = 20; n = 10 * m; //m = 40, n = 25m
 	mstep = 50; //4000
-	m0 = p * m; n0 = m;
+	m0 = p * m; n0 = p * m;
 	u0 = 0.1, rho0 = 5, alfa = 0.01;
 	omega = 0;
 	J = 0; Jbar = 0;
@@ -414,7 +414,7 @@ void LBM::Exectue()
 		//CollisionStep();
 		//StreamingStep();
 		//CalculateMacroscopic();
-		SolveTimeStep(p, u0, m, n, cx, cy, w, rho, u, v, omega, feq, f[i], f[i + 1]);
+		SolveTimeStep(p, u0, m, n, cx, cy, w, rho, u, v, omega, feq, f[i], f[i + 1]); //Friend function for TAPENADE
 		for (int j = m0; j < m; j++)	pin += rho[0][j] / 3;
 		for (int j = 0; j < m; j++)	pout += rho[n - 1][j] / 3;
 		pin /= (m - m0); pout /= m;
@@ -653,31 +653,35 @@ void LBM::PostProcess()
 	std::ofstream file("result.txt");
 
 	file << "Rho\n";
+	file << "U\n";
+	file << "V\n";
+
 	for (int j = 0; j < m; j++)
 	{
 		for (int i = 0; i < n; i++)
 		{
 			file << "\t" << rho[i][j];
+			if (rho[i][j] != rho[i][j]) std::cerr << "\nNaN rho value\n";
 		}
 		file << "\n";
 	}
-
-	file << "U\n";
+	file << "\n";
 	for (int j = 0; j < m; j++)
 	{
 		for (int i = 0; i < n; i++)
 		{
 			file << "\t" << u[i][j];
+			if (u[i][j] != u[i][j]) std::cerr << "\nNaN u value\n";
 		}
 		file << "\n";
 	}
-
-	file << "V\n";
+	file << "\n";
 	for (int j = 0; j < m; j++)
 	{
 		for (int i = 0; i < n; i++)
 		{
 			file << "\t" << v[i][j];
+			if (v[i][j] != v[i][j]) std::cerr << "\nNaN v value\n";
 		}
 		file << "\n";
 	}
