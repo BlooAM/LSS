@@ -1,0 +1,627 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\documentclass[12pt,a4paper,oneside]{book}
+\documentclass[12pt]{article}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{polski}
+
+% \usepackage[polish,english]{babel}
+% \usepackage{polish}
+ \usepackage{ifthen}
+\usepackage{mathtools}
+\usepackage{amsthm}
+%\usepackage{vksymb}
+%\usepackage[draft]{graphicx}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{epic}
+\usepackage{eepic}
+%\usepackage{macro,latexsym}
+%\usepackage{abceqn}
+\usepackage{fancyheadings}
+\usepackage{boxedminipage}
+\usepackage{float}
+\usepackage{amsbsy}
+%\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage{amsmath}%
+\usepackage{MnSymbol}%
+\usepackage{wasysym}%
+%\usepackage{mathabx}%
+
+\usepackage{latexsym}
+\usepackage{amsfonts}
+\usepackage{epsfig}
+\usepackage{subfigure}
+\usepackage{url}
+
+\usepackage{pgfbaseshapes}
+\usepackage{calc}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usepackage{engord}
+
+
+\usetikzlibrary{%
+  arrows,%
+  shapes,%
+  chains,%
+  matrix,%
+  positioning,% wg. " of "
+  scopes,%
+  decorations.pathmorphing,% /pgf/decoration/random steps | erste Graphik
+  shadows%
+}
+
+
+\setlength{\topmargin}{-5 mm}
+\setlength{\textheight}{225 mm}
+\setlength{\oddsidemargin}{5 mm}
+\setlength{\evensidemargin}{-6 mm}
+\setlength{\textwidth}{160 mm}
+\setlength{\parindent}{7 mm}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+%\include{macros}
+
+\usetikzlibrary{arrows, decorations.markings}
+\usetikzlibrary{shapes.multipart}
+
+% for double arrows a la chef
+% adapt line thickness and line width, if needed
+\tikzstyle{vecArrow} = [thick, decoration={markings,mark=at position
+   1 with {\arrow[thick, draw=black!20!red]{open triangle 60}}},
+   double distance=1.4pt, shorten >= 5.5pt,
+   preaction = {decorate},
+   postaction = {draw,line width=1.4pt, white,shorten >= 4.5pt}]
+
+%----------------------------------------------------------------------
+
+\makeatletter
+\newcommand\appendix@section[1]{%
+  \refstepcounter{section}%
+  \orig@section*{Appendix \@Alph\c@section: #1}%
+  \addcontentsline{toc}{section}{Appendix \@Alph\c@section: #1}%
+}
+\let\orig@section\section
+\g@addto@macro\appendix{\let\section\appendix@section}
+\makeatother
+
+%----------------------------------------------------------------------
+
+\title{
+    \vspace*{-3cm}
+    %
+    % \begin{center}
+    % \includegraphics[width=6cm]{figs/idihom_250px.pdf}
+    % \end{center}
+    \vspace*{5cm}
+    %
+    {Praca magisterska\bf} \\
+    \vspace*{1cm}
+    %
+    {\bf Analiza czułości niestacjonarnych układów turbulentnych} \\
+    \vspace*{2cm}
+}
+
+\author{
+    \sffamily Adam Marek\\
+    \\[6cm]
+}
+% \vspace*{1cm}
+\date{ {\small \bf \today} }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newtheorem{defi}{Definicja}
+\newtheorem{przyklad}{Przykład}
+\newtheorem{tw}{Twierdzenie}
+
+\begin{document}
+
+
+\maketitle
+\newpage
+\tableofcontents
+\newpage
+
+%\input{abstract}
+\cleardoublepage
+
+%---------------------------------------------------------------------
+
+%\input{acknow}
+%\cleardoublepage
+
+
+%\listofsymbols
+%\input{symbol}
+%\cleardoublepage
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Wprowadzenie}
+\subsection{Ogólna charakterystyka}
+Istotę niniejszej pracy stanowi opracowanie oraz implementacja metody wyznaczania wrażliwości dla pewnej klasy funkcji celu stanowiących długookresowe wartości średnie w przypadku układów dynamicznych, których rozwiązania przejawiają skomplikowane zachowania. Analiza taka jest niezbędna w wielu praktycznych zastosowaniach, takich jak optymalizacja kształtu elementów maszyn i urządzeń cieplno-przepływowych [], sterowanie z przesuwnym horyzontem czasowym (predykcyjne) [], adaptacja siatek obliczeniowych [], szacowanie błędów i niepewności []. Mimo że praca ta skupia się głównie na zastosowaniach związanych z mechaniką płynów, przedstawione algorytmy mogą być pomocne do rozwiązywania szerszej klasy problemów związanych z układami dynamicznymi.\newline 
+W ostatnich latach powstało kilka prac sugerujących sposób rozwiązania postawionego problemu (zobacz Rozdział 1.2), jednakże wspólną ich cechą jest wysoki koszt numeryczny. W niniejszej pracy wykorzystuje się podstawowe ich idee - w szczególności zaimplementowana została Metoda Trajektorii Cienia (ang. \textit{Least Squares Shadowing}) w formie wariacyjnej. Całość została zaimplementowana w języku skryptowym \textit{MATLAB} oraz w języku wysokiego poziomu: \textit{C++}. Nowość stanowi sposób dyskretyzacji równań mechaniki płynów - zastosowana została Metoda Siatkowa Boltzmanna. Poza tym wykorzystane zostało narzędzie do automantycznego różniczkowania kodu.
+\subsection{Tło literaturowe badanego problemu}
+Opracowane do tej pory klasyczne metody estymacji czułości bazujące na wyznaczaniu gradientu funkcji celu pozostają nieskuteczne wobec istotnych z punktu widzenia techniki układów niestacjonarnych, których dynamika (silnie nieliniowa) przekłada się na praktycznie nieprzewidywalne zachowanie. Mówi się wówczas o układach chaotycznych (patrz Rozdział). Świetną pozycję opisującą historię odkryć takich układów, związane z nimi problemy oraz pierwsze próby ich matematycznego opisu stanowi książka \cite{Gleick}. Trudności polegające na załamaniu się klasycznych metod wyznaczania wrażliwości zotały po raz pierwszy zauważone w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) stanowiącego skrajnie uproszczony model termicznej konwekcji naturalnej w atmosferze. Ci sami autorzy w pracy \cite{Lea2} zaproponowali sposób regularyzacji poprzez uśrednianie całkowe w przestrzeni fazowej dla skal czasowych zdeterminowanych poprzez największą wartość wykładników Lyapunowa. Uzasadnienie takiego postępowania stanowi pozycja \cite{Ruelle1}, w której autor dowodzi poprawności sformułowania problemu (tj. pokazuje, że poszukiwana pochodna istnieje i jest ograniczona przy pewnych ogólnych założeniach) oraz podaje \textit{explicite} jej wzór. Podejście takie bez znaczących modyfikacji jest niepraktyczne ze względu na koszt numeryczny, co zostało pokazane w pracy \cite{Chandramoorthy}.
+\subsection{Układ pracy}
+W Rozdziale 2 przedstawiono wybrane metody klasyczne wyznaczania gradientu funkcji celu, na których bazują algorytmy optymalizacji lokalnej stosowane w technice. Rozdział 3 zawiera przegląd definicji oraz niezbędnych faktów dotyczących teorii układów dynamicznych i chaosu deterministycznego wykorzystywanych w dalszych rozdziałach. Rozdział 4 prezentuje metodę najmniejszych kwadratów dla trajektorii cienia (ang. \textit{Least Squares Shadowing}, oznaczana dalej jako LSS). W rozdziale 5 zestawiono wyniki dla dwóch przypadków:
+\newpage
+\newpage
+\section{Elementy teorii gładkich układów dynamicznych}
+Dla zrozumienia problemów związanych ze stabilnością układów ewoluujących w czasie konieczne jest zapoznanie się z nomenklaturą obowiązującą w matematycznym opisie takich układów. W rozdziale tym przedstawione zostały podstawowe definicje i fakty dotyczące zagadnień stabilności równań różniczkowych zwyczajnych oraz chaosu deterministycznego. Na wstępnie należy zaznaczyć, że nie należy mylić tego pojęcia z terminem chaotyczności przywołanym na wstępie pracy, który oznacza skomplikowane zachowanie rozwiązań i w ogólności nie musi zależeć od wartości wykładników Lyapunowa stanowiących formalne kryterium chaotyczności w sensie układów dynamicznych. Mimo że w tej pracy przedstawiona została między innymi metoda analizy wrażliwości na przykładzie układu Lorentza, który w istocie jest chaotyczny (dodatnie wykładniki Lyapunowa), celem zainteresowań będzie szersza klasa problemów, o których (w większości) nie ma informacji związanych z ich przynależnością do tej klasy problemów (w szczególności nie jest udowodniona chaotyczność układu równań Naviera-Stokesa). Zaproponowana metoda jest jednak dogodna do dużej klasy układów przejawiających skomplikowane zachowania, które w dalszej części pracy określa się mianem chaotycznych.\newline
+\subsection{Pojęcia podstawowe}
+Niech $ M $ oznacza rozmaitość różniczkową z metryką Riemanna oznaczaną symbolem $ d $. W dalszej części pracy (w przypadku braku konfliktu oznaczeń) przetrzeń metryczna $ (M,d) $ będzie oznaczana przez $ M $. Niech dany będzie homeomorfizm $  \textbf{f}: M \mapsto M$.
+Załóżmy również, że dany jest układ autonomicznych równań różniczkowych zwyczajnych postaci
+\begin{equation}
+\frac{d\textbf{u}}{dt} =  \textbf{f}(\textbf{u};\textbf{s}),
+\label{dyn_eq}
+\end{equation}
+z warunkiem początkowym
+\begin{equation}
+\textbf{u}(0) = \textbf{u}_{s}
+\label{U1}
+\end{equation}
+gdzie $t\in(0,T]$ oznacza czas ($ T>0 $ - rozpatrywany okres),$ \textbf{s} $ oznacza wektor zmiennych decyzyjnych(w problemach optymalizacyjnych nazywany wektorem parametrów projektowych  - nie stanowi on zmiennej niezależnej, należy go traktować jako parametr), zaś $ \textbf{u}_{0} $ oznacza funkcję wektorową, której regularność uzależniona jest od struktury równania \ref{dyn_eq} (przykładowo w analizie równań Naviera-Stokesa przyjęlibyśmy założenie, że $ u_{0}\in V $, gdzie $ V $ oznacza domknięcie funkcji gładkich o zerowej dywergencji w odpowiedniej przestrzeni Sobolewa\footnote{Więcej informacji na ten temat Czytelnik znajdzie na przykład w [Teman]}). Autonomiczność układu oznacza, że jego prawa strona nie zależy \textit{explicite} od czasu $ t $.\newline
+W tym momencie poczynione zostaną uwagi o charakterze technicznym, które pozostają w mocy do końca bieżącego rozdziału:
+\begin{itemize}
+	\item Równanie (\ref{dyn_eq}) jest w ogólności określone na przestrzeni funkcji (tj. na pewnej nieskończenie wymiarowej przestrzeni Banacha). Jednakże jakościowe warunki dotyczące istnienia i jednoznaczności rozwiązań takich równań zachodzą i w takich przypadkach (tj. twierdzenia: Peano oraz Picarda-Lindelöfa mają analogiczną postać do swoich skończenie wymiarowych odpowiedników).
+	\item Poprzez rozmaitość różniczkową $ M $ generowaną na pewnej przestrzeni Hilberta $ H $ rozumie się przestrzeń topologiczną Hausdorffa, w której każdy punkt ma otoczenie dyfeomorfincze z pewnym zbiorem otwartym w $ H$ (w przypadku skończenie wymiarowym każdy punkt ma otoczenie dyfeomorficzne z pewną kulą).
+	\item Metryka Riemanna jest w ogólności pojęciem bardzo abstrakcyjnym. Jej precyzyjna definicja wymaga pojęć takich jak: ..., których wprowadzanie pozostaje poza zakresem tej pracy. W związku z tym przedstawiona zostanie intuicja stojąca za tym pojęciem odsyłając zainteresowanego Czytelnika do literatury\footnote{Nonlinear Dynamical Systems Of Mathematical Physics: Spectral And Symplectic}
+\end{itemize}
+Równanie (\ref{dyn_eq}) można interpretować jako ewolucję w czasie wielkości wektorowej, na przykład pola prędkości przy zadanych warunkach brzegowych, które w ogólności zależą od czasu, współrzędnych przestrzennych oraz od wektora zmiennych decyzyjnych:
+\begin{equation}
+\textbf{u} = \textbf{u}(t,
+\textbf{x};\textbf{s}).
+\label{utxs}
+\end{equation}
+Realizacja numeryczna równania (\ref{dyn_eq}) z warunkiem początkowym (\ref{U1}) wyraża się poprzez procedurę iteracyjną postaci
+\begin{equation}
+\textbf{u}_{i+1} = \textbf{f}^{s}(\textbf{u}_{i})
+\label{dyn_eq_discr}
+\end{equation}
+\begin{equation}
+\textbf{u}_{0} = \textbf{u}_{s},
+\label{U2}
+\end{equation}
+gdzie $ \textbf{f}^{s} $ oznacza zdyskretyzowany homeomorfizm $ \textbf{f} $ sparametryzowany wektorem $ \textbf{s} $. Wobec postaci równań (\ref{dyn_eq}) i (\ref{dyn_eq_discr}) można opisywane przez nie układy dynamiczne identyfikować z funkcjami prawych stron (zadającymi dynamikę). W dalszej części pracy o powyższych zagadnieniach zakłada się, iż mają jednoznaczne rozwiązanie dla  $t\in(0,T]$, tzn. spełniają one założenia twierdzenie Picarda-Lindelöfa (dla przestrzeni $ M $). Jednym z najistotniejszych pojęć pozwalających na jakościową analizę układów dynamicznych jest \textit{przestrzeń fazowa}.
+\begin{defi}\label{ph_space}
+	Przestrzenią fazową $M_{ph} \subseteq M $ równania (\ref{dyn_eq}) nazywamy zbiór wszystkich stanów tego układu traktowanych jako punkty tej przestrzeni.
+\end{defi}
+W dalszym ciągu pracy o przestrzeni fazowej $ M_{ph} $ zakłada się, iż ma odpowiednią strukturę topologiczną. Aby uściślić to pojęcie załóżmy o $ \textbf{f} $, iż jest dyfeomorfizmem określonym na przestrzeni fazowej ($  \textbf{f}: M_{ph} \mapsto M_{ph}$) która jest zbiorem zwartym, bez brzegu. Przy tych założeniach można przyjąć następujące definicje. 
+\begin{defi}\label{tan_space}
+	Przestrzenią styczną $ T_{x}M_{ph} $
+\end{defi}
+\begin{defi}\label{tan_bundle}
+	Wiązką styczną $ TM_{ph} $ do przestrzeni fazowej $M_{ph} \subseteq M $ nazywamy rodzinę przestrzeni stycznych $  TM_{ph} = \{ (x,y) | x \in M_{ph} , y \in T_{x} M_{ph}\} $.
+\end{defi}
+Tak zdefiniowana wiązka stanowi dziedzinę pochodnej odwzorowania $ \textbf{f} $, tj. $ D\textbf{f}:TM_{ph} \mapsto TM_{ph}  $. Wizualizację wiązki stycznej dla prostych kształtów geometrycznych ilustruje Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.2]{figures/tan_bundle.png} 
+	\centering
+	\caption{Wizualizacja pojęcia wiązki stycznej dla okręgu}
+\end{figure}
+Jednym z dwóch najważniejszych założeń o rozpatrywanych układach dynamicznych jest możliwość dekompozycji ich przestrzeni fazowych na sumę prostą dwóch podprzestrzeni, których wektory cechują się podobnymi właściwościami dynamicznymi.
+\begin{defi}\label{hyperbolic_set}
+	Powiemy, że zbiór $M_{ph}$ ma strukturę hiperboliczną, o ile istnieją zbiory $ E^{s},E^{u} \subseteq TM_{ph}$ (nazywane wiązką stabilną i niestabilną, odpowiednio) takie, że $ TM_{ph} = E^{s} \bigoplus E^{u}$ i spełniające warunki:
+	\begin{itemize}
+		\item $ D\textbf{f}_{\mkern 1mu \vrule height 2ex\mkern2mu E^{s}} $ jest kontrakcją,
+		\item $ D\textbf{f}_{\mkern 1mu \vrule height 2ex\mkern2mu E^{u}} $ jest ekspansją.
+	\end{itemize}
+	Istnieją wówczas stałe $ \lambda \in (0,1), c \in (0,+\infty) $ takie, że:
+	\begin{itemize}
+		\item $ \| D\textbf{f}^{\ i}x_{s}\| \leq c\lambda^{i} \| x_{s}\|$ dla dowolnych $ x_{s} \in E^{s} $ oraz $ 0 < i \in \mathbb{N} $,
+		\item $ \| D\textbf{f}^{\ -i}x_{u}\| \leq c\lambda^{i} \| x_{u}\|$ dla dowolnych $ x_{u} \in E^{u} $ oraz $ 0 < i \in \mathbb{N} $.
+	\end{itemize}
+\end{defi}
+Układ dynamiczny, którego przestrzeń fazowa ma strukturę hiperboliczną będzie nazywany układem hiperbolicznym. Ostatnie dwa warunki w Definicji grupują wektory przestrzeni stycznej ze względu na jakościowe zachowanie ich norm wraz z rozwojem układu. Jak się przekonamy w późniejszych rozdziałach jest to niezbędne założenie warunkujące użyteczność różnych metod regularyzacji pozwalających na wyznaczanie wrażliwości w rozważanych układach. \newline
+Drugie, równie istotne założenie dotyczy pośrednio funkcji, której gradient jest poszukiwany. Istotnymi z punktu widzenia techniki pozostają długookresowe wartości średnie, tj. funkcje postaci
+\begin{equation}
+\bar{J}(u;s) = \lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(u;s)dt,
+\label{J_bar}
+\end{equation}
+gdzie $ J(u;s) $ oznacza chwilową wartość funkcji będącej obiektem zainteresowań. Może ona oznaczać przykładowo opór aerodynamiczny, siłę nośną, ciąg silnika lub współczynnik przejmowania ciepła na powierzchniach wymiennika ciepła. W praktyce dysponujemy oczywiście jedynie skończonymi przybliżeniami granicy (\ref{J_bar}), tj.
+\begin{equation}
+\bar{J}(u;s) \approx \frac{1}{\Delta T}\sum_{i=0}^{N-1}\frac{J(u_{i+1};s)+J(u_{i};s)}{2}(T_{i+1}-T_{i}),
+\label{J_bar_approx}
+\end{equation}
+gdzie $ \Delta T $ oznacza przyjętą (odpowiednio dużą) długość okresu uśredniania,  $ (T_{i+1}-T_{i}) $ określa długość kroku czasowego w danym kroku (przyjęty został w tym przypadku schemat trapezów dla całkowania numerycznego).\newline
+Aby zastosować odpowiedni aparat matematyczny w dalszym ciągu rozpatrywana będzie formuła postaci (\ref{J_bar}) pozostawiając jej numeryczną realizację (\ref{J_bar_approx}) na moment opisu implementacji odpowiedniej metody. Poprzez wrażliwość tak zdefiniowanej funkcji będziemy rozumieli jej gradient względem wektora parametrów $ \textbf{s} $. Klasyczne metody wyznaczania takiej wielkości przedstawione zostały w Rozdziale, zaś problemy z nich wynikające przy aplikacji do układów chaotycznych wyjaśnia Rozdział. Należy przy tym zaznaczyć, że aby cały ten aparat mógł być użyty należy przyjąć kolejne, bardzo istotne założenie dotyczące ropatrywanego układu, które będzie rzutowało na regularność takiej funkcji: ergodyczność systemu. 
+\newline Formalna definicja ergodyczności wydawać się może pojęciem abstrakcyjnym. Implikuje ona jednak istotną cechę rozpatrywanych układów: długookresowe wartości średnie są niezależne od warunków początkowych (uściślając: są one takie same dla prawie wszystkich warunków początkowych) i ich wartość można równoważnie uzyskać poprzez uśrednianie po przestrzeni fazowej układu. Jak się później przekonamy (Rozdział) całkowanie w przestrzeni możliwych stanów układu ma działanie regularyzujące. 
+\subsection{Stabilność rozwiązań}
+Zagadnienie stabilności związane jest z odpowiedzią na pytanie jak zmieni się globalny przebieg rozwiązania pod wpływem małych (w odpowiednim sensie) perturbacji warunków początkowych lub funkcji określającej dynamikę układu, który jest zidentyfikowany poprzez (wektorowe) równanie różniczkowe zwyczajne.
+\begin{defi}\label{crit_points}
+	Punkt $ \textbf{u}_{c} \in M_{ph}$ nazywamy położeniem równowagi równania (\ref{dyn_eq}), o ile jest to punkt stały odwzorowania $ \textbf{f} $, tzn. $ \textbf{f}(u_{c}) = 0 $.
+\end{defi}
+Zauważamy, że położenie równowagi jest (stałym) rozwiązaniem równania (\ref{dyn_eq}) z takim samym warunkiem początkowym. Punkty takie jakościowo mogą istotnie się różnić ze względu na ewolucję w czasie swojego otoczenia. Ilustrację tej uwagi stanowi Rysunek przedstawiający ideę stabilnych  punktów równowagi oraz analogiczny Rysunek dla punktów niestabilnych (pojęcia te i ich znaczenie jest analogiczne dla rodzajów równowagi termodynamicznej: trwałej i chwiejnej, odpowiednio).
+\begin{figure}[H]
+	\includegraphics[scale=0.2]{figures/stable_equilibrium.png}
+	\centering
+	\caption{Ilustracja stabilnego punktu równowagi}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.2]{figures/unstable_equilibrium.png} 
+	\centering
+	\caption{Ilustracja niestabilnego punktu równowagi}
+\end{figure}
+Jak już zostało wspomniane narzucenie warunku początkowego w postaci punktu równowagi implikuje stałe rozwiązanie układu (\ref{dyn_eq}). Powstaje naturalne pytanie jak zachowują się rozwiązania owego układu dla warunków początkowych  $ \textbf{u}_{0} \in M_{ph}$ takich, że
+\begin{equation}
+	\| \textbf{u}_{c} - \textbf{u}_{0} \|_{X}  \leq \epsilon,
+\label{x_xc}
+\end{equation}
+gdzie $ \epsilon \in \mathbb{R}_{+} $.\newline
+Dla lepszego zrozumienia problemu oraz wytyczenia kierunku dalszych rozważań przytoczone zostaną dwa proste przykłady (w przypadku gdy $ M = \mathbb{R} $) ilustrujące zachowanie obrazu otoczenia punktów równowagi w przypadku zaburzenia warunków początkowych oraz przekształcenia $ \textbf{f} $ (poprzez perturbację wektora parametryzującego wspomnianą funkcję). \newline
+\begin{przyklad}\label{przyklad1}
+	Rozważmy układ postaci
+	\begin{equation}
+	\frac{dx}{dt} = x^2-1,
+	\end{equation}
+	z warunkiem początkowym postaci
+	\begin{equation}
+	x(0) = x_{0}
+	\end{equation}
+	Układ taki można rozwiązać analitycznie. Rodzina krzywych całkowych w tym przypadku określona jest wzorem
+	\begin{equation}
+	x(t) = \frac{1 - e^{2C + 2t}}{1 + e^{2C + 2t}},
+	\end{equation}
+	gdzie
+	\begin{equation}
+	C = \frac{1}{2}ln\frac{1-x_{0}}{1+x_{0}}.
+	\end{equation}	
+	Zauważmy jednak, że powyższy wzór ma sens jedynie w przypadku, gdy $ x_{0} \in (-1,1) $. Dla $ x_{0} = -1 $ lub $ x_{0} = 1 $ otrzymujemy stałe rozwiązanie równe $ x_{0} $ (punkt równowagi), zaś przypadek, gdy $ \| {x_{0}}\| > 1 $ należy rozpatrzeć osobno.\newline 
+	Powyższa analiza pokazuje, że jakościowe badanie równań wymaga dodatkowych technik (nawet w przypadku obecności analitycznego rozwiązania). Dużo lepsze efekty uzyskuje się poprzez podejście geometryczne z użyciem tzw. \textit{portretów fazowych}. Otrzymuje się je poprzez zwizualizowanie funkcji zadającej dynamikę w rozpatrywanym układzie. Następnie analizuje się ewolucję dowolnego punktu reprezentującego warunek początkowy w zależności od znaku funkcji. Idea ta została przedstawiona na Rysunku.
+	\begin{figure}[H]
+		\includegraphics[scale=0.7]{figures/example1.png} 
+		\centering
+		\caption{Portret fazowy układu z Przykładu 1}
+	\end{figure}
+	Dla dowolnego punktu $ x_{0} \in (-1,1) $ odpowiadająca mu wartość funkcji $ f(x) = x^2-1 $ jest ujemna, wobec czego pochodna rozwiązania jest ujemna i w 'następnym kroku czasowym' będzie miało ono niższą wartość. Zostało to przedstawione za pomocą strzałki o grocie skierowanym w lewą stronę. Analogiczne rozumowanie pozwala dojść do wniosku, że dla $ x_{0} \in (-\infty,-1) \bigcup (1,\infty)$ rozwiązanie będzie zwiększało swoją wartość wraz z upływem czasu, co ilustrują strzałki skierowane w prawą stronę. Oczywiście dla  $ x_{0} = -1 $ lub $ x_{0} = 1 $ rozwiązanie nie będzie się zmieniało, ponieważ są to punkty równowagi. Na koniec zauważmy, że niewielka perturbacja pierwszego z tych punktów 'sprowadzi' rozwiązanie (po pewnym czasie) do warunku początkowego, podczas gdy dowolna zmiana drugiego punktu powoduje rozbieżność rozwiązania. Wobec tego punkty równowagi można podzielić na (lokalnie) stabilne ($ x_{0} = -1 $) i niestabilne ($ x_{0} = 1 $). Formalna definicja tych pojęć podana zostanie później w tym rozdziale.
+\end{przyklad}
+\begin{przyklad}
+\end{przyklad}
+Powyższe przykłady sugerują następującą definicję.
+\begin{defi}\label{stable_point}
+	Niech $ \bar{\textbf{u}} \in M_{ph} $ będzie rozwiązaniem układu (\ref{dyn_eq}). Powiemy, że jest ono stabilne w sensie Lyapunowa o ile $\forall \epsilon>0 \  \exists t_{0} \geq 0 \  \exists \eta>0 \  \forall t>t_{0}$ zachodzi implikacja:\newline
+\centerline {$ 	\|\bar{\textbf{u}}(t_{0}) - \textbf{u}(t_{0}) \|_{X}  \leq \eta \  \Rightarrow \ \|\bar{\textbf{u}}(t) - \textbf{u}(t) \|_{X}  \leq \epsilon$,}
+gdzie symbolem $ \textbf{u} $ oznaczono dowolne rozwiązanie układu (\ref{dyn_eq}).\newline
+Ponadto jeśli \newline
+\centerline{$ \lim\limits_{t \rightarrow \infty}\|\bar{\textbf{u}}(t) - \textbf{u}(t) \|_{X} = 0$,}
+to rozwiązanie $ \bar{\textbf{u}} \in M_{ph} $ nazywamy asymptotycznie stabilnym.
+\end{defi}
+Taka definicja stabilności jest szeroko stosowana w wielu zastosowaniach technicznym. Dobrym przykładem mogą być układy automatycznej regulacji, w których praktyczne kryteria (takie jak kryterium Rutha lub Hurwitza) wyprowadza się bazując na stabilności określonej w powyższym sensie.\newline
+Zazwyczaj oczywiście nie dysponujemy rozwiązaniami. Z tego powodu konieczne są inne techniki służące jakościowemu badaniu równań. Jednym z takich pomysłów jest zdefiniowanie specjalnej funkcji związanej z nazwiskiem Lyapunowa.
+\newline
+\begin{defi}
+	Funkcją Lyapunova dla układu postaci (\ref{dyn_eq}) nazywamy dyfeomorfizm $ V: M_{ph} \rightarrow \mathbb{R} $, który spełnia warunki:
+	\begin{itemize}
+		\item $\forall x \in M_{ph} V(x) \geq 0$,
+		\item $ V(u) = 0 $ wtedy i tylko wtedy, gdy $ u $ jest punktem równowagi,
+		\item dla dowolnego rozwiązania $ u(t) $ zachodzi $ \frac{d}{dt}V(u(t)) \leq 0 $
+	\end{itemize}
+\end{defi}
+Zauważmy, że nie trzeba dysponować rozwiązaniem, gdy znaleziona zostanie odpowiadająca mu funkcja Lyapunowa (co zazwyczaj jest zadaniem dużo łatwiejszym). Ostatni warunek  Definicji mówi, że funkcja Lyapunowa na krzywych całkowych jest nierosnąca. W związku z tym prawdziwe jest następujące twierdzenie.
+\begin{tw}
+	Niech dany będzie układ postaci (\ref{dyn_eq}) i niech funkcja prawych stron będzie dyfeomorfizmem. Ponadto niech $ 0 \in M_{ph} $ i $ \textbf{f}(0) = 0 $. Jeśli dla takiego układu istnieje funkcja Lyapunowa, to rozwiązanie $ \textbf{u}(t) \equiv 0 $ jest stabilne. Ponadto jeśli $ \frac{d}{dt}V(u(t)) < 0 $ dla $ u \in M_{ph} - \{0\} $, to jest ono asymptotycznie stabilne.
+\end{tw}
+Dowód tego twierdzenia jest dość techniczny. Można go znaleść w większość podręczników traktujących o równaniach różniczkowych (na przykład \cite{Palczewski}). Intuicyjnie jednakże jest ono dość oczywiste. Z założeń poczynionych na początku rozdziału wybór dowolnego warunku początkowego z przestrzeni fazowej determinuje jednoznacznie rozwiązanie tego układu (zależność przyporządkowująca warunkowi początkowemu rozwiązanie jest przekształceniem ciągłym), a funkcja Lyapunowa dla takiego rozwiązania jest nierosnąca. Ponieważ z definicji jest ona nieujemna i przyjmuje zerowe wartości tylko w punktach równowagi, to krzywa całkowa musi pozostać dostatecznie blisko takiego punktu, gdy jest ono stabilnym rozwiązaniem lub też zbiegać do niego w przypadku gdy jest to asymptoycznie stabilne rozwiązanie.\newline
+Powyższe uwagi sugerują pewien sposób postrzegania funkcji Lyapunowa. Niech dana będzie funkcja $ V(u) $ nazywana dalej potencjałem zdefiniowana równaniem 
+\begin{equation}
+f(u) = -\frac{dV}{du}.
+\end{equation}
+Trajktując $ u $ jako zmiennej niezależnej $ t $ mamy:
+\begin{equation}
+\frac{dV}{dt} = \frac{dV}{du}\frac{du}{dt}.
+\end{equation}
+Referując dalej do układu postaci (\ref{dyn_eq}) otrzymujemy:
+\begin{equation}
+\frac{dV}{dt} = -(\frac{dV}{du})^2 \leq 0.
+\end{equation}
+Tak zdefiniowany potencjał zachowuje się jak funkcja Lyapunowa. Ta intuicja sugeruje również (zgodnie z oczekiwaniami), że lokalne maksima potencjału odpowiadają niestabilnym punktom równowagi, zaś lokalne minima odpowiadają stabilnym (idea potencjału jest często używana w kontekście fizyki, w szczególności pola sił, które można zdefiniować jako gradient pewnego pola skalarnego określany jest mianem potencjalnego i posiada przy tym szereg specyficznych cech, jak na przykład zachowawczość).\newline
+Dotychczas wszelkie rozważania oparte były na rozwiązaniach ustalonego układu, w którym czas jest traktowany jako zmienna niezależna, zaś warunek początkowy jako parametr. Oznaczając rozwiązanie układu (\ref{dyn_eq}) z warunkiem początkowym (\ref{U1}) w czasie $ t $ przez $ u(t;u_{s}) $ możemy zdefiniować rodzinę dyfeomorfizmów (na mocy założeń dotyczących funkcji $ f(u) $ i przestrzemi fazowej $ M_{ph} $) sparametryzowanych zmienną $ t $: $ g^t:M_{ph} \rightarrow M_{ph} $ taką, że: 
+\begin{equation}
+	g^t(u_{s}) = u(t;u_{s}).
+\end{equation}
+Fakt, że tak zdefiniowane funkcje są różniczkowalne wynika z gładkiej zależności rozwiązań względem warunków początkowych. Załóżmy od tego momentu, że zmienna $ t \in (-\infty;\infty) $, tzn. że zmienna ta może przyjmować dowolne wartości. Wówczas zachodzą następujące definicje.
+\begin{defi}
+	Potokiem układu (\ref{dyn_eq}) nazywamy parę $ (M_{ph},g^t), $ gdzie $ M_{ph} $ oznacza przestrzeń fazową, zaś $ \{g^t\}_{t\in(-\infty;\infty)} $ oznacza zdefiniowaną wcześniej rodzinę dyfeomorfizmów.
+\end{defi}
+\begin{defi}
+	Trajektorią (orbitą) punktu $ u_{s} $ nazywa się obraz przekształcenia $ g^t(u_{s}) $ dla $t\in(-\infty;\infty)  $.
+\end{defi}
+Trajektorię można postrzegać jako ewaluację rozwiązania w konkretnej chwili, traktując przy tym warunek początkowy jako zmienną niezależną. W związku z tym, gdy $ u_{s} $ jest punktem równowagi, to jego orbita jest stała $ g^t(u_{s}) \equiv u_{s}. $\newline
+Przeliśmy od analizy krzywych całkowych jako funkcji czasu do trajektorii układu, które od czasu nie zależą i w naturalny sposób można je zilustrować w przestrzeni fazowej. Jednocześnie mają one wiele wspólnego z rozwiązaniami. Zauważmy najpierw, że sam potok $ (M_{ph},g^t) $ ma strukturę grupy abelowej z działaniem
+\begin{equation}
+g^{t+s} = g^tg^s.
+\end{equation}
+Elementem neutralnym tej grupy jest przekształcenie identycznościowe. Stąd i z jedyności rozwiązań rozpatrywanego układu wynika następujące twierdzenie.
+\begin{tw}
+	Przez każdy punkt przestrzeni fazowej przechodzi dokładnie jedna orbita.
+\end{tw}
+Takie zachowanie trajektorii upadabnie je do rozwiązań. Ich zaleta przejawia się tym, że z topologicznego punktu widzenia różnych rodzajów orbit jest niewiele, w przeciwieństwie do geometrycznego bogactwa kształtów krzywych całkowych. Mówi o tym następujące twierdzenie.
+\begin{tw}
+	Przy założeniach przyjętych uprzednio orbity potoku generowanego przez układ (\ref{dyn_eq}) dzielą się na trzy kategorie:
+	\begin{itemize}
+		\item orbity otwarte
+		\item orbity zamknięte
+		\item punkty krytyczne
+	\end{itemize}
+\end{tw}
+Dowód tego twierdzenia opiera się istotnie o poprzednim twierdzeniu i o własnościach domkniętych grup addytywnych. Zamiast podawać pełną jego wersję zilustrowane zostaną jego konsekwencję bazując na dwóch przykładach zaczerpniętych z książki \cite{Palczewski}.
+\begin{przyklad}
+	Rozważmy równanie
+	\begin{equation}
+	\frac{du}{dt} = u.
+	\end{equation}
+	Trajektoria punktu $ u_{s} $ ma postać $ \{e^tu_{s}\} $, gdzie $ t \in (-\infty,\infty) $. W związku z tym dla $ u_{s} > 0 $ orbitę stanowi przedział $ (0,\infty) $, dla $ u_{s} < 0 $ przedział $ (-\infty,0) $, zaś dla $ u_{s} = 0 $ trajktoria redukuje się do punktu $ \{0\} $
+\end{przyklad}
+Z przykładu tego można łatwo uogólnić następujący wniosek: w przypadku jednowymiarowej przestrzeni fazowej orbity układów dynamicznych redukują się do punktów lub też do przedziałów (nieograniczonych przynajmniej z jednej strony). W szczególności niemożliwe jest otrzymanie trajektorii okresowej. Sytuację tę zmienia dodatkowy wymiar przestrzeni fazowej, co pokazuje następny przykład.
+\begin{przyklad}
+	Rozważmy układ postaci
+	\begin{equation}
+	\begin{array}{rcr} 
+		\frac{du_{1}}{dt} & = & -u_{1} + u_{1}(1 - u_{1}^2 - u_{2}^2) \\ 
+		\frac{du_{2}}{dt} & = & u_{1} + u_{2}(1 - u_{1}^2 - u_{2}^2)
+		\end{array}
+	\end{equation}
+	Rozwiązanie można uzyskać poprzez wprowadzenie współrzędnych biegunowych
+	\begin{equation}
+	\begin{array}{rcr} 
+	u_{1} & = & rcos(\theta) \\ 
+	u_{2} & = & rsin(\theta),
+	\end{array}
+	\end{equation}
+	aby otrzymać układ
+	\begin{equation}
+	\begin{array}{rcl} 
+	\frac{dr}{dt} & = & r(1-r^2) \\ 
+	\frac{d\theta}{dt} & = & 1
+	\end{array}
+	\end{equation}
+	Trajektorie pierwszego równania mają postać $ \{\frac{u_{s}e^t}{\sqrt{u_{s}^2e^{2t}-p^2+1}}\}. $ Dostajemy trzy rodzaje trajektorii:
+	\begin{itemize}
+		\item punkt równowagi $ (0,0) $,
+		\item orbitę okresową $ u_{1}^1 + u_{2}^2 = 1 $,
+		\item orbity spiralne 'nawijające' się od zewnątrz i od wewnątrz na orbitę okresową.
+	\end{itemize}
+	Zostały one zilustrowane na Rysunku, gdzie pogrubioną linią zaznaczono trajektorię okresową.
+	\begin{figure}[H]
+		\includegraphics[scale=0.7]{figures/example4.png} 
+		\centering
+		\caption{Trajektorie rozważanego układu}
+	\end{figure}
+\end{przyklad}
+Z powyższych przykładów łatwo można dojść do wniosku, że analiza trajektorii w przestrzeni fazowej jest dużo łatwiejsza niż badanie nieskończonej (być może nieprzeliczalnej) liczby rozwiązań danego układu. Dysponując już odpowiednim aparatem pojęciowym możemy przejść do analitycznego ujęcia zjawiska chaosu.
+\subsection{Chaos deterministyczny}
+Do tej pory przedstawione zostały pewne ogólne sposoby badania stabilności układów dynamicznych. Obecnie przechodzimy do analizy równań, których rozwiązania (chociaż nadal są wyznaczone w sposób jednoznaczny) mają bardzo skomplikowane portrety fazowe, które w praktyce istotnie ograniczają możliwość przewidywania długookresowych zachowań tych rozwiązań. Należy zauważyć, że do tej pory takie układy nie były rozważane, gdyż dotychczas prezentowane były układy o co najwyżej dwuwymiarowej przestrzeni fazowej, zaś wspomniana cecha ujawnia się gdy liczba wymiarów jest nie mniejsza niż trzy.\newline
+
+\newpage
+\section{Wybrane metody optymalizacji lokalnej stosowane w technice}
+Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent (???) oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice [].
+\subsection{Metoda różnic skończonych}
+Metoda ta jest rozwinięciem intuicji stojących za wyznaczaniem pochodnej funkcji. Granicę ilorazu różnicowego przybliża się poprzez tzw. \textit{schematy różnicowe}, które wymagają wyznaczenia wybranej funkcji w kilku punktach. Schematy te mają przykładowe postaci (do końca pracy pochodna poszukiwanej funkcji oznaczana będzie symbolem $ J $, zaś jej parametr symbolem $ s $):
+\begin{equation}
+\frac{dJ}{ds}(s_{0}) \approx \frac{J(s_{0}+\Delta s) - J(s_{0})}{\Delta s},
+\end{equation} 
+\begin{equation}
+\frac{dJ}{ds}(s_{0}) \approx \frac{J(s_{0}) - J(s_{0}-\Delta s)}{\Delta s},
+\end{equation} 
+\begin{equation}
+\frac{dJ}{ds}(s_{0}) \approx \frac{J(s_{0}+\Delta s) - J(s_{0}-\Delta s)}{\Delta s},
+\end{equation}
+którym odpowiadają odpowiednio: schemat różnicowy przedni, wsteczny oraz centralny. \newline
+Metoda ta jest bardzo prosta w implementacji i dość łatwo pozwala kontrolować dokładność wyznaczanej pochodnej poprzez dobór odpowiednio małego przyrostu $ \Delta s  $. Należy zauważyć, że dla odpowiednio małej wartości takiego przyrostu błąd arytmetyki zmiennoprzecinkowej istotnie rzutuje na dokładności wyniku. Nietrywialnym rozszerzeniem tej metody jest zastosowanie przyrostu jako liczby czysto urojonej. Dalsze postępowanie jest analogiczne do wyżej wspomnianych, przy czym operacje wykonywane są zgodnie z arytmetyką liczb zespolonych. Ostateczny wzór przyjmuje postać:
+\begin{equation}
+\frac{dJ}{ds}(s_{0}) \approx \frac{Im[J(s_{0}+i\epsilon)]}{\epsilon},
+\end{equation}
+gdzie $ Im $ oznacza część zespoloną, zaś $\epsilon$ jest liczbą rzeczywistą. Zabieg ten pozwala na separację badanego punktu przestrzeni parametrów oraz zaburzenia na dwa niezależne obiekty numeryczne, dzięki czemu problem błędów zaokrągleń zostaje wyeliminowany. Dokładność szacowanej pochodnej pozostaje ograniczona jedynie precyzją maszynową.
+\subsection{Metoda Tangent (???)}
+\subsection{Metoda Operatora Sprzężonego}
+
+\newpage
+\section{Metoda Trajektorii Cienia}
+\subsection{Wstęp}
+Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział). Z praktycznego punktu widzenia obiektem zainteresowania są wartości średnie wielkości chwilowych, w których okres uśredniania jest stosunkowo długi, tj. funkcje postaci (\ref{J_bar}). W rozdziale tym będziemy poszukiwali czułości tak zdefiniowanych funkcji względem parametru $ s \in \mathbb{R} $ (zakładamy przy tym, że parametr projektowy jest skalarem, aby nie komplikować istoty problemu niepotrzebnymi rachunkami - rozszerzenie na przypadek wektorowy nie jest trudne). Konkretnie: poszukujemy wartości wyrażenia
+\begin{equation}
+\frac{d\bar{J}}{ds} = \lim\limits_{\delta s \rightarrow 0}\frac{1}{\delta s}(\lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(s + \delta s)dt - \lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(s)dt).
+\label{J_derivative}
+\end{equation}
+Przy założeniach przywołanych w Rozdziale można pokazać, iż taka wielkość jest dobrze zdefiniowana []. Co więcej jej wartość wynosi 
+Heurystyczne obserwacje pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki. Główną przeszkodę stanowi fakt, iż czas numerycznej symulacji jest zawsze skończony. \newline 
+Podstawową ideą Metody Trajektorii Cienia jest regularyzacja poprzez odpowiedni wybór trajektorii zaburzonej przy innym warunku początkowym. Postępowanie takie jest usprawiedliwione na mocy założenia ergodyczności (Rozdział). Głównym narzędziem jest operator cienia, którego własności zostaną przedstawione w następnych sekcjach. Do końca pracy przyjmujemy założenia z Rozdziału. W szczególności te dotyczące ergodyczności oraz hiperboliczności układu (\ref{dyn_eq}), jak i regularności funkcji $ \textbf{f}: M_{ph} \rightarrow M_{ph}$
+\subsection{Metoda Operatora Cienia}
+Przypuśćmy, że dana jest trajektoria pewnego układu dynamicznego postaci (\ref{dyn_eq}), którą zapiszemy w postaci
+\begin{equation}
+\textbf{u}(t) = \textbf{u}_t,
+\label{trajectory}
+\end{equation}
+gdzie $ \forall t \in \mathbb{R}_{+} \ \textbf{u}_t \in M_{ph}$. Wprowadźmy zaburzenie w postaci rodziny funkcji gładkich i wspólnie ograniczonych $ \{ \delta \textbf{u}_{t} \ |\ t\in \mathbb{R}_{+}\} $, takiej że $ \forall t \in \mathbb{R}_{+} \ (\textbf{u}_t + \epsilon \delta \textbf{u}_{t}) \in M_{ph}$, gdzie $ \epsilon \in \mathbb{R}_{+} $ jest pewną stałą. Mamy wówczas
+\begin{equation}
+\textbf{u'}(t) = \textbf{u'}_t = \textbf{u}_t + \epsilon \delta \textbf{u}_{t}.
+\label{trajectory_pert}
+\end{equation}
+Zauważmy, że z przyjętych na początku tego Rozdziału założeń wynika, że tak zdefiniowana trajektoria odpowiada układowi postaci
+\begin{equation}
+\frac{d}{dt}\textbf{u'}(t) = \textbf{f}(u) + \epsilon \frac{\partial \delta \textbf{u}}{\partial \textbf{u}}\textbf{f}(u) = \textbf{f}(u') - \epsilon \frac{\partial \textbf{u}}{\partial \textbf{u}}\delta\textbf{u}(\textbf{u'}) + \epsilon \frac{\partial \delta \textbf{u}}{\partial \textbf{u}}\textbf{f}(u') + O(\epsilon^2),
+\end{equation} 
+gdzie ostatnia równość wynika z przyjętych założeń na temat zaburzenia $ \delta u(u) $[]. Wobec tego można to równanie zapisać w postaci
+\begin{equation}
+\frac{d}{dt}\textbf{u'}(t) = \textbf{f}(\textbf{u'}) + \epsilon \delta \textbf{f}(\textbf{u'}) + O(\epsilon^2),
+\label{dyn_eq_pert}
+\end{equation}
+gdzie perturbacja dyfeomorfizmu $ \delta \textbf{f}: M \rightarrow M $ wyraża się formułą
+\begin{equation}
+\delta \textbf{f}(\textbf{u}) = -\frac{\partial  \textbf{f}}{\partial \textbf{u}} \delta \textbf{u}(\textbf{u}) +   \frac{d \delta \textbf{u}}{dt} = S_{f} \delta \textbf{u}(\textbf{u}).
+\label{funct_pert}
+\end{equation}
+Wprowadzony powyżej liniowy operator $ S_{f}: \delta \textbf{u} \mapsto \delta \textbf{f} $ nazywamy \textit{operatorem cienia}.\newline
+Tak zdefiniowany operator jest dobrze określony ([]), tj. w sposób jednoznaczny definiuje gładkie zaburzenie $ \delta \textbf{f}: M \rightarrow M $ odpowiadające gładkiej perturbacji wyjściowej trajektorii (\ref{trajectory}). Innymi słowy: zaburzona trajektoria (\ref{trajectory_pert}) spełnia jednoznacznie zaburzony układ (\ref{dyn_eq_pert}). Pewną komplikację stanowi fakt, że z punktu widzenia wyznaczania wrażliwości (\ref{J_derivative}) istotna jest operacja odwrotna. Perturbacja parametru projektowego $ s $ powoduje zmianę dynamiki $ \delta\textbf{f}(s) $, dla której poszukiwana jest perturbacja wyjściowej trajektorii $ \delta \textbf{u}(\delta \textbf{f}(s)) $ (pamiętając przy tym, że musi być ona 'dostatecznie mała'). Problem inwersji operatora cienia (przy założeniu, że takie odwzorowanie odwrotne istnieje) można rozwiązać numerycznie wykorzystując spektrum Lyapunowa. 
+\newpage
+\section{Implementacja metody LSS}
+W niniejszym rozdziale przedstawione zostały wyniki symulacji numerycznej dla dwóch scenariuszy:
+\begin{itemize}
+	\item Scenariusz I - układ Lorentza (1963)
+	\item Scenariusz II - 
+\end{itemize}
+\subsection{Scenariusz I - konceptualne preliminarium}
+\subsubsection{Model matematyczny}
+Zastosujemy teraz opisaną metodę trajektorii cienia w analizie wrażliwości za pomocą zagadnienia sprzężonego dla układu Lorentza, tj. układu chaotycznego opisywanego autonomicznym układem nieliniowych równań różniczkowych zwyczajnych postaci:
+\begin{equation}
+\begin{cases} 
+\frac{dx}{dt} = \sigma(y-z) \\ 
+\frac{dy}{dt} = x(\rho-z)-y \\ 
+\frac{dz}{dt} = xy-\beta z 
+\end{cases},
+\label{lorenz_eq}
+\end{equation}
+gdzie $ \sigma, \rho, \beta $ są pewnymi stałymi. Nie zostały określone warunki początkowe, zakłdając jedynie, że nie przujmują one poniższych wartości (punkty krytyczne układu Lorentza):
+\begin{itemize}
+	\item $ x = y = z = 0 $,
+	\item $ x = y = \sqrt{\beta(\rho - 1)}, z = \rho - 1 $,
+	\item $ x = y = -\sqrt{\beta(\rho - 1)}, z = \rho - 1 $,
+\end{itemize}
+Układ ten jest chaotyczny w ścisłym sensie i jest bardzo prostym modelem ruchu konwekcyjnego powietrza atmosferycznego (oryginalny układ Lorentza składał się z równań, rozważany jest skrajnie uproszczony - jest on minimalnym, w sensie ilości stopni swobody, układem, który może przejawiać chaotyczne zachowania),przy czym stała   $ \sigma $ charakteryzuje lepkość ośrodka, $ \rho $ współczynnik przewodzenia ciapła, zaś $ \beta $ wymiar charakterystyczny.\newline
+Trajektorie dla trzech wybranych parametrów $ \rho $ w przypadku $ x(0) = 1, y(0) = 0, z(0) = 28 $ przedstawia Rysunek .
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/Trajectories.png} 
+	\centering
+	\caption{Trajektorie układu Lorentza.}
+\end{figure}
+\subsubsection{Wyniki symulacji numerycznej}
+Funkcja celu została zdefiniowana jako
+\begin{equation}
+\langle\textbf{J}\rangle = \lim\limits_{\textit{T}\to\infty}\int_{0}^{T}zdt
+\label{lorenz_J}
+\end{equation} 
+Założone zostały wartości parametrów: $\sigma$ = 10, $\beta$ = $\frac{8}{3}$, zaś $\rho$ pozostawiono jako zmienną projektową(której zakres zmienności przebiega od 10 do 100). Rysunek przedstawia zmienność funkcji celu w rozważanym zakresie zmian $ \rho $, gdzie okres uśredniania $ T = 10 $.
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/OF.png} 
+	\centering
+	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=10 $)}
+\end{figure}
+Należy zauważyć, że chociaż ogólny trend krzywej sugeruje stałe jej nachylenie (wartość tangensa kąta tego nachylenia jest bliska jedności), to występują lokalne fluktuacje, które są przyczyną problemów w wyznaczenia wrażliwości tej funkcji na zmianę parametrów projektowych. Wyznaczona została dla tego przypadku pochodna względem parametru $ \rho $, której wykres ilustruje Rysunek (oś rzędnych jest przedstawiona w skali logarytmicznej). Wykorzystano do tego celu metodę zaburzenia zaburzenia części urojonej zmiennej projektowej traktowanej jako liczbę zespoloną. Technika ta pozwala uzyskać pochodną z doskładnością maszynową (patrz Rozdział).
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/OF_sens.png} 
+	\centering
+	\caption{Wrażlowość funkcji celu wyznaczona metodą zaburzenia zespolonego}
+\end{figure}
+Tak wyznaczona czułość jest praktycznie nieprzydatna. Jednym ze sposobów 'wygładzenia' trendu zmian funkcji celu w zależności od zmiennej decyzyjnej jest zwiększenie okresu uśredniania (słuszność tego podejścia sugeruje założenie ergodyczności). Na Rysunkach oraz  przedstawiono rozpatrywaną funkcję w przypadkach $ T = 50 $ oraz $ T = 100 $.
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/OF1.png} 
+	\centering
+	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=50 $)}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/OF2.png} 
+	\centering
+	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=100 $)}
+\end{figure}
+Zgodnie z oczekiwaniami amplituda fluktuacji maleje, jednak ich obecność nie została wyeliminowana, co w istotny sposób rzutuje na wyznaczanie poszukiwanego gradientu (Rysunki  i ).
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/OF1_sens.png} 
+	\centering
+	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=50 $)}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/OF2_sens.png} 
+	\centering
+	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=100 $)}
+\end{figure}
+Metoda trajektorii cienia została wykorzystana do wyznaczenia wrażliwości funkcji celu (przy użyciu operatora sprzężonego) dla pierwszego przypadku ($ T=10 $). Wynik ilustruje Rysunek , zaś Rysunek  pokazuje porównanie obu metod.
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/LSS.png} 
+	\centering
+	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.)}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/LSSvsCVM.png} 
+	\centering
+	\caption{Porównanie obu metod}
+\end{figure}
+Podobna analiza została wykonana dla drugiego przypadku ($ T=50 $), a jej wyniki przedstawiają Rysunki  oraz .
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/LSS1.png} 
+	\centering
+	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.)}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/LSSvsCVM1.png} 
+	\centering
+	\caption{Porównanie obu metod}
+\end{figure}
+
+\newpage
+\begin{thebibliography}{99}
+\bibitem{Blonigan1} Blonigan P. J., Wang Q.,
+\emph{Probability density adjoint for sensitivity analysis of the mean chaos},
+Journal of Computational Physics, 235 (2014) 1-13.
+
+\bibitem{Blonigan2} Blonigan P. J., Wang Q., Nielsen E. J., Diskin B.,
+\emph{Least Squares Shadowing sensitivity analysis of chaotic flow around a tw-dimensional airfoil},
+in: 54th AIAA Aerosoace Sciences Meeting, January 2016, pp. 1-28.
+
+\bibitem{Blonigan3} Blonigan P. J., Wang Q.,
+\emph{Least Squares Shadowing sensitivity analysis of a modified Kuramoto-Sivashinsky eqation},
+Chaos Solitons Fractals, 64, 2014, 16-25.
+
+\bibitem{Chandramoorthy} Chandramoorthy, N., Fernandez, P., Talnikar, C., Wang, Q. 2017 
+\emph{An Analysis of the Ensemble Adjoint Approach to Sensitivity Analysis in Chaotic Systems} 
+AIAA Paper 2017-3799. 
+
+\bibitem{Gleick} Gleick J.,
+\emph{Chaos. Narodziny nowej nauki.},
+Wydawnictwo: Zysk i S-ka, 2018.
+
+\bibitem{Golub} Golub G. H., Loan C. V. F.,
+\emph{Matrix Computations},
+The Johns Hopkins Univ. Press, Baltimore, 1996.
+
+
+\bibitem{Lea1} Lea D., Allen M., Haine T.,
+\emph{Sensitivity analysis of the climate of a chaotic system},
+Tellus, Vol. 52A, 2000, pp. 523-532.
+
+\bibitem{Lea2} Lea D., Haine T., Allen M., Hansen J., 
+\emph{Sensitivity analysis of the climate of a chaotic ocean circulation model},
+Journal of the Royal Meteorological Society, Vol. 128, 2002, pp. 2587-2605.
+
+\bibitem{Lorenz} Lorenz E.,
+\emph{Deterministic Nonperiodic Flow},
+Journal of Atmospheric Sciences, Vol. 20, 1963, pp. 130-141.
+
+\bibitem{Palczewski} Palczewski A.,
+\emph{Równania różniczkowe zwyczajne. Teoria i metody numeryczne z wykorzystaniem programu rachunków symbolicznych},
+Wydawnictwo: WNT, Warszawa 2017.
+
+\bibitem{Ruelle1} Ruelle D.,
+\emph{Differentiation of SRB states},
+Communications in Mathematical Physics, Vol. 187, 1997, pp. 227-241.
+	
+\bibitem{Strogatz} Strogatz S., 
+\emph{Nonlinear Dynamics and Chaos: With Applications to Physics, Biology, Chemistry and Engineering},
+Westview Press, Philadelphia, PA, 1994.  
+
+	
+\bibitem{Qiqi1} Wang Q.,
+\emph{Forward and adjoint sensitivity computation of chaotic dynamical systems},
+Journal of Computational Physics, 235 (2013) 1-13.
+
+\bibitem{Qiqi2} Wang Q.,
+\emph{Convergence of the Least Squares Shadowing Method for Computing Derivative of Ergodic Averages},
+SIAM Journal of Numerical Analysis, Vol 52, No. 1, 2014, pp. 156-170.  
+
+\bibitem{Qiqi3} Wang Q., 
+\emph{Least Squares Shadowing sensitivity analysis of chaotic limit cycle oscillations},
+Journal of Computational Physics, Vol. 267, June 2014, pp. 210-224.  
+
+
+\end{thebibliography} 
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
