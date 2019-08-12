@@ -172,8 +172,10 @@ gdzie $t\in(0,T]$ oznacza czas ($ T>0 $ - rozpatrywany okres),$ \textbf{s} $ ozn
 W tym momencie poczynione zostaną uwagi o charakterze technicznym, które pozostają w mocy do końca bieżącego rozdziału:
 \begin{itemize}
 	\item Równanie (\ref{dyn_eq}) jest w ogólności określone na przestrzeni funkcji (tj. na pewnej nieskończenie wymiarowej przestrzeni Banacha). Jednakże jakościowe warunki dotyczące istnienia i jednoznaczności rozwiązań takich równań zachodzą i w takich przypadkach (tj. twierdzenia: Peano oraz Picarda-Lindelöfa mają analogiczną postać do swoich skończenie wymiarowych odpowiedników).
+	\item Funkcję określoną na przestrzeni nieskończenie wymiarowej określa się często mianem operatora. W tej pracy konwencja ta nie będzie obowiązywała, aby nie zaciemniać istoty rzeczy.
 	\item Poprzez rozmaitość różniczkową $ M $ generowaną na pewnej przestrzeni Hilberta $ H $ rozumie się przestrzeń topologiczną Hausdorffa, w której każdy punkt ma otoczenie dyfeomorfincze z pewnym zbiorem otwartym w $ H$ (w przypadku skończenie wymiarowym każdy punkt ma otoczenie dyfeomorficzne z pewną kulą).
 	\item Metryka Riemanna jest w ogólności pojęciem bardzo abstrakcyjnym. Jej precyzyjna definicja wymaga pojęć takich jak: ..., których wprowadzanie pozostaje poza zakresem tej pracy. W związku z tym przedstawiona zostanie intuicja stojąca za tym pojęciem odsyłając zainteresowanego Czytelnika do literatury\footnote{Nonlinear Dynamical Systems Of Mathematical Physics: Spectral And Symplectic}
+	\item Pełne dookreślenie układu dynamicznego wymaga zdefiniowania niezmienniczej względem homeomorfizmu $ \textbf{f} $ miary. Oczywiście 'zwykła' miara Lebesgue'a nie jest odpowiednia ze względu na brak niezmienniczości (w większości przypadków objętości, pod wpływem dynamiki, redukują się do tworów niżej wymiarowych). W związku z czym wprowadzona została miara SRB (nazwa pochodzi od nazwisk jej twórców: Sinai, Ruelle, Bowen). Miara ta konieczna jest jedynie do zdefiniowania właśności układu zwaną ergodycznością, która zostanie wytłumaczona na gruncie intuicji, wobec czego formalna defnicja miary SRB nie zostanie sformułowana. Można ją znnaleść w pracach [].
 \end{itemize}
 Równanie (\ref{dyn_eq}) można interpretować jako ewolucję w czasie wielkości wektorowej, na przykład pola prędkości przy zadanych warunkach brzegowych, które w ogólności zależą od czasu, współrzędnych przestrzennych oraz od wektora zmiennych decyzyjnych:
 \begin{equation}
@@ -194,9 +196,9 @@ gdzie $ \textbf{f}^{s} $ oznacza zdyskretyzowany homeomorfizm $ \textbf{f} $ spa
 \begin{defi}\label{ph_space}
 	Przestrzenią fazową $M_{ph} \subseteq M $ równania (\ref{dyn_eq}) nazywamy zbiór wszystkich stanów tego układu traktowanych jako punkty tej przestrzeni.
 \end{defi}
-W dalszym ciągu pracy o przestrzeni fazowej $ M_{ph} $ zakłada się, iż ma odpowiednią strukturę topologiczną. Aby uściślić to pojęcie załóżmy o $ \textbf{f} $, iż jest dyfeomorfizmem określonym na przestrzeni fazowej ($  \textbf{f}: M_{ph} \mapsto M_{ph}$) która jest zbiorem zwartym, bez brzegu. Przy tych założeniach można przyjąć następujące definicje. 
+W dalszym ciągu pracy o przestrzeni fazowej $ M_{ph} $ zakłada się, iż ma odpowiednią strukturę topologiczną. Aby uściślić to pojęcie załóżmy o $ \textbf{f} $, iż jest dyfeomorfizmem określonym na przestrzeni fazowej ($  \textbf{f}: M_{ph} \mapsto M_{ph}$) która jest zbiorem zwartym, bez brzegu\footnote{Zwartość jest stosunkowo mocnym założeniem, które często będzie pomijane. Niemniej dla ścisłości rozumowania jest ono konieczne}. Przy tych założeniach można przyjąć następujące definicje. 
 \begin{defi}\label{tan_space}
-	Przestrzenią styczną $ T_{x}M_{ph} $
+	Przestrzenią styczną $ T_{x}M_{ph} $ do przestrzeni fazowej w punkcie $ x\in M_{ph} $ nazywamy zbiór $ \{x\} \bigtimes \phi'(u)\cdot E \subset \{x\}\bigtimes M$, gdzie $ \phi (U) $ jest parametryzacją otoczenia punktu $ x\in M_{ph} $ (istniejąca na mocy założeń o $ M $) taką, że $ \phi (u) = x $
 \end{defi}
 \begin{defi}\label{tan_bundle}
 	Wiązką styczną $ TM_{ph} $ do przestrzeni fazowej $M_{ph} \subseteq M $ nazywamy rodzinę przestrzeni stycznych $  TM_{ph} = \{ (x,y) | x \in M_{ph} , y \in T_{x} M_{ph}\} $.
@@ -207,7 +209,8 @@ Tak zdefiniowana wiązka stanowi dziedzinę pochodnej odwzorowania $ \textbf{f} 
 	\centering
 	\caption{Wizualizacja pojęcia wiązki stycznej dla okręgu}
 \end{figure}
-Jednym z dwóch najważniejszych założeń o rozpatrywanych układach dynamicznych jest możliwość dekompozycji ich przestrzeni fazowych na sumę prostą dwóch podprzestrzeni, których wektory cechują się podobnymi właściwościami dynamicznymi.
+Jednym z dwóch najważniejszych
+\\\\ założeń o rozpatrywanych układach dynamicznych jest możliwość dekompozycji ich przestrzeni fazowych na sumę prostą dwóch podprzestrzeni, których wektory cechują się podobnymi właściwościami dynamicznymi.
 \begin{defi}\label{hyperbolic_set}
 	Powiemy, że zbiór $M_{ph}$ ma strukturę hiperboliczną, o ile istnieją zbiory $ E^{s},E^{u} \subseteq TM_{ph}$ (nazywane wiązką stabilną i niestabilną, odpowiednio) takie, że $ TM_{ph} = E^{s} \bigoplus E^{u}$ i spełniające warunki:
 	\begin{itemize}
@@ -232,12 +235,16 @@ gdzie $ J(u;s) $ oznacza chwilową wartość funkcji będącej obiektem zaintere
 \label{J_bar_approx}
 \end{equation}
 gdzie $ \Delta T $ oznacza przyjętą (odpowiednio dużą) długość okresu uśredniania,  $ (T_{i+1}-T_{i}) $ określa długość kroku czasowego w danym kroku (przyjęty został w tym przypadku schemat trapezów dla całkowania numerycznego).\newline
-Aby zastosować odpowiedni aparat matematyczny w dalszym ciągu rozpatrywana będzie formuła postaci (\ref{J_bar}) pozostawiając jej numeryczną realizację (\ref{J_bar_approx}) na moment opisu implementacji odpowiedniej metody. Poprzez wrażliwość tak zdefiniowanej funkcji będziemy rozumieli jej gradient względem wektora parametrów $ \textbf{s} $. Klasyczne metody wyznaczania takiej wielkości przedstawione zostały w Rozdziale, zaś problemy z nich wynikające przy aplikacji do układów chaotycznych wyjaśnia Rozdział. Należy przy tym zaznaczyć, że aby cały ten aparat mógł być użyty należy przyjąć kolejne, bardzo istotne założenie dotyczące ropatrywanego układu, które będzie rzutowało na regularność takiej funkcji: ergodyczność systemu. 
-\newline Formalna definicja ergodyczności wydawać się może pojęciem abstrakcyjnym. Implikuje ona jednak istotną cechę rozpatrywanych układów: długookresowe wartości średnie są niezależne od warunków początkowych (uściślając: są one takie same dla prawie wszystkich warunków początkowych) i ich wartość można równoważnie uzyskać poprzez uśrednianie po przestrzeni fazowej układu. Jak się później przekonamy (Rozdział) całkowanie w przestrzeni możliwych stanów układu ma działanie regularyzujące. 
+Aby zastosować odpowiedni aparat matematyczny w dalszym ciągu rozpatrywana będzie formuła postaci (\ref{J_bar}) pozostawiając jej numeryczną realizację (\ref{J_bar_approx}) na moment opisu implementacji odpowiedniej metody. Poprzez wrażliwość tak zdefiniowanej funkcji będziemy rozumieli jej gradient względem wektora parametrów $ \textbf{s} $. Klasyczne metody wyznaczania takiej wielkości przedstawione zostały w Rozdziale, zaś problemy z nich wynikające przy aplikacji do układów chaotycznych wyjaśnia Rozdział. Należy przy tym zaznaczyć, że aby cały ten aparat mógł być użyty należy przyjąć kolejne, bardzo istotne założenie dotyczące ropatrywanego układu, które będzie rzutowało na regularność takiej funkcji: ergodyczność systemu.
+\begin{defi}\label{ergodicity}
+
+\end{defi} 
+Formalna definicja ergodyczności wydawać się może abstrakcyjna, niemniej wprowadzenie tego pojęcia wynikało pierwotnie z potrzeb fizyki, a dokładnie z mechaniki statystycznej i ma ono praktyczną interpretację. Załóżmy bowiem, że chcielibyśmy wyznaczyć temperaturę gazu w danym pomieszczeniu. Patrząc na to z eksperymentalnego punktu widzenia nie ma w tym nic nadzwyczajnego - wystarczy w dowolnym miejscu dokonać pomiaru za pomocą termometru. Należy przy tym odczekać odpowiednią ilość czasu związaną z termiczną bezwładnością przyrządu. Na ten oczywisty fakt można spojrzeć z punktu widzenia układów dynamicznych - temperatura jest miarą średniej energii kinetycznej ruchu postępowego cząstek gazu w pomieszczeniu (przyjmujemy tutaj model gazu doskonałego jako dobre przybliżenie). Pomiar za pomocą termometru mierzy energie kinetyczne cząstek, których wartości różnią się. Stąd, aby pomiar był poprawny, należy zapewnić odpowiednio długi okres uśredniania. Dodatkowo należy zwrócić uwagę, że nie ma znaczenia w którym miejscu tego pomiaru dokonamy (gaz jest w równowadze termodynamicznej). Mimo, że z mikroskopowego punktu widzenia w każdej chwili cząstki poruszają się chaotycznie ich średnia wartość pewnych wielkości (w tym przypadku energii kinetycznej) nie zmienia się. Analizując to zadanie, ale tym razem na drodze teorii napotyka się pewien problem. Rozwiązanie równań dynamiki dla tak złożonego układu jest zbyt kosztowne w sensie czasu obliczeń. Z mechaniki statystycznej wiadomo jednakże, że istnieje w stanie równowagi funkcja rozkładu prędkości cząstek (rozkład Maxwella-Boltzmanna). Jest to funkcja gęstości prawdopodobieństwa i dzięki niej można bez większych problemów (tj. całkując po przestrzeni fazowej) wyznaczyć poszukiwaną średnią wartość energii kinetycznej przypadającej na cząstke a w konsekwencji temperaturę gazu. Jest tutaj pewna subtelność - wykorzystane zostały uśrednianie po przestrzeni fazowej. Jest to abstrakcyjny zabieg, który można sobie wyobrazić jako mierzenie parametrów jednej cząstki 'rozmazaen' przez funkcję rozkładu po wszystkich możliwych jej stanach. W tym momencie dochodzimy do istoty problemu: kiedy można powiedzieć, że losowo wybrana cząsta jest reprezentatywna w tym sensie, że (po odpowiednio długim czasie) \newline 
+Wobec powyższego można dojść do wniosku, że własność ta implikuje istotną cechę rozpatrywanych układów: długookresowe wartości średnie są niezależne od warunków początkowych (uściślając: są one takie same dla prawie wszystkich warunków początkowych) i ich wartość można równoważnie uzyskać poprzez uśrednianie po przestrzeni fazowej układu (względem miary probabilistycznej, która w takich układach jest niezmiennicza). Jak się później przekonamy (Rozdział) całkowanie w przestrzeni możliwych stanów układu ma działanie regularyzujące. 
 \subsection{Stabilność rozwiązań}
 Zagadnienie stabilności związane jest z odpowiedzią na pytanie jak zmieni się globalny przebieg rozwiązania pod wpływem małych (w odpowiednim sensie) perturbacji warunków początkowych lub funkcji określającej dynamikę układu, który jest zidentyfikowany poprzez (wektorowe) równanie różniczkowe zwyczajne.
 \begin{defi}\label{crit_points}
-	Punkt $ \textbf{u}_{c} \in M_{ph}$ nazywamy położeniem równowagi równania (\ref{dyn_eq}), o ile jest to punkt stały odwzorowania $ \textbf{f} $, tzn. $ \textbf{f}(u_{c}) = 0 $.
+	Punkt $ \textbf{u}_{c} \in M_{ph}$ nazywamy położeniem równowagi równania (\ref{dyn_eq}), o ile jest to punkt krytyczny odwzorowania $ \textbf{f} $, tzn. $ \textbf{f}(u_{c}) = 0 $.
 \end{defi}
 Zauważamy, że położenie równowagi jest (stałym) rozwiązaniem równania (\ref{dyn_eq}) z takim samym warunkiem początkowym. Punkty takie jakościowo mogą istotnie się różnić ze względu na ewolucję w czasie swojego otoczenia. Ilustrację tej uwagi stanowi Rysunek przedstawiający ideę stabilnych  punktów równowagi oraz analogiczny Rysunek dla punktów niestabilnych (pojęcia te i ich znaczenie jest analogiczne dla rodzajów równowagi termodynamicznej: trwałej i chwiejnej, odpowiednio).
 \begin{figure}[H]
@@ -398,8 +405,26 @@ Z przykładu tego można łatwo uogólnić następujący wniosek: w przypadku je
 \end{przyklad}
 Z powyższych przykładów łatwo można dojść do wniosku, że analiza trajektorii w przestrzeni fazowej jest dużo łatwiejsza niż badanie nieskończonej (być może nieprzeliczalnej) liczby rozwiązań danego układu. Dysponując już odpowiednim aparatem pojęciowym możemy przejść do analitycznego ujęcia zjawiska chaosu.
 \subsection{Chaos deterministyczny}
-Do tej pory przedstawione zostały pewne ogólne sposoby badania stabilności układów dynamicznych. Obecnie przechodzimy do analizy równań, których rozwiązania (chociaż nadal są wyznaczone w sposób jednoznaczny) mają bardzo skomplikowane portrety fazowe, które w praktyce istotnie ograniczają możliwość przewidywania długookresowych zachowań tych rozwiązań. Należy zauważyć, że do tej pory takie układy nie były rozważane, gdyż dotychczas prezentowane były układy o co najwyżej dwuwymiarowej przestrzeni fazowej, zaś wspomniana cecha ujawnia się gdy liczba wymiarów jest nie mniejsza niż trzy.\newline
-
+Do tej pory przedstawione zostały pewne ogólne sposoby badania stabilności układów dynamicznych. Obecnie przechodzimy do analizy równań, których rozwiązania (chociaż nadal są wyznaczone w sposób jednoznaczny) mają bardzo skomplikowane portrety fazowe, które w praktyce istotnie ograniczają możliwość przewidywania długookresowych zachowań tych rozwiązań. Należy zauważyć, że do tej pory takie układy nie były rozważane, gdyż dotychczas prezentowane były systemy o co najwyżej dwuwymiarowej przestrzeni fazowej, zaś wspomniana cecha ujawnia się gdy liczba wymiarów jest nie mniejsza niż trzy. Dodatkowy wymiar przestrzeni fazowej umożliwia pojawienie się trajektorii o kształtach tak skomplikowanych, że klasyczne metody geometrii pozostają wobec nich bezsilnie. Stanowią one istotną wskazówkę, iż mamy do czynienia z chaosem (choć nie jest to reguła). \newline
+Chaos deterministyczny wyróżniają (nieformalnie ujmując) trzy cechy układu:
+\begin{itemize}
+	\item determinizm,
+	\item nieliniowość,
+	\item wrażliwość na warunki początkowe.
+\end{itemize} 
+Pierwsza z nich dotyczy istnienia i jednoznaczności rozwiązania, zaś druga struktury równań zadających dynamikę (suma rozwiązań w ogólności nie musi być rozwiązaniem). Ostatnia cecha dotyczy zachowania się trajektorii wraz z upływem czasu - norma ich różnicy pozostaje nieograniczona pomimo zbliżonych warunków początkowych. Innymi słowy: ustaliwszy uprzednio warunek początkowy, trajektorie wychodzące z punktów z jego dowolnego otoczenia z czasem pozostają odległe od trajektorii rozpoczynającej się w tymże punkcie\footnote{Mówiąc bardziej precyzyjnie - cecha ta zachodzi dla $ \mu $-prawie wszystkich punktów z otoczenia, gdzie definicja miary $ \mu $ podana zostanie później.}. Wrażliwość układu dynamicznego równie silnie przejawia się w stosunku do zmiany parametrów funkcji  $ \textbf{f}:M_{ph} \mapsto M_{ph}  $ przy ustalonym warunku początkowym. Występują istotne różnice pomiędzy wspomniamymi wrażliwościami, które mają bezpośrednie konsekwencje w analizie układu - zagadnienie to zostanie poruszone przy okazji omawiania \textit{Metody Trajektorii Cienia}. Dodatkowo, często wspomina się o długookresowym, aperiodycznym zachowaniu rozwiązań w kontekście chaosu. \newline
+Z powyższych ustaleń można dojść do wniosku, że o takim układzie niemalże nic konkretnego nie można powiedzieć. Należy pamiętać o tym, że z punktu widzenia metod numerycznych zawsze istnieją ograniczenia (precyzja maszynowa, błędy zaokrągleń, itp.), co wobec ostatniej z wyżej wspomnianych cech również nie poprawia sytuacji. W matematyce oraz w naukach przyrodniczych, w sytuacjach podobnych do zainstniałej, dobrym pomysłem jest próba znalezienie niezmienników - stałych elementów w rozważanych systemach. Okazuje się, że dla układów dynamicznych pomocnym jest zdefiniowanie niezmienniczego ze względu na dynamikę zbioru zwanego atraktorem.
+\begin{defi}
+	Zbiór $\Lambda \subset M_{ph}$ nazywamy atraktorem układu (\ref{dyn_eq}), jeżeli:
+	\begin{itemize}
+		\item $\Lambda $ jest niezmienniczy względem $ \textbf{f} $, tj. $ \textbf{f}(\Lambda) \subset \Lambda $,
+		\item Istnieje zbiór otwarty $ U \subset M_{ph} $ taki, że
+		$\forall \textbf{u} \in M_{ph}$ zachodzi: \newline
+		$ \textbf{u}(0) \in U  \implies \lim\limits_{t->\infty} d(\Lambda, \textbf{u}(t))=0$, \newline gdzie przez $ d(,) $ oznaczono metrykę indukowaną przez normę w $ M_{ph} $,
+		\item $\Lambda$ jest minimalny w tym sensie, że żaden jego właściwy podzbiór nie spełnia powyższych dwóch warunków\footnote{Ze względu na trudności w dowodzeniu poprawności tego warunku w większości przypadków jest on pomijany.}.
+	\end{itemize} 
+Patrząc na dotychczas omówione przkłady można dojść do wniosku, że różne proste postaci atraktorów już się pojawiały (patrz). Różnorodność ich geometrii była jednak mocno ograniczona (). 
+\end{defi}
 \newpage
 \section{Wybrane metody optymalizacji lokalnej stosowane w technice}
 Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent (???) oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice [].
@@ -573,6 +598,10 @@ Chaos Solitons Fractals, 64, 2014, 16-25.
 \emph{An Analysis of the Ensemble Adjoint Approach to Sensitivity Analysis in Chaotic Systems} 
 AIAA Paper 2017-3799. 
 
+\bibitem{Evans} Evans L.C.,
+\emph{Równania różniczkowe cząstkowe},
+Wydawnictwo: PWN, Warszawa 2012.
+
 \bibitem{Gleick} Gleick J.,
 \emph{Chaos. Narodziny nowej nauki.},
 Wydawnictwo: Zysk i S-ka, 2018.
@@ -593,6 +622,18 @@ Journal of the Royal Meteorological Society, Vol. 128, 2002, pp. 2587-2605.
 \bibitem{Lorenz} Lorenz E.,
 \emph{Deterministic Nonperiodic Flow},
 Journal of Atmospheric Sciences, Vol. 20, 1963, pp. 130-141.
+
+\bibitem{Maurin1} Maurin K.,
+\emph{Analiza, część I},
+Wydawnictwo: PWN, Warszawa 2010.
+
+\bibitem{Maurin2} Maurin K.,
+\emph{Analiza, część II},
+Wydawnictwo: PWN, Warszawa 2010.
+
+\bibitem{Maurin3} Maurin K.,
+\emph{Analiza, część III},
+Wydawnictwo: PWN, Warszawa 2010.
 
 \bibitem{Palczewski} Palczewski A.,
 \emph{Równania różniczkowe zwyczajne. Teoria i metody numeryczne z wykorzystaniem programu rachunków symbolicznych},
