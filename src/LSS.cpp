@@ -662,7 +662,7 @@ void LSS::SolveKKT()
 	std::ofstream CGM("CGM.txt");
 	int N = mstep * m * n * Q; //System size
 	int d = 3, D = 1;// pow(10.0, double(d / 2));
-	int maxIter = 3*pow(10.0, double(d));
+	int maxIter = int(mstep/100)*pow(10.0, double(d));
 	double eps = 1e-5, alfa = 0.5, beta, buff = 0;
 	double ****res_b, ****res, ****p, ****temp, ****x;
 
