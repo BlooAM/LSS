@@ -24,7 +24,7 @@ void dfds_b(double p, double u0, double *u0b, int m, int n, double *cx,
 	m0 = p * m;
 	n0 = m;
 	//Collision step
-	double temp1, temp2, rhow, ssum, usum, vsum;
+	double temp1, temp2, rhow = 0, ssum, usum, vsum;
 	double rhowb;
 	for (int i = 0; i < n; ++i)
 		for (int j = 0; j < m; ++j) {

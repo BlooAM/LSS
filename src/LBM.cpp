@@ -1,5 +1,162 @@
 #include "LBM.h"
 
+//Friend functions first
+void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy, double *w, double **rho, double **u, double **v, double omega, double ***feq, double*** fin, double*** fout) //Friend function
+{
+	int m0 = p * m, n0 = m;
+	//Collision step
+	double temp1, temp2, rhow, ssum, usum, vsum;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			temp1 = u[i][j] * u[i][j] + v[i][j] * v[i][j];
+			for (int k = 0; k < 9; k++)
+			{
+				temp2 = u[i][j] * cx[k] + v[i][j] * cy[k];
+				feq[k][i][j] = rho[i][j] * w[k] * (1 + 3 * temp2 + 4.5*temp2*temp2 - 1.5*temp1);
+				fout[i][j][k] = omega * feq[k][i][j] + (1 - omega)*fin[i][j][k];
+			}
+		}
+	}
+
+	//Apply BC
+	//Inlet
+	for (int j = m0; j < m; j++)
+	{
+		rhow = (fout[0][j][0] + fout[0][j][2] + fout[0][j][4] + 2 * (fout[0][j][3] + fout[0][j][6] + fout[0][j][7])) / (1 - u0);
+		fout[0][j][1] = fout[0][j][3] + 2 * rhow*u0 / 3;
+		fout[0][j][5] = fout[0][j][7] + rhow * u0 / 6;
+		fout[0][j][8] = fout[0][j][6] + rhow * u0 / 6;
+	}
+	//South
+	for (int i = 0; i < n; i++)
+	{
+		fout[i][0][2] = fout[i][0][4];
+		fout[i][0][5] = fout[i][0][7];
+		fout[i][0][6] = fout[i][0][8];
+	}
+	//North
+	for (int i = 0; i < n; i++)
+	{
+		fout[i][m - 1][4] = fout[i][m - 1][2];
+		fout[i][m - 1][8] = fout[i][m - 1][6];
+		fout[i][m - 1][7] = fout[i][m - 1][5];
+	}
+	//Outlet - extrapolation
+	for (int j = 0; j < m; j++)
+	{
+		fout[n - 1][j][1] = 2 * fout[n - 2][j][1] - fout[n - 3][j][1];
+		fout[n - 1][j][5] = 2 * fout[n - 2][j][5] - fout[n - 3][j][5];
+		fout[n - 1][j][8] = 2 * fout[n - 2][j][8] - fout[n - 3][j][8];
+	}
+	//Back-facing step
+	for (int i = 0; i < n0; i++)
+	{
+		fout[i][m0 - 1][2] = fout[i][m0 - 1][4];
+		fout[i][m0 - 1][5] = fout[i][m0 - 1][7];
+		fout[i][m0 - 1][6] = fout[i][m0 - 1][8];
+	}
+	for (int j = 0; j < m0; j++)
+	{
+		fout[n0 - 1][j][1] = fout[n0 - 1][j][3];
+		fout[n0 - 1][j][5] = fout[n0 - 1][j][7];
+		fout[n0 - 1][j][8] = fout[n0 - 1][j][6]; //???
+	}
+
+	//Streaming step
+	for (int j = 0; j < m; j++)
+	{
+		for (int i = n - 1; i > 0; i--)
+		{
+			fout[i][j][1] = fout[i - 1][j][1];
+		}
+
+		for (int i = 0; i < n - 1; i++)
+		{
+			fout[i][j][3] = fout[i + 1][j][3];
+		}
+	}
+
+	for (int j = m - 1; j > 0; j--)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			fout[i][j][2] = fout[i][j - 1][2];
+		}
+		for (int i = n - 1; i > 0; i--)
+		{
+			fout[i][j][5] = fout[i - 1][j - 1][5];
+		}
+		for (int i = 0; i < n - 1; i++)
+		{
+			fout[i][j][6] = fout[i + 1][j - 1][6];
+		}
+	}
+	for (int j = 0; j < m - 1; j++)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			fout[i][j][4] = fout[i][j + 1][4];
+		}
+		for (int i = 0; i < n - 1; i++)
+		{
+			fout[i][j][7] = fout[i + 1][j + 1][7];
+		}
+		for (int i = n - 1; i > 0; i--)
+		{
+			fout[i][j][8] = fout[i - 1][j + 1][8];
+		}
+	}
+
+	//Calculate macroscopic
+	for (int j = 0; j < m; j++)
+	{
+		for (int i = 0; i < n; i++)
+		{
+			ssum = 0;
+			for (int k = 0; k < 9; k++)
+			{
+				ssum = ssum + fout[i][j][k];
+			}
+			rho[i][j] = ssum;
+		}
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		rho[i][m - 1] = fout[i][m - 1][0] + fout[i][m - 1][1] + fout[i][m - 1][3] + 2 * (fout[i][m - 1][2] + fout[i][m - 1][6] + fout[i][m - 1][5]);
+	}
+
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m - 1; j++)
+		{
+			usum = 0;	vsum = 0;
+			for (int k = 0; k < 9; k++)
+			{
+				usum = usum + fout[i][j][k] * cx[k];
+				vsum = vsum + fout[i][j][k] * cy[k];
+			}
+			u[i][j] = usum / rho[i][j];
+			v[i][j] = vsum / rho[i][j];
+		}
+	}
+
+	for (int j = 0; j < m; j++)
+	{
+		v[n - 1][j] = 0;
+	}
+
+	for (int j = 0; j < m0; j++)
+	{
+		for (int i = 0; i < n0; i++)
+		{
+			u[i][j] = 0;
+			v[i][j] = 0;
+		}
+	}
+}
 
 LBM::LBM()
 {
@@ -441,163 +598,6 @@ void LBM::GetEqulibrium(int i, double** rho, double** u, double** v, double ***e
 				temp2 = u[i][j] * cx[k] + v[i][j] * cy[k];
 				eq[k][i][j] = rho[i][j] * w[k] * (1 + 3 * temp2 + 4.5*temp2*temp2 - 1.5*temp1);
 			}
-		}
-	}
-}
-
-void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy, double *w, double **rho, double **u, double **v, double omega, double ***feq, double*** fin, double*** fout) //Friend function
-{
-	int m0 = p * m, n0 = m;
-	//Collision step
-	double temp1, temp2, rhow, ssum, usum, vsum;
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			temp1 = u[i][j] * u[i][j] + v[i][j] * v[i][j];
-			for (int k = 0; k < 9; k++)
-			{
-				temp2 = u[i][j] * cx[k] + v[i][j] * cy[k];
-				feq[k][i][j] = rho[i][j] * w[k] * (1 + 3 * temp2 + 4.5*temp2*temp2 - 1.5*temp1);
-				fout[i][j][k] = omega * feq[k][i][j] + (1 - omega)*fin[i][j][k];
-			}
-		}
-	}
-
-	//Apply BC
-	//Inlet
-	for (int j = m0; j < m; j++)
-	{
-		rhow = (fout[0][j][0] + fout[0][j][2] + fout[0][j][4] + 2 * (fout[0][j][3] + fout[0][j][6] + fout[0][j][7])) / (1 - u0);
-		fout[0][j][1] = fout[0][j][3] + 2 * rhow*u0 / 3;
-		fout[0][j][5] = fout[0][j][7] + rhow * u0 / 6;
-		fout[0][j][8] = fout[0][j][6] + rhow * u0 / 6;
-	}
-	//South
-	for (int i = 0; i < n; i++)
-	{
-		fout[i][0][2] = fout[i][0][4];
-		fout[i][0][5] = fout[i][0][7];
-		fout[i][0][6] = fout[i][0][8];
-	}
-	//North
-	for (int i = 0; i < n; i++)
-	{
-		fout[i][m - 1][4] = fout[i][m - 1][2];
-		fout[i][m - 1][8] = fout[i][m - 1][6];
-		fout[i][m - 1][7] = fout[i][m - 1][5];
-	}
-	//Outlet - extrapolation
-	for (int j = 0; j < m; j++)
-	{
-		fout[n - 1][j][1] = 2 * fout[n - 2][j][1] - fout[n - 3][j][1];
-		fout[n - 1][j][5] = 2 * fout[n - 2][j][5] - fout[n - 3][j][5];
-		fout[n - 1][j][8] = 2 * fout[n - 2][j][8] - fout[n - 3][j][8];
-	}
-	//Back-facing step
-	for (int i = 0; i < n0; i++)
-	{
-		fout[i][m0 - 1][2] = fout[i][m0 - 1][4];
-		fout[i][m0 - 1][5] = fout[i][m0 - 1][7];
-		fout[i][m0 - 1][6] = fout[i][m0 - 1][8];
-	}
-	for (int j = 0; j < m0; j++)
-	{
-		fout[n0 - 1][j][1] = fout[n0 - 1][j][3];
-		fout[n0 - 1][j][5] = fout[n0 - 1][j][7];
-		fout[n0 - 1][j][8] = fout[n0 - 1][j][6]; //???
-	}
-
-	//Streaming step
-	for (int j = 0; j < m; j++)
-	{
-		for (int i = n - 1; i > 0; i--)
-		{
-			fout[i][j][1] = fout[i - 1][j][1];
-		}
-
-		for (int i = 0; i < n - 1; i++)
-		{
-			fout[i][j][3] = fout[i + 1][j][3];
-		}
-	}
-
-	for (int j = m - 1; j > 0; j--)
-	{
-		for (int i = 0; i < n; i++)
-		{
-			fout[i][j][2] = fout[i][j - 1][2];
-		}
-		for (int i = n - 1; i > 0; i--)
-		{
-			fout[i][j][5] = fout[i - 1][j - 1][5];
-		}
-		for (int i = 0; i < n - 1; i++)
-		{
-			fout[i][j][6] = fout[i + 1][j - 1][6];
-		}
-	}
-	for (int j = 0; j < m - 1; j++)
-	{
-		for (int i = 0; i < n; i++)
-		{
-			fout[i][j][4] = fout[i][j + 1][4];
-		}
-		for (int i = 0; i < n - 1; i++)
-		{
-			fout[i][j][7] = fout[i + 1][j + 1][7];
-		}
-		for (int i = n - 1; i > 0; i--)
-		{
-			fout[i][j][8] = fout[i - 1][j + 1][8];
-		}
-	}
-
-	//Calculate macroscopic
-	for (int j = 0; j < m; j++)
-	{
-		for (int i = 0; i < n; i++)
-		{
-			ssum = 0;
-			for (int k = 0; k < 9; k++)
-			{
-				ssum = ssum + fout[i][j][k];
-			}
-			rho[i][j] = ssum;
-		}
-	}
-
-	for (int i = 0; i < n; i++)
-	{
-		rho[i][m - 1] = fout[i][m - 1][0] + fout[i][m - 1][1] + fout[i][m - 1][3] + 2 * (fout[i][m - 1][2] + fout[i][m - 1][6] + fout[i][m - 1][5]);
-	}
-
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m - 1; j++)
-		{
-			usum = 0;	vsum = 0;
-			for (int k = 0; k < 9; k++)
-			{
-				usum = usum + fout[i][j][k] * cx[k];
-				vsum = vsum + fout[i][j][k] * cy[k];
-			}
-			u[i][j] = usum / rho[i][j];
-			v[i][j] = vsum / rho[i][j];
-		}
-	}
-
-	for (int j = 0; j < m; j++)
-	{
-		v[n - 1][j] = 0;
-	}
-
-	for (int j = 0; j < m0; j++)
-	{
-		for (int i = 0; i < n0; i++)
-		{
-			u[i][j] = 0;
-			v[i][j] = 0;
 		}
 	}
 }

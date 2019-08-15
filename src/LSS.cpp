@@ -661,9 +661,9 @@ void LSS::SolveKKT()
 	bool ExportFlag = 1;
 	std::ofstream CGM("CGM.txt");
 	int N = mstep * m * n * Q; //System size
-	int d = 6, D = 1;// pow(10.0, double(d / 2));
-	int maxIter = pow(10.0, double(d));
-	double eps = 1e-6, alfa = 0.5, beta, buff = 0;
+	int d = 3, D = 1;// pow(10.0, double(d / 2));
+	int maxIter = 3*pow(10.0, double(d));
+	double eps = 1e-5, alfa = 0.5, beta, buff = 0;
 	double ****res_b, ****res, ****p, ****temp, ****x;
 
 	//Create solution vectors
@@ -811,24 +811,32 @@ double LSS::CalculateSensitivity(double ****KKT)
 	for (int i = 0; i < mstep - 1; i++)
 	{
 		ve[i] = new double **[n];
-		if (i == 0) temp = new double **[n];
 		for (int j = 0; j < n; j++)
 		{
 			ve[i][j] = new double *[m];
-			if (i == 0) temp[j] = new double *[m];
 			for (int k = 0; k < m; k++)
 			{
 				ve[i][j][k] = new double[Q];
-				if (i == 0) temp[j][k] = new double [Q];
 				for (int l = 0; l < Q; l++)
 				{
 					ve[i][j][k][l] = 0;
-					if (i == 0) temp[j][k][l] = 0;
 				}
 			}
 		}
 	}
-
+	temp = new double **[n];
+	for (int j = 0; j < n; j++)
+	{
+		temp[j] = new double *[m];
+		for (int k = 0; k < m; k++)
+		{
+			temp[j][k] = new double[Q];
+			for (int l = 0; l < Q; l++)
+			{
+				temp[j][k][l] = 0;
+			}
+		}
+	}
 	for (int i = 0; i < n; i++)
 	{
 		temp1[i] = new double *[m];	
