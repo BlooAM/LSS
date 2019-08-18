@@ -11,7 +11,7 @@ SolverFactory::~SolverFactory()
 
 }
 
-SolverFactory* SolverFactory::Create(SolverType type, double u0_, int tsteps_, int m_, int mx)
+SolverFactory* SolverFactory::Create(SolverType type, float u0_, int tsteps_, int m_, int mx)
 {
 	if (type == LB)
 		return new LBM(u0_,tsteps_,m_,mx);

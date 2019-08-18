@@ -16,17 +16,17 @@ LSS::~LSS()
 	delete solver, trajectory, b, rho, u, v, cx, cy, w, eq;
 }
 
-void Obj(double p, double u0, int m, int n, double *cx, double *cy, double *w, double **rho, double **u, double **v, double omega, double ***feq, double*** fin, double*** fout, double *J)
+void Obj(float p, float u0, int m, int n, float *cx, float *cy, float *w, float **rho, float **u, float **v, float omega, float ***feq, float*** fin, float*** fout, float *J)
 {
 	//Buff for fout
-	double*** foutBuffer = new double**[n];
+	float*** foutBuffer = new float**[n];
 	for (int i = 0; i < n; ++i)
 	{
-		foutBuffer[i] = new double*[m];
+		foutBuffer[i] = new float*[m];
 
 		for (int j = 0; j < m; ++j)
 		{
-			foutBuffer[i][j] = new double[9];
+			foutBuffer[i][j] = new float[9];
 
 			for (int k = 0; k < 9; ++k)
 			{
@@ -35,13 +35,13 @@ void Obj(double p, double u0, int m, int n, double *cx, double *cy, double *w, d
 		}
 	}
 
-	double pin = 0, pout = 0;
+	float pin = 0, pout = 0;
 
 	//Time step
 	int m0 = p * m, n0 = m;
 
 	//Collision step
-	double temp1, temp2, rhow, ssum, usum, vsum;
+	float temp1, temp2, rhow, ssum, usum, vsum;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
@@ -54,50 +54,6 @@ void Obj(double p, double u0, int m, int n, double *cx, double *cy, double *w, d
 				fout[i][j][k] = omega * feq[k][i][j] + (1 - omega)*fin[i][j][k];
 			}
 		}
-	}
-
-	//Apply BC
-	//Inlet
-	for (int j = m0; j < m; j++)
-	{
-		rhow = (fout[0][j][0] + fout[0][j][2] + fout[0][j][4] + 2 * (fout[0][j][3] + fout[0][j][6] + fout[0][j][7])) / (1 - u0);
-		fout[0][j][1] = fout[0][j][3] + 2 * rhow*u0 / 3;
-		fout[0][j][5] = fout[0][j][7] + rhow * u0 / 6;
-		fout[0][j][8] = fout[0][j][6] + rhow * u0 / 6;
-	}
-	//South
-	for (int i = 0; i < n; i++)
-	{
-		fout[i][0][2] = fout[i][0][4];
-		fout[i][0][5] = fout[i][0][7];
-		fout[i][0][6] = fout[i][0][8];
-	}
-	//North
-	for (int i = 0; i < n; i++)
-	{
-		fout[i][m - 1][4] = fout[i][m - 1][2];
-		fout[i][m - 1][8] = fout[i][m - 1][6];
-		fout[i][m - 1][7] = fout[i][m - 1][5];
-	}
-	//Outlet - extrapolation
-	for (int j = 0; j < m; j++)
-	{
-		fout[n - 1][j][1] = 2 * fout[n - 2][j][1] - fout[n - 3][j][1];
-		fout[n - 1][j][5] = 2 * fout[n - 2][j][5] - fout[n - 3][j][5];
-		fout[n - 1][j][8] = 2 * fout[n - 2][j][8] - fout[n - 3][j][8];
-	}
-	//Back-facing step
-	for (int i = 0; i < n0; i++)
-	{
-		fout[i][m0 - 1][2] = fout[i][m0 - 1][4];
-		fout[i][m0 - 1][5] = fout[i][m0 - 1][7];
-		fout[i][m0 - 1][6] = fout[i][m0 - 1][8];
-	}
-	for (int j = 0; j < m0; j++)
-	{
-		fout[n0 - 1][j][1] = fout[n0 - 1][j][3];
-		fout[n0 - 1][j][5] = fout[n0 - 1][j][7];
-		fout[n0 - 1][j][8] = fout[n0 - 1][j][6]; //???
 	}
 
 	//Streaming step
@@ -145,6 +101,50 @@ void Obj(double p, double u0, int m, int n, double *cx, double *cy, double *w, d
 		}
 	}
 
+	//Apply BC
+	//Inlet
+	for (int j = m0; j < m; j++)
+	{
+		rhow = (fout[0][j][0] + fout[0][j][2] + fout[0][j][4] + 2 * (fout[0][j][3] + fout[0][j][6] + fout[0][j][7])) / (1 - u0);
+		fout[0][j][1] = fout[0][j][3] + 2 * rhow*u0 / 3;
+		fout[0][j][5] = fout[0][j][7] + rhow * u0 / 6;
+		fout[0][j][8] = fout[0][j][6] + rhow * u0 / 6;
+	}
+	//South
+	for (int i = 0; i < n; i++)
+	{
+		fout[i][0][2] = fout[i][0][4];
+		fout[i][0][5] = fout[i][0][7];
+		fout[i][0][6] = fout[i][0][8];
+	}
+	//North
+	for (int i = 0; i < n; i++)
+	{
+		fout[i][m - 1][4] = fout[i][m - 1][2];
+		fout[i][m - 1][8] = fout[i][m - 1][6];
+		fout[i][m - 1][7] = fout[i][m - 1][5];
+	}
+	//Outlet - extrapolation
+	for (int j = 0; j < m; j++)
+	{
+		fout[n - 1][j][1] = 2 * fout[n - 2][j][1] - fout[n - 3][j][1];
+		fout[n - 1][j][5] = 2 * fout[n - 2][j][5] - fout[n - 3][j][5];
+		fout[n - 1][j][8] = 2 * fout[n - 2][j][8] - fout[n - 3][j][8];
+	}
+	//Back-facing step
+	for (int i = 0; i < n0; i++)
+	{
+		fout[i][m0 - 1][2] = fout[i][m0 - 1][4];
+		fout[i][m0 - 1][5] = fout[i][m0 - 1][7];
+		fout[i][m0 - 1][6] = fout[i][m0 - 1][8];
+	}
+	for (int j = 0; j < m0; j++)
+	{
+		fout[n0 - 1][j][1] = fout[n0 - 1][j][3];
+		fout[n0 - 1][j][5] = fout[n0 - 1][j][7];
+		fout[n0 - 1][j][8] = fout[n0 - 1][j][6]; //???
+	}
+
 	//Calculate macroscopic
 	for (int j = 0; j < m; j++)
 	{
@@ -159,10 +159,10 @@ void Obj(double p, double u0, int m, int n, double *cx, double *cy, double *w, d
 		}
 	}
 
-	for (int i = 0; i < n; i++)
+	/*for (int i = 0; i < n; i++)
 	{
 		rho[i][m - 1] = fout[i][m - 1][0] + fout[i][m - 1][1] + fout[i][m - 1][3] + 2 * (fout[i][m - 1][2] + fout[i][m - 1][6] + fout[i][m - 1][5]);
-	}
+	}*/
 
 	for (int i = 0; i < n; i++)
 	{
@@ -224,22 +224,22 @@ void Obj(double p, double u0, int m, int n, double *cx, double *cy, double *w, d
 }
 
 //Set case
-void LSS::SetCase(double s, int t, int m, int mx)
+void LSS::SetCase(float s, int t, int m, int mx)
 {
 	solver->SetParameter(s);
 	solver->SetNoTimeSteps(t);
 	solver->SetGridRefinementLevel(m, mx);
 }
 //Calculate scalar product of two vectors
-double LSS::ScalProduct(int N, double*a, double*b)
+float LSS::ScalProduct(int N, float*a, float*b)
 {
-	double result = 0;
+	float result = 0;
 	for (int i = 0; i < N; i++)	result += a[i] * b[i];
 	return result;
 }
-double LSS::ScalarProduct(double****a, double****b)
+float LSS::ScalarProduct(float****a, float****b)
 {
-	double result = 0;
+	float result = 0;
 	for (int i = 0; i < mstep-1; i++)
 		for (int j = 0; j < n; j++)
 			for (int k = 0; k < m; k++)
@@ -251,18 +251,18 @@ double LSS::ScalarProduct(double****a, double****b)
 }
 
 //Calculate vector norm
-double LSS::Norm(double *r, int N)
+float LSS::Norm(float *r, int N)
 {
-	double res = 0;
+	float res = 0;
 	for (int i = 0; i < N; i++)
 	{
 		res += r[i] * r[i];
 	}
 	return sqrt(res);
 }
-double LSS::VectorNorm(double ****r)
+float LSS::VectorNorm(float ****r)
 {
-	double res = 0;
+	float res = 0;
 	for (int i = 0; i < mstep - 1; i++)
 		for (int j = 0; j < n; j++)
 			for (int k = 0; k < m; k++)
@@ -272,9 +272,9 @@ double LSS::VectorNorm(double ****r)
 }
 
 //Preconditioner(diagonal)
-void LSS::Precond(int N, double *diagA, double*r, double*p)
+void LSS::Precond(int N, float *diagA, float*r, float*p)
 {
-	double temp;
+	float temp;
 	for (int i = 0; i < N; i++)
 	{
 		temp = 0;
@@ -285,9 +285,9 @@ void LSS::Precond(int N, double *diagA, double*r, double*p)
 }
 
 //Dummy preconditioner
-void LSS::Preconditioner(double****r, double****p)
+void LSS::Preconditioner(float****r, float****p)
 {
-	double temp;
+	float temp;
 	for (int i = 0; i < mstep - 1; i++)
 		for (int j = 0; j < n; j++)
 			for (int k = 0; k < m; k++)
@@ -296,18 +296,18 @@ void LSS::Preconditioner(double****r, double****p)
 }
 
 //Function for assembling array
-void LSS::AssemblyArray(double ****x, double ****y)
+void LSS::AssemblyArray(float ****x, float ****y)
 {
-	double ***dummy = nullptr, ***temp1 = new double **[n], ***temp2 = new double **[n], ***temp3 = new double **[n], ***temp4 = new double **[n], temp = 0;
-	double AlfaParameter = 10;
+	float ***dummy = nullptr, ***temp1 = new float **[n], ***temp2 = new float **[n], ***temp3 = new float **[n], ***temp4 = new float **[n], temp = 0;
+	float AlfaParameter = 10;
 	for (int i = 0; i < n; i++)
 	{
-		temp1[i] = new double *[m];	temp2[i] = new double *[m];
-		temp3[i] = new double *[m];	temp4[i] = new double *[m];
+		temp1[i] = new float *[m];	temp2[i] = new float *[m];
+		temp3[i] = new float *[m];	temp4[i] = new float *[m];
 		for (int j = 0; j < m; j++)
 		{
-			temp1[i][j] = new double[Q]; temp2[i][j] = new double[Q];
-			temp3[i][j] = new double[Q]; temp4[i][j] = new double[Q];
+			temp1[i][j] = new float[Q]; temp2[i][j] = new float[Q];
+			temp3[i][j] = new float[Q]; temp4[i][j] = new float[Q];
 			for (int k = 0; k < Q; k++)
 			{
 				temp1[i][j][k] = 0;
@@ -436,7 +436,7 @@ void LSS::AssemblyArray(double ****x, double ****y)
 }
 
 //Implementation of preconditioned conjugate gradient method
-void LSS::Solve(void(*mult)(double*, double*, double*, int), double*b, double*x)
+void LSS::Solve(void(*mult)(float*, float*, float*, int), float*b, float*x)
 {
 	//Set trajectory
 	trajectory = (*this).GetTrajectory();
@@ -465,11 +465,11 @@ void LSS::Solve(void(*mult)(double*, double*, double*, int), double*b, double*x)
 
 	//CGM parameters
 	int N = mstep * m * n * Q; //System size
-	int d = 6, D = pow(10.0, double(d / 2));
-	int maxIter = pow(10.0, double(d));
-	double eps = 1e-6, alfa = 0.5, beta;
-	double *temp = new double[N], *p = new double[N], *diagA = new double[N];
-	double *res_b = new double[N], *res_b_n = new double[N], *res = new double[N], *res_n = new double[N];
+	int d = 6, D = pow(10.0, float(d / 2));
+	int maxIter = pow(10.0, float(d));
+	float eps = 1e-5, alfa = 0.5, beta;
+	float *temp = new float[N], *p = new float[N], *diagA = new float[N];
+	float *res_b = new float[N], *res_b_n = new float[N], *res = new float[N], *res_n = new float[N];
 
 	mult(x, res, diagA, N); //r = Ax
 	for (int i = 0; i < N; i++) res[i] = b[i] - res[i]; //r = b - r
@@ -537,23 +537,23 @@ void LSS::Preprocess()
 	}
 
 	//Set macroscopic values
-	rho = new double *[n];	u = new double *[n];	v = new double *[n];
+	rho = new float *[n];	u = new float *[n];	v = new float *[n];
 	for (int j = 0; j < n; ++j)
 	{
-		rho[j] = new double[m];	u[j] = new double[m];	v[j] = new double[m];
+		rho[j] = new float[m];	u[j] = new float[m];	v[j] = new float[m];
 		for (int k = 0; k < m; ++k)
 		{
 			rho[j][k] = 0;	u[j][k] = 0;	v[j][k] = 0;
 		}
 	}
 	//Set equlibrium
-	eq = new double **[Q];
+	eq = new float **[Q];
 	for (int i = 0; i < Q; i++)
 	{
-		eq[i] = new double *[n];
+		eq[i] = new float *[n];
 		for (int j = 0; j < n; j++)
 		{
-			eq[i][j] = new double[m];
+			eq[i][j] = new float[m];
 			for (int k = 0; k < m; k++)
 				eq[i][j][k] = 0;
 		}
@@ -564,7 +564,7 @@ void LSS::Preprocess()
 
 void LSS::GetMacroscopic(int tstep)
 {
-	double ssum, usum, vsum;
+	float ssum, usum, vsum;
 	for (int j = 0; j < m; j++)
 	{
 		for (int i = 0; i < n; i++)
@@ -578,10 +578,10 @@ void LSS::GetMacroscopic(int tstep)
 		}
 	}
 
-	for (int i = 0; i < n; i++)
+	/*for (int i = 0; i < n; i++)
 	{
 		rho[i][m - 1] = trajectory[tstep][i][m - 1][0] + trajectory[tstep][i][m - 1][1] + trajectory[tstep][i][m - 1][3] + 2 * (trajectory[tstep][i][m - 1][2] + trajectory[tstep][i][m - 1][6] + trajectory[tstep][i][m - 1][5]);
-	}
+	}*/
 
 	for (int i = 0; i < n; i++)
 	{
@@ -617,13 +617,13 @@ void LSS::CreateRHSVector()
 {
 	bool flag = 0;
 	std::cout << "\nCONSTRUCTING RHS VECTOR\n";
-	double u0d = 1, ***dummy = nullptr, ***temp = new double **[n];
+	float u0d = 1, ***dummy = nullptr, ***temp = new float **[n];
 	for (int j = 0; j < n; j++)
 	{
-		temp[j] = new double *[m];
+		temp[j] = new float *[m];
 		for (int k = 0; k < m; k++)
 		{
-			temp[j][k] = new double[Q];
+			temp[j][k] = new float[Q];
 			for (int l = 0; l < Q; l++)
 				temp[j][k][l] = 0;
 		}
@@ -661,30 +661,30 @@ void LSS::SolveKKT()
 	bool ExportFlag = 1;
 	std::ofstream CGM("CGM.txt");
 	int N = mstep * m * n * Q; //System size
-	int d = 3, D = 1;// pow(10.0, double(d / 2));
-	int maxIter = int(mstep/100)*pow(10.0, double(d));
-	double eps = 1e-5, alfa = 0.5, beta, buff = 0;
-	double ****res_b, ****res, ****p, ****temp, ****x;
+	int d = 6, D = 1;// pow(10.0, float(d / 2));
+	int maxIter = int(mstep/100)*pow(10.0, float(d));
+	float eps = 1e-5, alfa = 0.5, beta, buff = 0;
+	float ****res_b, ****res, ****p, ****temp, ****x;
 
 	//Create solution vectors
-	b = new double ***[mstep - 1];	x = new double ***[mstep - 1];
-	res = new double ***[mstep - 1];	res_b = new double ***[mstep - 1];
-	p = new double ***[mstep - 1];	temp = new double ***[mstep - 1];
+	b = new float ***[mstep - 1];	x = new float ***[mstep - 1];
+	res = new float ***[mstep - 1];	res_b = new float ***[mstep - 1];
+	p = new float ***[mstep - 1];	temp = new float ***[mstep - 1];
 	for (int i = 0; i < mstep - 1; i++)
 	{
-		b[i] = new double **[n];	x[i] = new double **[n];
-		res[i] = new double **[n];	res_b[i] = new double **[n];
-		p[i] = new double **[n];	temp[i] = new double **[n];
+		b[i] = new float **[n];	x[i] = new float **[n];
+		res[i] = new float **[n];	res_b[i] = new float **[n];
+		p[i] = new float **[n];	temp[i] = new float **[n];
 		for (int j = 0; j < n; j++)
 		{
-			b[i][j] = new double *[m];	x[i][j] = new double *[m];
-			res[i][j] = new double *[m];	res_b[i][j] = new double *[m];
-			p[i][j] = new double *[m];	temp[i][j] = new double *[m];
+			b[i][j] = new float *[m];	x[i][j] = new float *[m];
+			res[i][j] = new float *[m];	res_b[i][j] = new float *[m];
+			p[i][j] = new float *[m];	temp[i][j] = new float *[m];
 			for (int k = 0; k < m; k++)
 			{
-				b[i][j][k] = new double[Q];	x[i][j][k] = new double[Q];
-				res[i][j][k] = new double[Q];	res_b[i][j][k] = new double[Q];
-				p[i][j][k] = new double[Q];	temp[i][j][k] = new double[Q];
+				b[i][j][k] = new float[Q];	x[i][j][k] = new float[Q];
+				res[i][j][k] = new float[Q];	res_b[i][j][k] = new float[Q];
+				p[i][j][k] = new float[Q];	temp[i][j][k] = new float[Q];
 				for (int l = 0; l < Q; l++)
 				{
 					b[i][j][k][l] = 0;	x[i][j][k][l] = 0;
@@ -764,7 +764,7 @@ void LSS::SolveKKT()
 }
 
 //Export results
-void LSS::Export(double ****w)
+void LSS::Export(float ****w)
 {
 	std::ofstream file("KKTSolution.txt");
 	//First 5 lines are the parameters: u0,mstep,n,m,Q
@@ -788,35 +788,35 @@ void LSS::Export(double ****w)
 	file.close();
 }
 
-double LSS::CalculateSensitivity(double ****KKT)
+float LSS::CalculateSensitivity(float ****KKT)
 {
-	double ****sol = KKT;
-	double *eta = new double[mstep - 1];
-	double ***temp, sum;
-	double ****ve = new double ***[mstep-1];
-	double J = 0, dJdu = 0, dJds = 0, Jtemp = 0, grad1 = 0, grad2 = 0, Jbar = 0, ***dummy = nullptr, ***temp1 = new double **[n], ***temp2 = new double **[n], ***temp3 = new double **[n], Jbuff = 0, dJdsbuff = 0, dJdubuff = 0;
-	double **rhod = new double *[n], ***foutd = new double **[n];
+	float ****sol = KKT;
+	float *eta = new float[mstep - 1];
+	float ***temp, sum;
+	float ****ve = new float ***[mstep-1];
+	float J = 0, dJdu = 0, dJds = 0, Jtemp = 0, grad1 = 0, grad2 = 0, Jbar = 0, ***dummy = nullptr, ***temp1 = new float **[n], ***temp2 = new float **[n], ***temp3 = new float **[n], Jbuff = 0, dJdsbuff = 0, dJdubuff = 0;
+	float **rhod = new float *[n], ***foutd = new float **[n];
 	for (int i = 0; i < n; i++)
 	{
-		rhod[i] = new double[m];
-		foutd[i] = new double *[m];
+		rhod[i] = new float[m];
+		foutd[i] = new float *[m];
 			for (int j = 0; j < m; j++)
 			{
 				rhod[i][j] = 0;
-				foutd[i][j] = new double[Q];
+				foutd[i][j] = new float[Q];
 				for (int k = 0; k < Q; k++)
 					foutd[i][j][k] = 0;
 			}
 	}
 	for (int i = 0; i < mstep - 1; i++)
 	{
-		ve[i] = new double **[n];
+		ve[i] = new float **[n];
 		for (int j = 0; j < n; j++)
 		{
-			ve[i][j] = new double *[m];
+			ve[i][j] = new float *[m];
 			for (int k = 0; k < m; k++)
 			{
-				ve[i][j][k] = new double[Q];
+				ve[i][j][k] = new float[Q];
 				for (int l = 0; l < Q; l++)
 				{
 					ve[i][j][k][l] = 0;
@@ -824,13 +824,13 @@ double LSS::CalculateSensitivity(double ****KKT)
 			}
 		}
 	}
-	temp = new double **[n];
+	temp = new float **[n];
 	for (int j = 0; j < n; j++)
 	{
-		temp[j] = new double *[m];
+		temp[j] = new float *[m];
 		for (int k = 0; k < m; k++)
 		{
-			temp[j][k] = new double[Q];
+			temp[j][k] = new float[Q];
 			for (int l = 0; l < Q; l++)
 			{
 				temp[j][k][l] = 0;
@@ -839,14 +839,14 @@ double LSS::CalculateSensitivity(double ****KKT)
 	}
 	for (int i = 0; i < n; i++)
 	{
-		temp1[i] = new double *[m];	
-		temp2[i] = new double *[m];
-		temp3[i] = new double *[m];
+		temp1[i] = new float *[m];	
+		temp2[i] = new float *[m];
+		temp3[i] = new float *[m];
 		for (int j = 0; j < m; j++)
 		{
-			temp1[i][j] = new double[Q]; 
-			temp2[i][j] = new double[Q];
-			temp3[i][j] = new double[Q];
+			temp1[i][j] = new float[Q]; 
+			temp2[i][j] = new float[Q];
+			temp3[i][j] = new float[Q];
 			for (int k = 0; k < Q; k++)
 			{
 				temp1[i][j][k] = 0;

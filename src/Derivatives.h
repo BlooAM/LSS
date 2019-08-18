@@ -3,29 +3,29 @@
 #include "adBuffer.h"
 
 //Dynamic derivatives
-void dfds_b(double p, double u0, double *u0b, int m, int n, double *cx,
-	double *cy, double *w, double **rho, double **u, double **v, double
-	omega, double ***feq, double ***feqb, double ***fin, double ***fout,
-	double ***foutb);
+void dfds_b(float p, float u0, float *u0b, int m, int n, float *cx,
+	float *cy, float *w, float **rho, float **u, float **v, float
+	omega, float ***feq, float ***feqb, float ***fin, float ***fout,
+	float ***foutb);
 
-void dfds_d(double p, double u0, double u0d, int m, int n, double *cx,
-	double *cy, double *w, double **rho, double **u, double **v, double
-	omega, double ***feq, double ***feqd, double ***fin, double ***fout,
-	double ***foutd);
+void dfds_d(float p, float u0, float u0d, int m, int n, float *cx,
+	float *cy, float *w, float **rho, float **u, float **v, float
+	omega, float ***feq, float ***feqd, float ***fin, float ***fout,
+	float ***foutd);
 
-void dfdu_b(double p, double u0, int m, int n, double *cx, double *cy
-	, double *w, double **rho, double **u, double **v, double omega,
-	double ***feq, double ***feqb, double ***fin, double ***finb, double ***fout, double ***foutb);
+void dfdu_b(float p, float u0, int m, int n, float *cx, float *cy
+	, float *w, float **rho, float **u, float **v, float omega,
+	float ***feq, float ***feqb, float ***fin, float ***finb, float ***fout, float ***foutb);
 
-void dfdu_d(double p, double u0, int m, int n, double *cx, double *cy
-	, double *w, double **rho, double **u, double **v, double omega,
-	double ***feq, double ***feqd, double ***fin, double ***find, double ***fout, double ***foutd);
+void dfdu_d(float p, float u0, int m, int n, float *cx, float *cy
+	, float *w, float **rho, float **u, float **v, float omega,
+	float ***feq, float ***feqd, float ***fin, float ***find, float ***fout, float ***foutd);
 
 //Objective function derivatives
-void dObjdu_d(double p, double u0, int m, int n, double *cx, double *cy, double *w, double **rho, double **rhod, double **u, 
-	double **v, double omega,double ***feq, double ***feqd, double ***fin, double ***find, double ***fout, double ***foutd, double *J, 
-	double *Jd);
+void dObjdu_d(float p, float u0, int m, int n, float *cx, float *cy, float *w, float **rho, float **rhod, float **u, 
+	float **v, float omega,float ***feq, float ***feqd, float ***fin, float ***find, float ***fout, float ***foutd, float *J, 
+	float *Jd);
 
-void dObjds_d(double p, double u0, double u0d, int m, int n, double *cx, double *cy, double *w, double **rho, double **rhod, 
-	double **u, double **v,double omega, double ***feq, double ***feqd, double ***fin, double ***fout, double ***foutd, 
-	double *J, double *Jd);
+void dObjds_d(float p, float u0, float u0d, int m, int n, float *cx, float *cy, float *w, float **rho, float **rhod, 
+	float **u, float **v,float omega, float ***feq, float ***feqd, float ***fin, float ***fout, float ***foutd, 
+	float *J, float *Jd);

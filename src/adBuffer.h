@@ -28,9 +28,9 @@ extern void pushreal4_(float x) ;
 extern void lookreal4_(float *x) ;
 extern void popreal4_(float *x) ;
 
-extern void pushreal8_(double x) ;
-extern void lookreal8_(double *x) ;
-extern void popreal8_(double *x) ;
+extern void pushreal8_(float x) ;
+extern void lookreal8_(float *x) ;
+extern void popreal8_(float *x) ;
 
 extern void printbuffertop() ;
 extern void showallstacks_() ;

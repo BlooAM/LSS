@@ -313,13 +313,13 @@ void popreal4_(float *x) {
 }
 
 /************************** real*8 ************************/
-static double adr8buf[512] ;
+static float adr8buf[512] ;
 static int adr8ibuf = 0 ;
-static double adr8lbuf[512] ;
+static float adr8lbuf[512] ;
 static int adr8ilbuf = -1 ;
 static int adr8inlbuf = 0 ;
 
-void pushreal8_(double x) {
+void pushreal8_(float x) {
   addftraffic(8) ;
   if (adr8ilbuf != -1) {
     adr8ilbuf = -1 ;
@@ -336,7 +336,7 @@ void pushreal8_(double x) {
   }
 }
 
-void lookreal8_(double *x) {
+void lookreal8_(float *x) {
   if (adr8ilbuf == -1) {
     adr8ilbuf = adr8ibuf ;
     //resetadlookstack_() ;
@@ -355,7 +355,7 @@ void lookreal8_(double *x) {
   }
 }
 
-void popreal8_(double *x) {
+void popreal8_(float *x) {
   if (adr8ilbuf != -1) {
     adr8ilbuf = -1 ;
     adr8inlbuf = 0 ;
@@ -401,7 +401,7 @@ void showallstacks_() {
  *              YET FOR OTHER DATA TYPES
  * Duplicate and uncomment the commented code below.
  * In the duplicated code, replace:
- *   ctct -> C type name (e.g. float double, int...)
+ *   ctct -> C type name (e.g. float float, int...)
  *   TTTT -> BASIC TAPENADE TYPE NAME
  *     (in character, boolean, integer, real, complex, pointer,...)
  *   z7   -> LETTER-SIZE FOR TYPE

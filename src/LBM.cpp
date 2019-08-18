@@ -1,11 +1,11 @@
 #include "LBM.h"
 
 //Friend functions first
-void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy, double *w, double **rho, double **u, double **v, double omega, double ***feq, double*** fin, double*** fout) //Friend function
+void SolveTimeStep(float p, float u0, int m, int n, float *cx, float *cy, float *w, float **rho, float **u, float **v, float omega, float ***feq, float*** fin, float*** fout) //Friend function
 {
 	int m0 = p * m, n0 = m;
 	//Collision step
-	double temp1, temp2, rhow, ssum, usum, vsum;
+	float temp1, temp2, rhow, ssum, usum, vsum;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
@@ -19,51 +19,6 @@ void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy, do
 			}
 		}
 	}
-
-	//Apply BC
-	//Inlet
-	for (int j = m0; j < m; j++)
-	{
-		rhow = (fout[0][j][0] + fout[0][j][2] + fout[0][j][4] + 2 * (fout[0][j][3] + fout[0][j][6] + fout[0][j][7])) / (1 - u0);
-		fout[0][j][1] = fout[0][j][3] + 2 * rhow*u0 / 3;
-		fout[0][j][5] = fout[0][j][7] + rhow * u0 / 6;
-		fout[0][j][8] = fout[0][j][6] + rhow * u0 / 6;
-	}
-	//South
-	for (int i = 0; i < n; i++)
-	{
-		fout[i][0][2] = fout[i][0][4];
-		fout[i][0][5] = fout[i][0][7];
-		fout[i][0][6] = fout[i][0][8];
-	}
-	//North
-	for (int i = 0; i < n; i++)
-	{
-		fout[i][m - 1][4] = fout[i][m - 1][2];
-		fout[i][m - 1][8] = fout[i][m - 1][6];
-		fout[i][m - 1][7] = fout[i][m - 1][5];
-	}
-	//Outlet - extrapolation
-	for (int j = 0; j < m; j++)
-	{
-		fout[n - 1][j][1] = 2 * fout[n - 2][j][1] - fout[n - 3][j][1];
-		fout[n - 1][j][5] = 2 * fout[n - 2][j][5] - fout[n - 3][j][5];
-		fout[n - 1][j][8] = 2 * fout[n - 2][j][8] - fout[n - 3][j][8];
-	}
-	//Back-facing step
-	for (int i = 0; i < n0; i++)
-	{
-		fout[i][m0 - 1][2] = fout[i][m0 - 1][4];
-		fout[i][m0 - 1][5] = fout[i][m0 - 1][7];
-		fout[i][m0 - 1][6] = fout[i][m0 - 1][8];
-	}
-	for (int j = 0; j < m0; j++)
-	{
-		fout[n0 - 1][j][1] = fout[n0 - 1][j][3];
-		fout[n0 - 1][j][5] = fout[n0 - 1][j][7];
-		fout[n0 - 1][j][8] = fout[n0 - 1][j][6]; //???
-	}
-
 	//Streaming step
 	for (int j = 0; j < m; j++)
 	{
@@ -108,7 +63,50 @@ void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy, do
 			fout[i][j][8] = fout[i - 1][j + 1][8];
 		}
 	}
-
+	//Apply BC
+	//Inlet
+	for (int j = m0; j < m; j++)
+	{
+		rhow = (fout[0][j][0] + fout[0][j][2] + fout[0][j][4] + 2 * (fout[0][j][3] + fout[0][j][6] + fout[0][j][7])) / (1 - u0);
+		fout[0][j][1] = fout[0][j][3] + 2 * rhow*u0 / 3;
+		fout[0][j][5] = fout[0][j][7] + rhow * u0 / 6;
+		fout[0][j][8] = fout[0][j][6] + rhow * u0 / 6;
+	}
+	//South
+	for (int i = 0; i < n; i++)
+	{
+		fout[i][0][2] = fout[i][0][4];
+		fout[i][0][5] = fout[i][0][7];
+		fout[i][0][6] = fout[i][0][8];
+	}
+	//North
+	for (int i = 0; i < n; i++)
+	{
+		fout[i][m - 1][4] = fout[i][m - 1][2];
+		fout[i][m - 1][8] = fout[i][m - 1][6];
+		fout[i][m - 1][7] = fout[i][m - 1][5];
+	}
+	//Outlet - extrapolation
+	for (int j = 0; j < m; j++)
+	{
+		fout[n - 1][j][1] = 2 * fout[n - 2][j][1] - fout[n - 3][j][1];
+		fout[n - 1][j][5] = 2 * fout[n - 2][j][5] - fout[n - 3][j][5];
+		fout[n - 1][j][8] = 2 * fout[n - 2][j][8] - fout[n - 3][j][8];
+	}
+	//Back-facing step
+	for (int i = 0; i < n0; i++)
+	{
+		fout[i][m0 - 1][2] = fout[i][m0 - 1][4];
+		fout[i][m0 - 1][5] = fout[i][m0 - 1][7];
+		fout[i][m0 - 1][6] = fout[i][m0 - 1][8];
+	}
+	for (int j = 0; j < m0; j++)
+	{
+		fout[n0 - 1][j][1] = fout[n0 - 1][j][3];
+		fout[n0 - 1][j][5] = fout[n0 - 1][j][7];
+		fout[n0 - 1][j][8] = fout[n0 - 1][j][6]; //???
+	}
+	
 	//Calculate macroscopic
 	for (int j = 0; j < m; j++)
 	{
@@ -123,10 +121,10 @@ void SolveTimeStep(double p, double u0, int m, int n, double *cx, double *cy, do
 		}
 	}
 
-	for (int i = 0; i < n; i++)
+	/*for (int i = 0; i < n; i++)
 	{
 		rho[i][m - 1] = fout[i][m - 1][0] + fout[i][m - 1][1] + fout[i][m - 1][3] + 2 * (fout[i][m - 1][2] + fout[i][m - 1][6] + fout[i][m - 1][5]);
-	}
+	}*/
 
 	for (int i = 0; i < n; i++)
 	{
@@ -194,13 +192,13 @@ LBM::LBM()
 	tSpan = nullptr;
 	/*for (int iter = 0; iter < 9; ++iter)
 	{
-		u_ref[iter] = new double **[mstep];
+		u_ref[iter] = new float **[mstep];
 		for (int i = 0; i < mstep; ++i)
 		{
-			u_ref[iter][i] = new double*[n];
+			u_ref[iter][i] = new float*[n];
 			for (int j = 0; j < n; ++j)
 			{
-				u_ref[iter][i][j] = new double[m];
+				u_ref[iter][i][j] = new float[m];
 				for (int k = 0; k < m; ++k)
 				{
 					u_ref[iter][i][j][k] = 0;
@@ -208,16 +206,16 @@ LBM::LBM()
 			}
 		}
 	}*/
-	f = new double ***[mstep];
+	f = new float ***[mstep];
 	for (int iter = 0; iter < mstep; ++iter)
 	{
-		f[iter] = new double **[n];
+		f[iter] = new float **[n];
 		for (int i = 0; i < n; ++i)
 		{
-			f[iter][i] = new double*[m];
+			f[iter][i] = new float*[m];
 			for (int j = 0; j < m; ++j)
 			{
-				f[iter][i][j] = new double[9];
+				f[iter][i][j] = new float[9];
 				for (int k = 0; k < 9; ++k)
 				{
 					f[iter][i][j][k] = 0;
@@ -228,11 +226,11 @@ LBM::LBM()
 
 	for (int iter = 0; iter < 9; ++iter)
 	{
-		feq[iter] = new double*[n];
+		feq[iter] = new float*[n];
 
 		for (int j = 0; j < n; ++j)
 		{
-			feq[iter][j] = new double[m];
+			feq[iter][j] = new float[m];
 
 			for (int k = 0; k < m; ++k)
 			{
@@ -241,14 +239,14 @@ LBM::LBM()
 		}
 	}
 
-	rho = new double *[n];
-	u = new double *[n];
-	v = new double *[n];
+	rho = new float *[n];
+	u = new float *[n];
+	v = new float *[n];
 	for (int j = 0; j < n; ++j)
 	{
-		rho[j] = new double[m];
-		u[j] = new double[m];
-		v[j] = new double[m];
+		rho[j] = new float[m];
+		u[j] = new float[m];
+		v[j] = new float[m];
 		for (int k = 0; k < m; ++k)
 		{
 			rho[j][k] = rho0;
@@ -263,7 +261,7 @@ LBM::LBM()
 	}
 }
 
-LBM::LBM(double u0_, int mstep_, int m_, int mx)
+LBM::LBM(float u0_, int mstep_, int m_, int mx)
 {
 	//Case parameters
 	tstep = 0;
@@ -297,16 +295,16 @@ LBM::LBM(double u0_, int mstep_, int m_, int mx)
 
 	//Pointers
 	tSpan = nullptr;
-	f = new double ***[mstep];
+	f = new float ***[mstep];
 	for (int iter = 0; iter < mstep; ++iter)
 	{
-		f[iter] = new double **[n];
+		f[iter] = new float **[n];
 		for (int i = 0; i < n; ++i)
 		{
-			f[iter][i] = new double*[m];
+			f[iter][i] = new float*[m];
 			for (int j = 0; j < m; ++j)
 			{
-				f[iter][i][j] = new double[9];
+				f[iter][i][j] = new float[9];
 				for (int k = 0; k < 9; ++k)
 				{
 					f[iter][i][j][k] = 0;
@@ -317,11 +315,11 @@ LBM::LBM(double u0_, int mstep_, int m_, int mx)
 
 	for (int iter = 0; iter < 9; ++iter)
 	{
-		feq[iter] = new double*[n];
+		feq[iter] = new float*[n];
 
 		for (int j = 0; j < n; ++j)
 		{
-			feq[iter][j] = new double[m];
+			feq[iter][j] = new float[m];
 
 			for (int k = 0; k < m; ++k)
 			{
@@ -330,14 +328,14 @@ LBM::LBM(double u0_, int mstep_, int m_, int mx)
 		}
 	}
 
-	rho = new double *[n];
-	u = new double *[n];
-	v = new double *[n];
+	rho = new float *[n];
+	u = new float *[n];
+	v = new float *[n];
 	for (int j = 0; j < n; ++j)
 	{
-		rho[j] = new double[m];
-		u[j] = new double[m];
-		v[j] = new double[m];
+		rho[j] = new float[m];
+		u[j] = new float[m];
+		v[j] = new float[m];
 		for (int k = 0; k < m; ++k)
 		{
 			rho[j][k] = rho0;
@@ -397,7 +395,7 @@ LBM::~LBM()
 
 void LBM::ApplyBC()
 {
-	double rhow;
+	float rhow;
 
 	//Inlet
 	for (int j = m0; j < m; j++)
@@ -445,7 +443,7 @@ void LBM::ApplyBC()
 
 void LBM::CalculateMacroscopic()
 {
-	double ssum, usum, vsum;
+	float ssum, usum, vsum;
 	for (int j = 0; j < m; j++)
 	{
 		for (int i = 0; i < n; i++)
@@ -495,7 +493,7 @@ void LBM::CalculateMacroscopic()
 }
 void LBM::CollisionStep()
 {
-	double temp1, temp2;
+	float temp1, temp2;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)
@@ -511,7 +509,7 @@ void LBM::CollisionStep()
 	}
 
 	//Apply BC
-	double rhow;
+	float rhow;
 
 	//Inlet
 	for (int j = m0; j < m; j++)
@@ -559,7 +557,7 @@ void LBM::CollisionStep()
 void LBM::Exectue()
 {
 	//Parameters for back-facing step case
-	double sumvel = 0, pin, pout, temp;
+	float sumvel = 0, pin, pout, temp;
 	omega = 1 / (3 * alfa + 0.5);
 	std::cout << "Reynolds number: " << u0 * m / alfa << std::endl;
 	J = 0; Jbar = 0; temp = 0;
@@ -585,9 +583,9 @@ void LBM::Exectue()
 }
 
 
-void LBM::GetEqulibrium(int i, double** rho, double** u, double** v, double ***eq)
+void LBM::GetEqulibrium(int i, float** rho, float** u, float** v, float ***eq)
 {
-	double temp1, temp2;
+	float temp1, temp2;
 	for (int i = 0; i < n; i++)
 	{
 		for (int j = 0; j < m; j++)

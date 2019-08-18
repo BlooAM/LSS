@@ -8,19 +8,19 @@ static char adSid[]="$Id: adStack.c 3442 2010-04-27 14:01:57Z llh $";
 #ifndef STACK_SIZE_TRACING
 #define STACK_SIZE_TRACING 1
 #endif
-/* The main stack is a double-chain of DoubleChainedBlock objects.
- * Each DoubleChainedBlock holds an array[ONE_BLOCK_SIZE] of char. */
-typedef struct _doubleChainedBlock{
-  struct _doubleChainedBlock *prev ;
+/* The main stack is a float-chain of floatChainedBlock objects.
+ * Each floatChainedBlock holds an array[ONE_BLOCK_SIZE] of char. */
+typedef struct _floatChainedBlock{
+  struct _floatChainedBlock *prev ;
   char                       *contents ;
-  struct _doubleChainedBlock *next ;
-} DoubleChainedBlock ;
+  struct _floatChainedBlock *next ;
+} floatChainedBlock ;
 
 /* Globals that define the current position in the stack: */
-static DoubleChainedBlock *curStack = NULL ;
+static floatChainedBlock *curStack = NULL ;
 static char               *curStackTop    = NULL ;
 /* Globals that define the current LOOKing position in the stack: */
-static DoubleChainedBlock *lookStack = NULL ;
+static floatChainedBlock *lookStack = NULL ;
 static char               *lookStackTop    = NULL ;
 
 static long int mmctraffic = 0 ;
@@ -55,11 +55,11 @@ void pushNarray(char *x, unsigned int nbChars) {
     while (inx>x) {
       if ((curStack == NULL) || (curStack->next == NULL)) {
         /* Create new block: */
-	DoubleChainedBlock *newStack ;
+	floatChainedBlock *newStack ;
 	char *contents = (char*)malloc(ONE_BLOCK_SIZE*sizeof(char)) ;
-	newStack = (DoubleChainedBlock*)malloc(sizeof(DoubleChainedBlock)) ;
+	newStack = (floatChainedBlock*)malloc(sizeof(floatChainedBlock)) ;
 	if ((contents == NULL) || (newStack == NULL)) {
-	  DoubleChainedBlock *stack = curStack ;
+	  floatChainedBlock *stack = curStack ;
 	  int nbBlocks = (stack?-1:0) ;
 	  while(stack) {
 	      stack = stack->prev ;
@@ -412,7 +412,7 @@ void printftrafficinc_(long int *mmfM, int *mmfsz, int *mmf) {
 }
 
 void printtopplace_() {
-    DoubleChainedBlock *stack = curStack ;
+    floatChainedBlock *stack = curStack ;
     int nbBlocks = (stack?-1:0) ;
     int remainder = 0;
     while(stack) {
@@ -426,7 +426,7 @@ void printtopplace_() {
 }
 
 void printtopplacenum_(int *n) {
-    DoubleChainedBlock *stack = curStack ;
+    floatChainedBlock *stack = curStack ;
     int nbBlocks = (stack?-1:0) ;
     int remainder = 0;
     while(stack) {
@@ -440,7 +440,7 @@ void printtopplacenum_(int *n) {
 }
 
 void printstackmax_() {
-    DoubleChainedBlock *stack = curStack ;
+    floatChainedBlock *stack = curStack ;
     int nbBlocks = (stack?-2:0) ;
     int remainder = 0;
     long int totalsz ;
@@ -463,7 +463,7 @@ void printlookingplace_() {
     if (lookStack == NULL)
 	printtopplace_() ;
     else {
-	DoubleChainedBlock *stack = lookStack ;
+	floatChainedBlock *stack = lookStack ;
 	int nbBlocks = (stack?-1:0) ;
 	while(stack) {
 	    stack = stack->prev ;
@@ -479,7 +479,7 @@ void printlookingplace_() {
 void showrecentcstack_() {
   if (curStack && curStackTop) {
     int totalNumChars = 30 ;
-    DoubleChainedBlock *stack = curStack ;
+    floatChainedBlock *stack = curStack ;
     char *stackTop = curStackTop ;
     unsigned short int *st1 ;
     printf("TOP OF C STACK  : ") ;

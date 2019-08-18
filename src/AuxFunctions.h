@@ -4,41 +4,41 @@
 #include <cmath>
 #include <iomanip>
 
-extern double *xs; //for tests
+extern float *xs; //for tests
 extern const int N;
-extern double **C;
+extern float **C;
 
 namespace AuxFun
 {
 	//Array dynamic allocation
-	double ** new_random_matrix(int n, int m) {
-		double ** tab;
+	float ** new_random_matrix(int n, int m) {
+		float ** tab;
 		srand(time(NULL));
-		tab = (double **)malloc(n * sizeof(double*));
-		tab[0] = (double *)malloc(n*m * sizeof(double));
+		tab = (float **)malloc(n * sizeof(float*));
+		tab[0] = (float *)malloc(n*m * sizeof(float));
 		for (int i = 0; i < n; i++) {
 			tab[i] = &(tab[0][i*m]);
 			for (int j = 0; j < m; j++) {
-				tab[i][j] = (double)rand() / RAND_MAX;;
+				tab[i][j] = (float)rand() / RAND_MAX;;
 			}
 		}
 		return tab;
 	}
 
 	//Gauss elimination
-	void Gauss(int n, double **M, double *f, double *x)
+	void Gauss(int n, float **M, float *f, float *x)
 	{
 		int i, j, k;
-		double s;
-		double wsp;
+		float s;
+		float wsp;
 
-		double **a;
-		double *b;
+		float **a;
+		float *b;
 
-		b = new double[n];
-		a = new double*[n];
+		b = new float[n];
+		a = new float*[n];
 		for (int i = 0; i < n; ++i)
-			a[i] = new double[n];
+			a[i] = new float[n];
 
 		for (int i = 0; i < n; ++i)
 		{
@@ -77,24 +77,24 @@ namespace AuxFun
 	}
 	
 	//Vector dynamic allocation
-	double * new_vector(int n) {
-		double * tab;
-		tab = (double *)malloc(n * sizeof(double));
+	float * new_vector(int n) {
+		float * tab;
+		tab = (float *)malloc(n * sizeof(float));
 		for (int j = 0; j < n; j++) {
 			tab[j] = 0.0;
 		}
 		return tab;
 	}
 
-	void free_vector(double * tab) {
+	void free_vector(float * tab) {
 		free(tab);
 	}
 
 	//Array dynamic allocation
-	double ** new_matrix(int n, int m) {
-		double ** tab;
-		tab = (double **)malloc(n * sizeof(double*));
-		tab[0] = (double *)malloc(n*m * sizeof(double));
+	float ** new_matrix(int n, int m) {
+		float ** tab;
+		tab = (float **)malloc(n * sizeof(float*));
+		tab[0] = (float *)malloc(n*m * sizeof(float));
 		for (int i = 0; i < n; i++) {
 			tab[i] = &(tab[0][i*m]);
 			for (int j = 0; j < m; j++) {
@@ -104,13 +104,13 @@ namespace AuxFun
 		return tab;
 	}
 
-	void free_matrix(double ** tab) {
+	void free_matrix(float ** tab) {
 		free(tab[0]);
 		free(tab);
 	}
 
 	//Multiply matrix by vector
-	void MatMult(int n, double **A, double *x, double *y)
+	void MatMult(int n, float **A, float *x, float *y)
 	{
 		for (int i = 0; i < n; i++)
 		{
@@ -124,7 +124,7 @@ namespace AuxFun
 	}
 
 	//Display linear system
-	void dispSystem(int n, double **A, double*b)
+	void dispSystem(int n, float **A, float*b)
 	{
 		std::cout << "A = " << std::endl;
 		for (int i = 0; i < n; i++)
@@ -143,17 +143,17 @@ namespace AuxFun
 	}
 
 	//Calculate scalar product
-	double skal(int n, double*a, double*b)
+	float skal(int n, float*a, float*b)
 	{
-		double result = 0;
+		float result = 0;
 		for (int i = 0; i < n; i++)	result += a[i] * b[i];
 		return result;
 	}
 
 	//Calculate vector norm
-	double norm(double *r, int n)
+	float norm(float *r, int n)
 	{
-		double res = 0;
+		float res = 0;
 		for (int i = 0; i < n; i++)
 		{
 			res += r[i] * r[i];
@@ -162,9 +162,9 @@ namespace AuxFun
 	}
 
 	//Preconditioner funtions
-	void Precond(int n, double **A, double*r, double*p)
+	void Precond(int n, float **A, float*r, float*p)
 	{
-		double temp;
+		float temp;
 		for (int i = 0; i < n; i++)
 		{
 			temp = 0;
@@ -173,9 +173,9 @@ namespace AuxFun
 			p[i] = (r[i] - temp) / A[i][i];
 		}
 	}
-	void FastPrecond(int n, double *diagA, double*r, double*p)
+	void FastPrecond(int n, float *diagA, float*r, float*p)
 	{
-		double temp;
+		float temp;
 		for (int i = 0; i < n; i++)
 		{
 			temp = 0;
@@ -186,13 +186,13 @@ namespace AuxFun
 	}
 
 
-	void FastSolve(int n, double**A, double*b, double*x)
+	void FastSolve(int n, float**A, float*b, float*x)
 	{
-		int d = 6, D = pow(10.0, double(d / 2));
-		int maxIter = pow(10.0, double(d));
-		double eps = 1e-6, alfa = 0.5, beta;
-		double *temp = new_vector(n), *z = new_vector(n), *z_n = new_vector(n);
-		double *p = new_vector(n), *res = new_vector(n), *res_n = new_vector(n);
+		int d = 6, D = pow(10.0, float(d / 2));
+		int maxIter = pow(10.0, float(d));
+		float eps = 1e-6, alfa = 0.5, beta;
+		float *temp = new_vector(n), *z = new_vector(n), *z_n = new_vector(n);
+		float *p = new_vector(n), *res = new_vector(n), *res_n = new_vector(n);
 		std::cout << std::endl << "ITERATIVE SECTION" << std::endl;
 		MatMult(n, A, x, res); //r = Ax
 		for (int i = 0; i < n; i++) res[i] = b[i] - res[i]; //r = b - r
@@ -231,14 +231,14 @@ namespace AuxFun
 	}
 
 	//Solve using main array as a function
-	void Solve(int n, void (*mult)(double*,double*,double*,int), double*b, double*x)
+	void Solve(int n, void (*mult)(float*,float*,float*,int), float*b, float*x)
 	{
-		int d = 6, D = pow(10.0, double(d / 2));
-		int maxIter = pow(10.0, double(d));
-		double eps = 1e-6, alfa = 0.5, beta;
-		double *temp = new_vector(n), *res_b = new_vector(n), *res_b_n = new_vector(n);
-		double *p = new_vector(n), *res = new_vector(n), *res_n = new_vector(n);
-		double *diagA = new_vector(n);
+		int d = 6, D = pow(10.0, float(d / 2));
+		int maxIter = pow(10.0, float(d));
+		float eps = 1e-6, alfa = 0.5, beta;
+		float *temp = new_vector(n), *res_b = new_vector(n), *res_b_n = new_vector(n);
+		float *p = new_vector(n), *res = new_vector(n), *res_n = new_vector(n);
+		float *diagA = new_vector(n);
 		std::cout << std::endl << "ITERATIVE SECTION" << std::endl;
 		mult(x, res, diagA, n); //r = Ax
 		for (int i = 0; i < n; i++) res[i] = b[i] - res[i]; //r = b - r
@@ -279,9 +279,9 @@ namespace AuxFun
 	}
 
 	//Function for assembling array
-	void AssemblyArray(double *x, double *y, double *d, int n)
+	void AssemblyArray(float *x, float *y, float *d, int n)
 	{
-		double temp = 0;
+		float temp = 0;
 		for (int i = 0; i < n; i++)
 		{
 			y[i] = 0;
@@ -305,8 +305,8 @@ namespace AuxFun
 	{
 
 		int n = N;
-		double **A, **B, *b, *x, *y, *res, *temp;
-		double alfa = 1.1;
+		float **A, **B, *b, *x, *y, *res, *temp;
+		float alfa = 1.1;
 
 		//Construct matrix
 		A = new_matrix(n, n);	B = new_matrix(n, n);	b = new_vector(n);
@@ -318,7 +318,7 @@ namespace AuxFun
 		{
 			for (int j = 0; j < n; j++)
 			{
-				B[i][j] = (double)rand() / RAND_MAX;
+				B[i][j] = (float)rand() / RAND_MAX;
 			}
 		}*/
 		for (int i = 0; i < n; i++)

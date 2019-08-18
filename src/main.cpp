@@ -5,13 +5,13 @@
 #include <string>
 #include <cstdlib>
 
-double *xs; //for tests
+float *xs; //for tests
 const int N = 7;
-double **C = AuxFun::new_random_matrix(N, N); //Global random matrix as a base for main matrix
+float **C = AuxFun::new_random_matrix(N, N); //Global random matrix as a base for main matrix
 
 int main(int argc, char* argv[])
 {
-	double s = 0.1;
+	float s = 0.1;
 	int tsteps = 100, m = 20, mx = 10;
 	if (std::string(argv[1]) == std::string("test"))
 	{
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 	}
 	else if (std::string(argv[1]) == std::string("ObjectiveFunctionSensitivity"))
 	{
-		double s = 0.01, deltas = 0.005, temp = 0;
+		float s = 0.01, deltas = 0.005, temp = 0;
 		if (argc > 2)
 		{
 			tsteps = atoi(argv[2]);
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 	else if (std::string(argv[1]) == std::string("SensitivityLSS"))
 	{
 		LSS obj;
-		double ****w, u0;
+		float ****w, u0;
 		int mstep, n, m, mx, Q;
 		//Read KKT result for this case
 		std::string line;
@@ -136,16 +136,16 @@ int main(int argc, char* argv[])
 			//Create solution vectors
 			std::cout << "CRETING VECTOR FOR KKT SOLUTION\n";
 			auto start1 = std::chrono::steady_clock::now();
-			w = new double ***[mstep - 1];
+			w = new float ***[mstep - 1];
 			for (int i = 0; i < mstep - 1; i++)
 			{
-				w[i] = new double **[n];
+				w[i] = new float **[n];
 				for (int j = 0; j < n; j++)
 				{
-					w[i][j] = new double *[m];
+					w[i][j] = new float *[m];
 					for (int k = 0; k < m; k++)
 					{
-						w[i][j][k] = new double[Q];
+						w[i][j][k] = new float[Q];
 						for (int l = 0; l < Q; l++)
 							w[i][j][k][l] = 0;
 					}
