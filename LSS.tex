@@ -582,6 +582,7 @@ Podobna analiza została wykonana dla drugiego przypadku ($ T=50 $), a jej wynik
 	\centering
 	\caption{Porównanie obu metod}
 \end{figure}
+Kod zaimplementowany w środowisku skryptowym MATLAB jest dostępny na publiczny repozytorium autora \cite{Marek1}.
 \subsection{Scenariusz II - oblicze chaosu}
 \subsubsection{Słowo wstępne}
 Jak zostało zaznaczone na wstępie, głównym celem niniejszej pracy jest analiza wrażliwości wybranej funkcji celu dla zagadnienia przepływowego modelowanego równaniem Boltzmanna. Konkretniej: chcemy zastosować Metodę Trajektorii Cienia do zagadnienia rozwiązywanego Metodą Siatek Boltzmanna (ang. \textit{Lattice Boltzmann Method}). Istnieje cały szereg zalet nautry numerycznej, które pokrótce zostaną przedstawione w następnym podrozdziale. Jednak już w tym momencie należy wmienić obszary praktycznych zastosować, które wykorzystują wspomnianą metodę. Są to między innymi:
@@ -592,7 +593,7 @@ Jak już zostało nieformalnie wspomniane (przy okazji omawiania pojęcia ergody
 Podstawowym założeniem prowadzącym do takiej dystrybucji prędkości wśród cząstek jest przyjęcie modelu gazu doskonałego oraz założenie równowagi termodynamicznej między układem jego otoczeniem. Należy zwrócić uwagę na znaczenie tego rozkładu - jest to gęstość prawdopodobieństwa stanowiąca miarę liczności cząstek w danym zakresie prędkości. Jak każda funkcja gęstości prawdopodobieństwa jest ona równa prawie wszędzie pochodnej dystrybuanty związanej z tym rozkładem. Wobec tego, na poziomie intuicji, można taką funkcję utożsamiać ze stosunkiem liczby cząstek mających ograniczony zakres przyjmowanych prędkości w stosunku do całkowitej ich liczby. Zauważmy, że podejście to nie opisuje każdej cząstki jako oddzielnego składnika złożonego systemu (podejście mikroskopowe). Jednakże jest ono również odmienne od dobrze znanego z obecnie najpopularniejszych metod modelowania komputerowego przepływów uśredniania w relatywnie niewielkiej (w sensie rozciągłości przestrzennej) parametrów statystycznie istotnej liczby cząstek, z którego generowane są pola parametrow makroskopowych takich jak ciśnienie, temperatura czy prędkość (podejście to bazuje na założeniu ciągłości badanego ośrodka i nazywane jest podejściem makroskopowym). Głównym zamysłem Metody Siatek Boltzmanna jest symulowanie ewolucji w czasie analogicznego rozkładu (niekoniecznie dla stanów równowagowych).
 
 \subsubsection{Model matematyczny}
-W przyjętym modelu D2Q9 metody siatek Boltzmanna proces kolizji ma następującą postać:
+W przyjętym modelu D2Q9 metody siatek Boltzmanna dyskretne równanie zadające dynamikę ma następującą postać:
 \begin{equation}
 f_{i}(x + \Delta x, t + \Delta t) = f_{i}(x,t) - \frac{1}{\tau_f}[f_{i}(x,t) - f_{i}^{eq}(x,t)] + \Delta f_{i}(x,t).
 \end{equation}
@@ -618,11 +619,68 @@ Gęstość w punkcie $x$ w chwili $t$ jest postaci:
 \begin{equation}
 \rho(x,t) = \sum_{i=0}^{8}f_{i}(x,t).
 \end{equation}
-Gdy na cząsteczki działa zewnętrzna siła $F$, to makroskopowa prędkość płynu wyraża się następująco:
+Dodatkowo, gdy na cząsteczki działa zewnętrzna siła $F$, to makroskopowa prędkość płynu wyraża się następująco:
 \begin{equation}
 U(x,t) = u(x,t) + \frac{1}{2}\frac{F(x,t)}{\rho(x,t)}.
 \end{equation}
 
+\subsubsection{Wyniki symulacji}
+Przebadane zostały trzy przypadki różniące się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne.
+\paragraph{Liczba Reynoldsa: 200}
+Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio (rysunki zostały odpowiednio przeskalowane w kierunku osi pionowej dla przejrzystości poglądu).
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_05_1.png} 
+	\caption{Mapa modułu prędkości po $ T=1000 $ kroków czasowych}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_05_2.png} 
+	\caption{Mapa modułu prędkości po $ T=2000 $ kroków czasowych}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_05_3.png} 
+	\caption{Mapa modułu prędkości po $ T=3000 $ kroków czasowych}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_05_4.png} 
+	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
+\end{figure}
+\paragraph{Liczba Reynoldsa: 400}
+Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_10_1.png} 
+	\caption{Mapa modułu prędkości po $ T=1000 $ kroków czasowych}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_10_2.png} 
+	\caption{Mapa modułu prędkości po $ T=2000 $ kroków czasowych}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_10_3.png} 
+	\caption{Mapa modułu prędkości po $ T=3000 $ kroków czasowych}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_10_4.png} 
+	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
+\end{figure}
+\paragraph{Liczba Reynoldsa: 600}
+Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_15_1.png} 
+	\caption{Mapa modułu prędkości po $ T=1000 $ kroków czasowych}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_15_2.png} 
+	\caption{Mapa modułu prędkości po $ T=2000 $ kroków czasowych}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_15_3.png} 
+	\caption{Mapa modułu prędkości po $ T=3000 $ kroków czasowych}
+\end{figure}
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/LBM/u0_15_4.png} 
+	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
+\end{figure}
+Kod zaimplementowany w języku C++ jest dostępny na publiczny repozytorium autora \cite{Marek2}.
 \newpage
 \begin{thebibliography}{99}
 \bibitem{Blonigan1} Blonigan P. J., Wang Q.,
@@ -665,6 +723,14 @@ Journal of the Royal Meteorological Society, Vol. 128, 2002, pp. 2587-2605.
 \bibitem{Lorenz} Lorenz E.,
 \emph{Deterministic Nonperiodic Flow},
 Journal of Atmospheric Sciences, Vol. 20, 1963, pp. 130-141.
+
+\bibitem{Marek1} Marek A.,
+\emph{ChaoticSystemsOptimization},
+https://github.com/BlooAM/ChaoticSystemsOptimization, 2019.
+
+\bibitem{Marek2} Marek A.,
+\emph{LSS},
+https://github.com/BlooAM/LSS, 2019.
 
 \bibitem{Maurin1} Maurin K.,
 \emph{Analiza, część I},
