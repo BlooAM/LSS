@@ -453,13 +453,13 @@ gdzie $ Im $ oznacza część zespoloną, zaś $\epsilon$ jest liczbą rzeczywis
 \newpage
 \section{Metoda Trajektorii Cienia}
 \subsection{Wstęp}
-Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział). Z praktycznego punktu widzenia obiektem zainteresowania są wartości średnie wielkości chwilowych, w których okres uśredniania jest stosunkowo długi, tj. funkcje postaci (\ref{J_bar}). W rozdziale tym będziemy poszukiwali czułości tak zdefiniowanych funkcji względem parametru $ s \in \mathbb{R} $ (zakładamy przy tym, że parametr projektowy jest skalarem, aby nie komplikować istoty problemu niepotrzebnymi rachunkami - rozszerzenie na przypadek wektorowy nie jest trudne). Konkretnie: poszukujemy wartości wyrażenia
+Z praktycznego punktu widzenia obiektem zainteresowania pozostają wartości średnie wielkości chwilowych, w których okres uśredniania jest stosunkowo długi, tj. funkcje postaci (\ref{J_bar}). W rozdziale tym będziemy poszukiwali czułości tak zdefiniowanych funkcji względem parametru $ s \in \mathbb{R} $ (zakładamy przy tym, że parametr projektowy jest skalarem, aby nie komplikować istoty problemu niepotrzebnymi rachunkami - rozszerzenie na przypadek wektorowy nie jest trudne). Konkretnie: poszukujemy wartości wyrażenia
 \begin{equation}
 \frac{d\bar{J}}{ds} = \lim\limits_{\delta s \rightarrow 0}\frac{1}{\delta s}(\lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(s + \delta s)dt - \lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(s)dt).
 \label{J_derivative}
 \end{equation}
-Przy założeniach przywołanych w Rozdziale można pokazać, iż taka wielkość jest dobrze zdefiniowana []. Co więcej jej wartość wynosi 
-Heurystyczne obserwacje pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki. Główną przeszkodę stanowi fakt, iż czas numerycznej symulacji jest zawsze skończony. \newline 
+Istnienie długookresowych średnich całkowych związane jest z założeniem ergodyczności (podobnie jak ich niezależność od warunków początkowych), jednakże różniczkowalność takich średnich nie jest oczywista. Głębokie rezultaty poczynione przez D. Ruelle'a przekonują (\cite{Ruelle1}), że dla klasy układów zwanych 'quasi-hiperbolicznymi' takie wartości są nie tylko dobrze określone, ale również wyrażają się formułą:
+Do systemów takich zalicza się z pewnością układ Lorenza. Istniją ponadto przesłanki, że duża część istotnych z inżynierskiego punktu widzenia przypadków przepływów również wykazuje cechę 'quasi-hiperboliczności' \cite{Qiqi1} (również heurystyczne obserwacje pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki), wobec czego z teoretycznego punktu widzenia nie ma przeszkód w wyznaczaniu czułości tak zdefiniowanych funkcji. Jednakże zlinearyzowane równania używane do tego celu (niezależnie od wybranej metody, których przegląd zawiera Rozdział ) skutkują w wynikach o bardzo niskiej jakości. Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział). Główną przeszkodę stanowi fakt, iż czas numerycznej symulacji jest zawsze skończony. Zmienność wartości oczekiwanej aproksymowanej średnią na skończonej trajektorii pozostaje nieograniczona (w normie). Jak już zostało wspomniane, jako pierwsi zjawisko to zauważyli autorzy w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) i zaproponowali metodę regularyzacji bazującą na uśrednianiu dostatecznej liczby trajektorii (jednocześnie stanowi ona pierwszy przykład z rodziny metod wykorzystujących zespół trajektorii) \cite{Lea2}. Formalne uzasadnienie poprawności tego podejścia stanowią prace \cite{Ruelle1} . Metody takie są jednak numerycznie kosztowne, co pokazują prace \cite{Chandramoorthy}. Należy przy tym wspomnieć, że wymiar zagadnienia może być zredukowany koncentrując się jedynie na niestabilnych wektorach kowiariantnych Lyapunowa (wkład do średniej pochodzący od modów stabilnych jest wyznaczany poprzez klasyczne metody analizy wrażliwości). Jest to tak zwany algorytm S3 (ang. Space Split Sensitivity Analysis algorithm) i jest opisany wraz z analizą kosztowności tego podejścia w stosunkowo nowych pracach[]. Niniejsza praca koncentruje się na metodach, które wykorzystują jedną (generyczną) trajektorię, co od razu wyznacza kres górny wymiaru zagadnienia.\newline 
 Podstawową ideą Metody Trajektorii Cienia jest regularyzacja poprzez odpowiedni wybór trajektorii zaburzonej przy innym warunku początkowym. Postępowanie takie jest usprawiedliwione na mocy założenia ergodyczności (Rozdział). Głównym narzędziem jest operator cienia, którego własności zostaną przedstawione w następnych sekcjach. Do końca pracy przyjmujemy założenia z Rozdziału. W szczególności te dotyczące ergodyczności oraz hiperboliczności układu (\ref{dyn_eq}), jak i regularności funkcji $ \textbf{f}: M_{ph} \rightarrow M_{ph}$
 \subsection{Metoda Operatora Cienia}
 Przypuśćmy, że dana jest trajektoria pewnego układu dynamicznego postaci (\ref{dyn_eq}), którą zapiszemy w postaci
@@ -593,9 +593,15 @@ Jak już zostało nieformalnie wspomniane (przy okazji omawiania pojęcia ergody
 Podstawowym założeniem prowadzącym do takiej dystrybucji prędkości wśród cząstek jest przyjęcie modelu gazu doskonałego oraz założenie równowagi termodynamicznej między układem jego otoczeniem. Należy zwrócić uwagę na znaczenie tego rozkładu - jest to gęstość prawdopodobieństwa stanowiąca miarę liczności cząstek w danym zakresie prędkości. Jak każda funkcja gęstości prawdopodobieństwa jest ona równa prawie wszędzie pochodnej dystrybuanty związanej z tym rozkładem. Wobec tego, na poziomie intuicji, można taką funkcję utożsamiać ze stosunkiem liczby cząstek mających ograniczony zakres przyjmowanych prędkości w stosunku do całkowitej ich liczby. Zauważmy, że podejście to nie opisuje każdej cząstki jako oddzielnego składnika złożonego systemu (podejście mikroskopowe). Jednakże jest ono również odmienne od dobrze znanego z obecnie najpopularniejszych metod modelowania komputerowego przepływów uśredniania w relatywnie niewielkiej (w sensie rozciągłości przestrzennej) parametrów statystycznie istotnej liczby cząstek, z którego generowane są pola parametrow makroskopowych takich jak ciśnienie, temperatura czy prędkość (podejście to bazuje na założeniu ciągłości badanego ośrodka i nazywane jest podejściem makroskopowym). Głównym zamysłem Metody Siatek Boltzmanna jest symulowanie ewolucji w czasie analogicznego rozkładu (niekoniecznie dla stanów równowagowych).
 
 \subsubsection{Model matematyczny}
-W przyjętym modelu D2Q9 metody siatek Boltzmanna dyskretne równanie zadające dynamikę ma następującą postać:
+Jako schemat połączeń węzłów siatki przyjęty został typ d2Q9 (Rysunek)
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/d2q9.jpg} 
+	\centering
+	\caption{Schemat połączeń węzłów siatki}
+\end{figure}
+W przyjętym modelu metody siatek Boltzmanna dyskretne równanie zadające dynamikę ma następującą postać:
 \begin{equation}
-f_{i}(x + \Delta x, t + \Delta t) = f_{i}(x,t) - \frac{1}{\tau_f}[f_{i}(x,t) - f_{i}^{eq}(x,t)] + \Delta f_{i}(x,t).
+f_{i}(x + \Delta x, t + \Delta t) = f_{i}(x,t) - \frac{1}{\tau_f}[f_{i}(x,t) - f_{i}^{eq}(x,t)].
 \end{equation}
 Przyjmujemy, że $f_{i}(x,t)$ oznacza funkcję rozkładu cząstek dla $i$-tej prędkości w punkcie $x$ w chwili $t$. Parametry siatki oznaczamy przez $\Delta x$ oraz $\Delta t$, zaś $\tau_f$ jest charakterystycznym czasem relaksacji.
 Jeśli pozostawimy układ bez wpływu czynników zewnętrznych, będzie on dążył do stanu równowagi, dla której równowagowa funkcja gęstości rozkładu $f^{eq}$, która ma postać:
@@ -623,7 +629,17 @@ Dodatkowo, gdy na cząsteczki działa zewnętrzna siła $F$, to makroskopowa pr�
 \begin{equation}
 U(x,t) = u(x,t) + \frac{1}{2}\frac{F(x,t)}{\rho(x,t)}.
 \end{equation}
-
+Dynamika w podejściu tej metody modelowana jest zatem dwustopniowo: pierwszy etap stanowi kolizja (reprezentowana operatorem kolizji), drugi zaś stanowi propagację funkcji rozkładu zgodnie z dyskretnymi kierunkami wybranych wektorów prędkości. W pracy operator kolizji jest aproksymowany dobrze rozpoznanym modelem BGK. Należy zwrócić uwagę, iż rozkład równowagowy jest wielomianowym przybliżeniem rozkładu Maxwella-Boltzmanna.\newline
+Kształt obszaru obliczeniowego został zilustrowany na Rysunku
+Pomimo tak prostej geometrii w przepływie takim występuje szereg zjawisk o skomplikowanej naturze:
+\begin{itemize}
+	\item niestabilność przepływu
+	\item przejście laminarno-turbulentne
+	\item separacja warstwy przyściennej
+	\item oderwanie warstwy przyściennej
+	\item recyrkulacja,
+\end{itemize}
+wobec czego przypadek ten często traktywany jest jako sprawdzian testowy dla różnych modeli turbulencji \cite{Salazar}.
 \subsubsection{Wyniki symulacji}
 Przebadane zostały trzy przypadki różniące się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne.
 \paragraph{Liczba Reynoldsa: 200}
@@ -751,6 +767,10 @@ Wydawnictwo: WNT, Warszawa 2017.
 \bibitem{Ruelle1} Ruelle D.,
 \emph{Differentiation of SRB states},
 Communications in Mathematical Physics, Vol. 187, 1997, pp. 227-241.
+
+\bibitem{Salazar} Salazar J., Santos L.
+\emph{2d lattice-boltzmann simulations of flow over a backward-facing step at low to moderate reynolds numbers},
+GRAD - Fluid Physics and Transport Phenomena Research Group, Universidade Federal deSanta Catarina
 	
 \bibitem{Strogatz} Strogatz S., 
 \emph{Nonlinear Dynamics and Chaos: With Applications to Physics, Biology, Chemistry and Engineering},
