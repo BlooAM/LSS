@@ -424,9 +424,37 @@ Z powyższych ustaleń można dojść do wniosku, że o takim układzie niemalż
 		$\forall \textbf{u} \in M_{ph}$ zachodzi: \newline
 		$ \textbf{u}(0) \in U  \implies \lim\limits_{t->\infty} d(\Lambda, \textbf{u}(t))=0$, \newline gdzie przez $ d(,) $ oznaczono metrykę indukowaną przez normę w $ M_{ph} $,
 		\item $\Lambda$ jest minimalny w tym sensie, że żaden jego właściwy podzbiór nie spełnia powyższych dwóch warunków\footnote{Ze względu na trudności w dowodzeniu poprawności tego warunku w większości przypadków jest on pomijany.}.
-	\end{itemize} 
-Patrząc na dotychczas omówione przkłady można dojść do wniosku, że różne proste postaci atraktorów już się pojawiały (patrz). Różnorodność ich geometrii była jednak mocno ograniczona (). 
+	\end{itemize}  
 \end{defi}
+Zgodnie z powyższą definicją można przyjąć, iż atraktor 'przyciąga' trajektorie zaczynające się z konkretynych punktów przestrzeni fazowej. Zbiór takich warunków początkowych dla danego atraktora nazywa się jego \textit{basenem atrakcji}. Pojęcia te są ze sobą blisko związane i dlatego w dalszej części pracy uwaga zostanie skupiona głównie na tym pierwszym. \newline
+Patrząc na dotychczas omówione przkłady można dojść do wniosku, że różne proste postaci atraktorów już się pojawiały (patrz). Różnorodność ich geometrii była jednak mocno ograniczona (punkt lub też pewna regularna krzywa). Jedną z najbardziej zaskakujących cech teorii chaosu jest praktyczny brak ograniczeń na topologiczną złożoność atraktorów (pomimo warunków regularności nałożonych na równanie opisujące dynammikę !). Skomplikowany portret fazowy atraktora nie jest też wyjątkiem ani nawet sytuacją rzadką, a raczej regułą. W pewnym sensie można powiedzieć, że jest to warunek chaotyczności układu (sprecyzujemy to stwierdzenie w dalszej części tego paragrafu). Szukając cech wspólnych takich atraktorów można odnaleść w literaturze dwa terminy stosowane zamiennie: atraktor dziwny oraz fraktal. Ten drugi w geometrii nazywany jest obiektem o 'ułamkowym' wymiarze, który jest samopodobny w każdej skali. Należy tutaj zaznaczyć, że nie ma jednej, powszechnie przyjętej definicji fraktala. Aby jednak nakreślić pewne intuicje możemy przyjąć, iż fraktal stanowi zbiór, którego wymiar Hausdorffa jest istotnie większy od jego wymiaru geometrycznego. Pojęcia te celowo nie zostają uściślone odsyłając zainteresowanego czytelnika do literatury \cite{Tempczyk}, \cite{Kudrewicz}. Zamiast tego w dalszej części zwizualizowane zostaną popularne fraktale wywodzące się z układów chaotycznych. Zanim jednak to nastąpi potrzebna konieczne jest wprowadzenie jeszcze jednego pojęcia.
+\begin{defi}
+	Bifurkacją układu dynamicznego (\ref{dyn_eq}) nazywamy jakościową zmianę zachowania jego rozwiązań. Parametr $ s_{0} \in \mathbb{R}^{n} $, dla którego następuje taka zmiana nazywany jest parametrem bifurkacji. 
+\end{defi}
+\begin{przyklad}\label{przyklad5}
+	Aby zilustrować powyższą definicję powtórzmy Przykład 1. Tym razem rozważmy sparametryzowane równanie postaci
+	\begin{equation}
+	\frac{dx}{dt} = x^2-a,
+	\end{equation}
+	z warunkiem początkowym postaci
+	\begin{equation}
+	x(0) = x_{0},
+	\end{equation}
+	gdzie $ a \in \mathbb{R} $. Zauważmy, że kształt krzywej obrazującej funkcję prawej strony pozostaje niezmienny - zmieniają się jedynie punkty przecięcia z osiami współrzędnych. Dla $ a > 0 $ sytuacja odpowiada Rysunkowi (z dokładnością do miejsc zerowych). Odpowiadające portrety dla $ a = 0 $ oraz $ a = -1 $ przedstawione zostały na Rysunku, odpowiednio.
+	\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/example5a.png} 
+	\centering
+	\caption{Portret fazowy układu z Przykładu 5 dla a=0}
+	\end{figure}
+	\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/example5b.png} 
+	\centering
+	\caption{Portret fazowy układu z Przykładu 5 dla $ a<0 $}
+	\end{figure}
+Zauważmy co stało się z punktami stabilnymi (w świetle nowo wprowadzonej nomenklatury możemy nazwać je również atraktorami, chociaż pojęcie to zarezerwowane jest dla bardziej skomplikowanych geometrycznie zbiorów). Wraz ze zmniejszaniem się parametru $ a $ punkty stabilne zbiegały do zera z różnych stron, aż w granicznym przypadku $ a=0 $ scaliły się w jednym miejscu. Należy zwrócić uwagę, że taki nazywany jest punktem częściowo stabilnym (przyciąga punkty ze swojego lewostronnego otoczenia i odpycha te z prawej strony, co symbolizują strzałki o zgodnie skierowanych grotach). Dalsze zmniejszanie parametru powoduje zanik punktów stabilnych - rozwiązanie z dowolnym warunkiem początkowym pozostaje niestabilne w sensie Lyapunowa. 
+\end{przyklad}
+Aby dać jeszcze lepsze zrozumienie pojęcia bifurkacji (jest to istotne, bo takowa pojawiająca się z coraz większą częstotliwością jest stanowi najpopularniejszą 'drogę' do powstania chaosu) zostaną przedstawione najpopularniejsze układy dynamiczne o skomplikowanym zachowaniu wraz ze zmianą pewnego parametru kontrolnego. Dodatkowo dla wybranych z nich przedstawione zostaną ich atraktory.
+\paragraph{Bifurkacja Feigenbauma}
 \newpage
 \section{Wybrane metody optymalizacji lokalnej stosowane w technice}
 Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent (???) oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice [].
@@ -459,8 +487,15 @@ Z praktycznego punktu widzenia obiektem zainteresowania pozostają wartości śr
 \label{J_derivative}
 \end{equation}
 Istnienie długookresowych średnich całkowych związane jest z założeniem ergodyczności (podobnie jak ich niezależność od warunków początkowych), jednakże różniczkowalność takich średnich nie jest oczywista. Głębokie rezultaty poczynione przez D. Ruelle'a przekonują (\cite{Ruelle1}), że dla klasy układów zwanych 'quasi-hiperbolicznymi' takie wartości są nie tylko dobrze określone, ale również wyrażają się formułą:
-Do systemów takich zalicza się z pewnością układ Lorenza. Istniją ponadto przesłanki, że duża część istotnych z inżynierskiego punktu widzenia przypadków przepływów również wykazuje cechę 'quasi-hiperboliczności' \cite{Qiqi1} (również heurystyczne obserwacje pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki), wobec czego z teoretycznego punktu widzenia nie ma przeszkód w wyznaczaniu czułości tak zdefiniowanych funkcji. Jednakże zlinearyzowane równania używane do tego celu (niezależnie od wybranej metody, których przegląd zawiera Rozdział ) skutkują w wynikach o bardzo niskiej jakości. Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział). Główną przeszkodę stanowi fakt, iż czas numerycznej symulacji jest zawsze skończony. Zmienność wartości oczekiwanej aproksymowanej średnią na skończonej trajektorii pozostaje nieograniczona (w normie). Jak już zostało wspomniane, jako pierwsi zjawisko to zauważyli autorzy w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) i zaproponowali metodę regularyzacji bazującą na uśrednianiu dostatecznej liczby trajektorii (jednocześnie stanowi ona pierwszy przykład z rodziny metod wykorzystujących zespół trajektorii) \cite{Lea2}. Formalne uzasadnienie poprawności tego podejścia stanowią prace \cite{Ruelle1} . Metody takie są jednak numerycznie kosztowne, co pokazują prace \cite{Chandramoorthy}. Należy przy tym wspomnieć, że wymiar zagadnienia może być zredukowany koncentrując się jedynie na niestabilnych wektorach kowiariantnych Lyapunowa (wkład do średniej pochodzący od modów stabilnych jest wyznaczany poprzez klasyczne metody analizy wrażliwości). Jest to tak zwany algorytm S3 (ang. Space Split Sensitivity Analysis algorithm) i jest opisany wraz z analizą kosztowności tego podejścia w stosunkowo nowych pracach[]. Niniejsza praca koncentruje się na metodach, które wykorzystują jedną (generyczną) trajektorię, co od razu wyznacza kres górny wymiaru zagadnienia.\newline 
-Podstawową ideą Metody Trajektorii Cienia jest regularyzacja poprzez odpowiedni wybór trajektorii zaburzonej przy innym warunku początkowym. Postępowanie takie jest usprawiedliwione na mocy założenia ergodyczności (Rozdział). Głównym narzędziem jest operator cienia, którego własności zostaną przedstawione w następnych sekcjach. Do końca pracy przyjmujemy założenia z Rozdziału. W szczególności te dotyczące ergodyczności oraz hiperboliczności układu (\ref{dyn_eq}), jak i regularności funkcji $ \textbf{f}: M_{ph} \rightarrow M_{ph}$
+Do systemów takich zalicza się z pewnością układ Lorenza. Istniją ponadto przesłanki, że duża część istotnych z inżynierskiego punktu widzenia przypadków przepływów również wykazuje cechę 'quasi-hiperboliczności' \cite{Qiqi1} (również heurystyczne obserwacje pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki), wobec czego z teoretycznego punktu widzenia nie ma przeszkód w wyznaczaniu czułości tak zdefiniowanych funkcji. Jednakże zlinearyzowane równania używane do tego celu (niezależnie od wybranej metody, których przegląd zawiera Rozdział ) skutkują w wynikach o bardzo niskiej jakości. Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział). Innymi słowy: 
+ \begin{equation}
+\frac{d\bar{J}}{ds} 
+\neq \lim\limits_{\textit{T}\to\infty}\frac{d}{d\textbf{s}}\frac{1}{T}\int_{0}^{T}J(s)dt.
+\label{J_derivative2}
+\end{equation}
+Główną przeszkodę stanowi fakt, iż czas numerycznej symulacji jest zawsze skończony. Zmienność wartości oczekiwanej aproksymowanej średnią na skończonej trajektorii pozostaje nieograniczona (w normie). Jak już zostało wspomniane, jako pierwsi zjawisko to zauważyli autorzy w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) i zaproponowali metodę regularyzacji bazującą na uśrednianiu dostatecznej liczby trajektorii (jednocześnie stanowi ona pierwszy przykład z rodziny metod wykorzystujących zespół trajektorii) \cite{Lea2}. Formalne uzasadnienie poprawności tego podejścia stanowią prace \cite{Ruelle1} . Metody takie są jednak numerycznie kosztowne, co pokazują prace \cite{Chandramoorthy}. Należy przy tym wspomnieć, że wymiar zagadnienia może być zredukowany koncentrując się jedynie na niestabilnych wektorach kowiariantnych Lyapunowa (wkład do średniej pochodzący od modów stabilnych jest wyznaczany poprzez klasyczne metody analizy wrażliwości). Jest to tak zwany algorytm S3 (ang. Space Split Sensitivity Analysis algorithm) i jest opisany wraz z analizą kosztowności tego podejścia w stosunkowo nowych pracach[]. Niniejsza praca koncentruje się na metodach, które wykorzystują jedną (generyczną) trajektorię, co od razu wyznacza kres górny wymiaru zagadnienia.\newline 
+Podstawową ideą Metody Trajektorii Cienia jest regularyzacja poprzez odpowiedni wybór trajektorii zaburzonej przy innym warunku początkowym. Postępowanie takie jest usprawiedliwione na mocy założenia ergodyczności (Rozdział). Głównym narzędziem jest operator cienia, którego własności zostaną przedstawione w następnych sekcjach. Skutkiem jego działania będzie uzyskanie trajektorii bliskej wyjściowej dla dowolnego czasu, co pozwoli uzyskać równość w (\ref{J_derivative2}). \newline 
+Do końca pracy przyjmujemy założenia z Rozdziału. W szczególności te dotyczące ergodyczności oraz hiperboliczności układu (\ref{dyn_eq}), jak i regularności funkcji $ \textbf{f}: M_{ph} \rightarrow M_{ph}$. 
 \subsection{Metoda Operatora Cienia}
 Przypuśćmy, że dana jest trajektoria pewnego układu dynamicznego postaci (\ref{dyn_eq}), którą zapiszemy w postaci
 \begin{equation}
@@ -475,8 +510,9 @@ gdzie $ \forall t \in \mathbb{R}_{+} \ \textbf{u}_t \in M_{ph}$. Wprowadźmy zab
 Zauważmy, że z przyjętych na początku tego Rozdziału założeń wynika, że tak zdefiniowana trajektoria odpowiada układowi postaci
 \begin{equation}
 \frac{d}{dt}\textbf{u'}(t) = \textbf{f}(u) + \epsilon \frac{\partial \delta \textbf{u}}{\partial \textbf{u}}\textbf{f}(u) = \textbf{f}(u') - \epsilon \frac{\partial \textbf{u}}{\partial \textbf{u}}\delta\textbf{u}(\textbf{u'}) + \epsilon \frac{\partial \delta \textbf{u}}{\partial \textbf{u}}\textbf{f}(u') + O(\epsilon^2),
+\label{u_perturb}
 \end{equation} 
-gdzie ostatnia równość wynika z przyjętych założeń na temat zaburzenia $ \delta u(u) $[]. Wobec tego można to równanie zapisać w postaci
+gdzie ostatnia równość wynika z przyjętych założeń na temat zaburzenia $ \delta u(u) $ \cite{Qiqi1}. Wobec tego można to równanie zapisać w postaci
 \begin{equation}
 \frac{d}{dt}\textbf{u'}(t) = \textbf{f}(\textbf{u'}) + \epsilon \delta \textbf{f}(\textbf{u'}) + O(\epsilon^2),
 \label{dyn_eq_pert}
@@ -487,7 +523,14 @@ gdzie perturbacja dyfeomorfizmu $ \delta \textbf{f}: M \rightarrow M $ wyraża s
 \label{funct_pert}
 \end{equation}
 Wprowadzony powyżej liniowy operator $ S_{f}: \delta \textbf{u} \mapsto \delta \textbf{f} $ nazywamy \textit{operatorem cienia}.\newline
-Tak zdefiniowany operator jest dobrze określony ([]), tj. w sposób jednoznaczny definiuje gładkie zaburzenie $ \delta \textbf{f}: M \rightarrow M $ odpowiadające gładkiej perturbacji wyjściowej trajektorii (\ref{trajectory}). Innymi słowy: zaburzona trajektoria (\ref{trajectory_pert}) spełnia jednoznacznie zaburzony układ (\ref{dyn_eq_pert}). Pewną komplikację stanowi fakt, że z punktu widzenia wyznaczania wrażliwości (\ref{J_derivative}) istotna jest operacja odwrotna. Perturbacja parametru projektowego $ s $ powoduje zmianę dynamiki $ \delta\textbf{f}(s) $, dla której poszukiwana jest perturbacja wyjściowej trajektorii $ \delta \textbf{u}(\delta \textbf{f}(s)) $ (pamiętając przy tym, że musi być ona 'dostatecznie mała'). Problem inwersji operatora cienia (przy założeniu, że takie odwzorowanie odwrotne istnieje) można rozwiązać numerycznie wykorzystując spektrum Lyapunowa. 
+Tak zdefiniowany operator jest dobrze określony (\cite{Qiqi1}), tj. w sposób jednoznaczny definiuje gładkie zaburzenie $ \delta \textbf{f}: M \rightarrow M $ odpowiadające gładkiej perturbacji wyjściowej trajektorii (\ref{trajectory}). Innymi słowy: zaburzona trajektoria (\ref{trajectory_pert}) spełnia jednoznacznie zaburzony układ (\ref{dyn_eq_pert}). Pewną komplikację stanowi fakt, że z punktu widzenia wyznaczania wrażliwości (\ref{J_derivative}) istotna jest operacja odwrotna. Perturbacja parametru projektowego $ s $ powoduje zmianę dynamiki $ \delta\textbf{f}(s) $, dla której poszukiwana jest perturbacja wyjściowej trajektorii $ \delta \textbf{u}(\delta \textbf{f}(s)) $ (pamiętając przy tym, że musi być ona 'dostatecznie mała'). Problem inwersji operatora cienia (przy założeniu, że takie odwzorowanie odwrotne istnieje) można rozwiązać numerycznie wykorzystując spektrum Lyapunowa - wykorzystując jednoznaczny rozkład wektorów w przestrzeni stycznej na wektory bazowe (tj. wektory kowariantne Lyapunowa) oraz liniowość operatora cienia otrzymuje się związki na współczynniki sperturbowanej trajektorii w zależności od współczynników odpowiadających zaburzeniu $ \delta \textbf{f}: M \rightarrow M $ (\cite{Qiqi1}). Pozostaje zastanowić się czy taka trajektoria pozostanie 'blisko' (w sensie metryki) trajektorii pierwotnej. Zauważmy w tym celu, że z (\ref{u_perturb}) wynika, że warunki początkowe nie muszę się pokrywać. Ponieważ ergodyczność w swej istocie zakłada, że poszukiwane średnie nie zależą od warunków brzegowych to można wybrać inny, bardziej dogodny (w ten sposób 'pozbyliśmy' się ograniczenia, które wpływało na złe uwarunkowanie numeryczne zadania). Powstają natychmiast dwa pytania:
+\begin{itemize}
+	\item Czy dla dowolnej trajektorii można znaleść warunek początkowy trajektorii zaburzonej w taki sposób aby stale była ona blisko pierwotnej (tj. norma ich różnicy była dowolnie mała w sposób jednostajne względem czasu) ?
+	\item Czy w przypadku istnienia takiej trajektorii istnieje deterministyczny algorytm pozwalający ją wyznaczyć?
+\end{itemize} 
+Odpowiedź na pierwsze z nich stanowi treść Lematu Cienia (patrz Rozdział ). Drugie również ma pozytywną odpowiedź. Algorytm taki zaproponowany po raz pierwszy w pracy \cite{Qiqi2} nazywa się Metodą Trajektorii Cienia.
+\subsection{Metoda Trajektorii Cienia} 
+
 \subsection{LSS - podejście bazujące na intuicji}
 \newpage
 \section{Implementacja metody LSS}
@@ -640,6 +683,8 @@ Pomimo tak prostej geometrii w przepływie takim występuje szereg zjawisk o sko
 	\item recyrkulacja,
 \end{itemize}
 wobec czego przypadek ten często traktywany jest jako sprawdzian testowy dla różnych modeli turbulencji \cite{Salazar}.
+\subsubsection{Aspekty numeryczne}
+Zanim przejdziemy do omówienia wyników należy chwilę poświęcić na aspekty implementacyjne, gdyż dla zagadnień wielowymiarowych odgrywają one kluczową rolę. W typowych przypadkach przepływów mogą nawet zadecydować o możliwości wykorzystania danej metody.
 \subsubsection{Wyniki symulacji}
 Przebadane zostały trzy przypadki różniące się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne.
 \paragraph{Liczba Reynoldsa: 200}
@@ -727,6 +772,9 @@ Wydawnictwo: Zysk i S-ka, 2018.
 \emph{Matrix Computations},
 The Johns Hopkins Univ. Press, Baltimore, 1996.
 
+\bibitem{Kudrewicz} Kudrewicz J., 
+\emph{Fraktale i chaos},
+Wydawnictwo: WNT, 1996.
 
 \bibitem{Lea1} Lea D., Allen M., Haine T.,
 \emph{Sensitivity analysis of the climate of a chaotic system},
