@@ -455,6 +455,27 @@ Zauważmy co stało się z punktami stabilnymi (w świetle nowo wprowadzonej nom
 \end{przyklad}
 Aby dać jeszcze lepsze zrozumienie pojęcia bifurkacji (jest to istotne, bo takowa pojawiająca się z coraz większą częstotliwością jest stanowi najpopularniejszą 'drogę' do powstania chaosu) zostaną przedstawione najpopularniejsze układy dynamiczne o skomplikowanym zachowaniu wraz ze zmianą pewnego parametru kontrolnego. Dodatkowo dla wybranych z nich przedstawione zostaną ich atraktory.
 \paragraph{Bifurkacja Feigenbauma}
+Numeryczna realizacja równań różniczkowych zwyczajnych polega przeważnie na wyznaczeniu wartości poszukiwanej funkcji w kolejnych krokach czasowych bazując na jednym lub kilku wartości w krokach poprzednich. Jest to więc procedura postaci
+\begin{equation}
+\label{discrete_dyn_eq}
+u_{n+1} = f(u_{n}),
+\end{equation}
+gdzie $ u_{n} $ oznacza wartość poszukiwanej funkcji (być może wektorowej) w \textit{n}-tym kroku czasowym, zaś $ f() $ oznacza funkcję zadającą dynamikę (przy zadanym warunku początkowym $ u_{0} $). Okazuje się, że pewne postaci funkcji $ f $ implikują skomplikowane zachowanie ciągu $ \{u_{n}\}_{n\in \mathbb{N}} $. Jako przykład rozważmy sytuację, w której $ u_{n} $ jest funkcją skalarną oraz 
+\begin{equation} 
+f(u_{n}) = ru_{n}(1-u_{n}),
+\end{equation}
+gdzie $ r \in \mathbb{R} $. Jest to tzw. \textit{odwzorowanie logistyczne} (zauważmy przy okazji, iż $ f $ jest nieliniową funkcją swojego argumentu). Połóżmy dodatkowo $ r \in [0,4] $. Łatwo wówczas zauważyć, że $ f([0,1]) = [0,1] $. Dodatkowo, dla $ r\in (0,1] $ punkt $ u^{*} = 0 $ jest atraktorem, zaś jego basenem atrakcji jest cały przedział $ [0,1] $, w związku z tym wszystkie trajektorie zbiegają do tego punktu, bez względu na wartość warunku początkowego $ u_{0} $, co nie stanowi interesującego nas zachowania. Załóżmy więc, że $ r>1 $. Zauważmy natychmiast, że $ u^{*} = 0 $ stanowi w oczywisty sposów punkt stały tego odwzorowania. Dodatkowo, dla $ r>1 $ pojawia się kolejny: $ u^{**} = 1-\frac{1}{r} $. Punkty takie mogą stanowić atraktor o ile 'przyciągają' punkty z pewnego swojego otoczenia, co praktycznie oznacza, iż pochodna w tym punkcie ma moduł mniejszy od jedności. Pochodna funkcji logistycznej wyraża się wzorem $ f'(u) = r(1-2u) $, w związku z czym $ u^{*} = 0 $ nie jest atraktorem ($ r>1 $), zaś $ u^{**} = 1-\frac{1}{r} $ spełnia ten warunek dla $ 1<r<3 $. Atraktor ten 'przesuwa' się wraz ze zmianą wartości parametru kontrolnego $ r $ od $ u^{**} = 0 $ do wartości $ u^{**} = \frac{2}{3} $. \newline
+Dla  $ r>3 $ punkt $ u^{**} = 1-\frac{1}{r} $ nadal jest punktem stałym, jednakże pochodna nie spełnia wspomnianego warunku i punkt ten 'odpycha' punkty z dowolnego swojego otoczenia. Pojawia się wówczas dwuelementowy cykl przyciągający, tj. dwa punktu $ u_{1}, u_{2} $ wzajemnie przekształcane na siebie, przy czym każdy punkt w ich otoczeniu po dwóch iteracjach zbliża się do takiego cyklu (oba te punkty stają się atraktorami odwzorowanie złożonego $ f(f(u)) $). Taka sytuacja jest obecna przy warunku $ 3<r<1+\sqrt{6} $. Po przekroczeniu prawej nierówności sytuacja się powtarza i powstaje atraktor czteroelementowy. Punkty z sąsiedztwa 'skaczą' po coraz to bliższych otoczeniach elementów tego atraktora, zachowując przy tym zawsze tę samą kolejność (i znów otrzymujemy pojedynczy atraktor dla złożenia $ f(f(f(f(u)))) $).\newline
+Sytuacja ta pojawia się coraz częściej (wraz ze zmianą parametru $ r $), przy czym liczba elementów atraktora podwaja się za każdym razem i zawsze stanowi on jednoelementowy atraktor złożenia funkcji $ f $ $ 2^{n} $ razy ze sobą. \newline
+Zachowanie takie jest jednak wciąż przewidywalne (w pewnym sensie). Sytuacja zmienia się dla granicznej wartości \cite{Tempczyk} $ r_{\inf} \approx 3,5699456 $. Przypadek ten charakteryzuje się cyklem o nieskończonej liczbie elementów, zaś przekroczenie tej wartości powoduje prawdziwy chaos - pojawiają się cykle o dowolnej liczbie elementów, a także odcinki, odcinki pozbawione atraktorów. Pełny diagram bifurkacji ilustruje Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/Feigenbaum.png} 
+	\centering
+	\caption{Diagram bifurkacji Feigenbauma}
+\end{figure}
+Dla $ r=4 $ otrzymujemy jednorodny chaos - iteracje pokrywają odcinek $ [0,1] $.\newline
+Podsumowując powyższe podsumowania można stwierdzić, iż pierwsze pojawienie się bifurkacji ($ r=1 $) pozwoliło na 'kotrolowaną' zmianę jakościową rozwiązań rozważanego równania. Kolejne bifurkacje (poczynając od $ r=3 $) pojawiające się z coraz większą częstotliwością doprowadziły do chaosu poprzez tzw. \textit{podwajanie okresu}. 
+\paragraph{Bifurkacja Hopfa}
 \newpage
 \section{Wybrane metody optymalizacji lokalnej stosowane w technice}
 Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent (???) oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice [].
