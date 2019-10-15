@@ -474,8 +474,64 @@ Zachowanie takie jest jednak wciąż przewidywalne (w pewnym sensie). Sytuacja z
 	\caption{Diagram bifurkacji Feigenbauma}
 \end{figure}
 Dla $ r=4 $ otrzymujemy jednorodny chaos - iteracje pokrywają odcinek $ [0,1] $.\newline
-Podsumowując powyższe podsumowania można stwierdzić, iż pierwsze pojawienie się bifurkacji ($ r=1 $) pozwoliło na 'kotrolowaną' zmianę jakościową rozwiązań rozważanego równania. Kolejne bifurkacje (poczynając od $ r=3 $) pojawiające się z coraz większą częstotliwością doprowadziły do chaosu poprzez tzw. \textit{podwajanie okresu}. 
+Podsumowujac powyzsze rozwazania mozna stwierdzic, iż pierwsze pojawienie sie bifurkacji ($ r = 1$) pozwoliło na 'kontrolowaną' zmianę jakosciową rozwiazań rozważanego równania. Kolejne bifurkacje (poczynając od $ r = 3$) pojawiające się z coraz wiekszą czestotliwoscią doporowadziły do chaosu poprzez tzw. podwajanie chaosu (z tym też zwiazana jest etymologia słowa bifurkacja - rozgałezienie siś jakieś całości na dwie czśsci [przypis]). W ramach prac nad tym (wyjątkowo prosto wyglądającym) procesem iteracyjnym wykryto wiele prawidłowosci. Najwazniejszą z nich jest tzw. stała Feigenbauma. Wyraża ona stosunek odległosci od kolejnych punktów bifurkacji (dla $r>3$). Interesującym jest fakt, że analogiczna stała (wraz z zachowaniem sie ukladu odwzorowan) o tej samej wartości jest obecna dla innych postaci funkcji $f$ (np dla $ f(u_{n}) = rsin(u_{n})$).Jest to przesłanka, iż mechanizm ten jest w pewnym stopniu uniwersalny. Po dokładniejszym zbadaniu okazuje się, iż w istocie jest to uniwersalna stała gładkich układów dynamicznych, których (skalarna) funkcja dynamiki jest unimodalna w rozważanym przedziale określoności.
 \paragraph{Bifurkacja Hopfa}
+Wspomniane bifurkacje Feigenbauma stanowią klasyczny przykład dla układów dyskretnych. W przypadku systemów ciągłych taki sztandarowy układ ma postać
+\begin{equation}
+\begin{array}{rcl} 
+\frac{dr}{dt} & = & \lambda r(1-r^2) \\ 
+\frac{d\phi}{dt} & = & \omega
+\end{array}
+\end{equation}
+Jest to równanie ruchu obrotowego punktu w płaszczyźnie ($ \omega $ stanowi prędkość obrotową, $ r $ to promień, $ \phi $ kąt tworzącej z ustaloną półosią układu współrzędnych, zaś $ \lambda  $ to parametr kontrolny). Zauważmy przy okazji, że układ ten to ogólniejszy przypadek dla Przykładu 4, w którym $ \omega = 1 $ oraz $ \lambda $ = 1.\newline
+Łatwo dostrzec, że dla $ \lambda < 0 $ punkt $ (0,0) $ jest atraktorem, bez względu na warunek początkowy. Dzieje się tak, gdyż wyrażenie $ \lambda r(1-r^{2}) $ jest ujemne, a więc promień będzie zmniejszał swoją wartość, przy czym intensywność tych zmian będzie malała. W związku z tym dowolna trajektoria będzie się 'zawijać' ku środkowi układu współrzędnech - Rysunek
+\begin{figure}[H]
+	\includegraphics[scale=0.3]{figures/Hopf.png} 
+	\centering
+	\caption{Przykładowa trajektoria dla układu Hopfa}
+\end{figure}
+Sytuacja w przypadku $ \lambda >0 $ generuje atraktory cykliczne w postaci okręgów o promieniach $ r = \sqrt{\lambda} $. Trajektorie odpowiadające punktom zaczynającym się na zewnątrz takiego okręgu nawijają się nań, zaś te zaczynające się wewnątrz - stopniowo się do niego zbliżają (Rysunek)
+\paragraph{Bifurkacja Henona}
+\subsection{Lemat cienia}
+Na koniec tego rozdziału wprowadzimy narzędzie, które w pewnym sensie gwarantuje, iż przedstawiona metoda jest deterministyczna \footnote{Mówiąc nieco ściślej - trajektoria cienia zawsze istnieje przy przyjmowanych założeniach, ale nie zawsze jest ona reprezentatywna, o czym będzie mowa w późniejszych rozdziałach}. Wprowadźmy najpierw kilka pojęć pomocniczych. Skupimy się przy nich na układach dyskretnych, co 
+\begin{defi}\label{trajectory_discrete}
+	Trajektorią (orbitą) dynamicznego układu (\ref{discrete_dyn_eq}) z czasem dyskretnym nazywamy zbiór
+	\begin{center}
+		$ O(u,f) = \{f^k(u): k \in \mathbb{Z}\} $
+	\end{center} 
+\end{defi}
+Zauważmy, że $ u \in M_{ph} $ oznacza warunek początkowy, a trajektoria określona jest dla dodatnich i ujemnych wskaźników iteracyjnych, zgodnie z poprzednimi uwagami. Można wobec tego wprowadzić dodatnią i ujemną półtrajektorię.
+\begin{equation}
+\begin{array}{rcl} 
+	O^{+}(u,f) = \{f^k(u): k \in \mathbb{N}\} \\
+	O^{-}(u,f) = \{f^k(u): k \in \mathbb{Z} - \mathbb{N}\}
+\end{array}
+\end{equation}
+Oczywiście nic nie stoi na przeszkodzie, aby wprowadzić trajektorię dla zbiorów:
+\begin{equation}
+	O(U,f) = \{f^k(U): k \in \mathbb{Z}\},
+\end{equation}
+gdzie $ U \subset M_{ph} $. Pozwala to na badanie lokalnej dynamiki. \newline
+Kluczowym pojęciem tego rozdziału jest pseudotrajektoria.
+\begin{defi}\label{pseudotrajectory}
+	Niech $\delta \in \mathbb{R}_{+}$
+	$\delta$-pseudotrajektorią ($ \delta $-pseudoorbitą) dynamicznego układu (\ref{discrete_dyn_eq}) z czasem dyskretnym nazywamy zbiór
+	\begin{center}
+		$ \xi = \{u_{k} \in M_{ph}: k\in \mathbb{Z}\}$,
+	\end{center} 
+	o ile
+	\begin{center}
+		$ d(u_{k+1},f(u_k))<\delta $, $ k \in \mathbb{Z} $,
+	\end{center} 
+	gdzie $ d $ oznacza metrykę przestrzeni metrycznej $ M_{ph} $.
+\end{defi}
+Widzimy, że 
+\begin{figure}[H]
+	\includegraphics[scale=0.5]{figures/pseudotrajectory.png} 
+	\centering
+	\caption{Ilustracja pseudotrajektorii dla układu punktów w płaszczyźnie.}
+\end{figure}
+
 \newpage
 \section{Wybrane metody optymalizacji lokalnej stosowane w technice}
 Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent (???) oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice [].
