@@ -146,7 +146,7 @@
 
 \section{Wprowadzenie}
 \subsection{Ogólna charakterystyka}
-Istotę niniejszej pracy stanowi opracowanie oraz implementacja metody wyznaczania wrażliwości dla pewnej klasy funkcji celu stanowiących długookresowe wartości średnie w przypadku układów dynamicznych, których rozwiązania przejawiają skomplikowane zachowania. Analiza taka jest niezbędna w wielu praktycznych zastosowaniach, takich jak optymalizacja kształtu elementów maszyn i urządzeń cieplno-przepływowych [], sterowanie z przesuwnym horyzontem czasowym (predykcyjne) [], adaptacja siatek obliczeniowych [], szacowanie błędów i niepewności []. Mimo że praca ta skupia się głównie na zastosowaniach związanych z mechaniką płynów, przedstawione algorytmy mogą być pomocne do rozwiązywania szerszej klasy problemów związanych z układami dynamicznymi.\newline 
+Istotę niniejszej pracy stanowi efektywna implementacja metody wyznaczania wrażliwości dla pewnej klasy funkcji celu stanowiących długookresowe wartości średnie w przypadku układów dynamicznych, których rozwiązania przejawiają skomplikowane zachowania. Analiza taka jest niezbędna w wielu praktycznych zastosowaniach, takich jak optymalizacja kształtu elementów maszyn i urządzeń cieplno-przepływowych [], sterowanie z przesuwnym horyzontem czasowym (predykcyjne) [], adaptacja siatek obliczeniowych [], szacowanie błędów i niepewności []. Mimo że praca ta skupia się głównie na zastosowaniach związanych z mechaniką płynów, przedstawione algorytmy mogą być pomocne do rozwiązywania szerszej klasy problemów związanych z układami dynamicznymi.\newline 
 W ostatnich latach powstało kilka prac sugerujących sposób rozwiązania postawionego problemu (zobacz Rozdział 1.2), jednakże wspólną ich cechą jest wysoki koszt numeryczny. W niniejszej pracy wykorzystuje się podstawowe ich idee - w szczególności zaimplementowana została Metoda Trajektorii Cienia (ang. \textit{Least Squares Shadowing}) w formie wariacyjnej. Całość została zaimplementowana w języku skryptowym \textit{MATLAB} oraz w języku wysokiego poziomu: \textit{C++}. Nowość stanowi sposób dyskretyzacji równań mechaniki płynów - zastosowana została Metoda Siatkowa Boltzmanna. Poza tym wykorzystane zostało narzędzie do automantycznego różniczkowania kodu.
 \subsection{Tło literaturowe badanego problemu}
 Opracowane do tej pory klasyczne metody estymacji czułości bazujące na wyznaczaniu gradientu funkcji celu pozostają nieskuteczne wobec istotnych z punktu widzenia techniki układów niestacjonarnych, których dynamika (silnie nieliniowa) przekłada się na praktycznie nieprzewidywalne zachowanie. Mówi się wówczas o układach chaotycznych (patrz Rozdział). Świetną pozycję opisującą historię odkryć takich układów, związane z nimi problemy oraz pierwsze próby ich matematycznego opisu stanowi książka \cite{Gleick}. Trudności polegające na załamaniu się klasycznych metod wyznaczania wrażliwości zotały po raz pierwszy zauważone w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) stanowiącego skrajnie uproszczony model termicznej konwekcji naturalnej w atmosferze. Ci sami autorzy w pracy \cite{Lea2} zaproponowali sposób regularyzacji poprzez uśrednianie całkowe w przestrzeni fazowej dla skal czasowych zdeterminowanych poprzez największą wartość wykładników Lyapunowa. Uzasadnienie takiego postępowania stanowi pozycja \cite{Ruelle1}, w której autor dowodzi poprawności sformułowania problemu (tj. pokazuje, że poszukiwana pochodna istnieje i jest ograniczona przy pewnych ogólnych założeniach) oraz podaje \textit{explicite} jej wzór. Podejście takie bez znaczących modyfikacji jest niepraktyczne ze względu na koszt numeryczny, co zostało pokazane w pracy \cite{Chandramoorthy}.
@@ -553,8 +553,40 @@ Metoda ta jest bardzo prosta w implementacji i dość łatwo pozwala kontrolowa�
 \end{equation}
 gdzie $ Im $ oznacza część zespoloną, zaś $\epsilon$ jest liczbą rzeczywistą. Zabieg ten pozwala na separację badanego punktu przestrzeni parametrów oraz zaburzenia na dwa niezależne obiekty numeryczne, dzięki czemu problem błędów zaokrągleń zostaje wyeliminowany. Dokładność szacowanej pochodnej pozostaje ograniczona jedynie precyzją maszynową.
 \subsection{Metoda Tangent (???)}
-\subsection{Metoda Operatora Sprzężonego}
 
+\subsection{Metoda Operatora Sprzężonego}
+Naszym celem jest znalezienie gradientu funkcji postaci (\ref{J_bar}). Zauważamy, że funkcja podcałkowa zależy od rozwiązania układu (\ref{dyn_eq}), które z kolei zależy od wektora parametrów projektowych. W praktyce oprócz takiej zagnieżdżonej zależności funkcjia celu zależy \textit{explcite} od wektora zmiennych decyzyjnych
+\begin{equation}
+J = J(\textbf{u}(t,\textbf{s})),\textbf{s}),
+\label{eq7}
+\end{equation}
+gdzie \textbf{u} jest rozwiązaniem układu (\ref{dyn_eq}) z odpowiednim warunkiem początkowym.\newline Należy przy tym zwrócić uwagę, że funkcja, której ekstremów szukamy nie zależy od czasu. Jawna zależność funkcji celu od zmiennych decyzyjnych może referować do składnika odpowiadającego za stan końcowy,tj  stan w chwili $\textit{t} = \textit{T}$, a za niejawną zależność odpowiada składnik dla chwil $\textit{t} < \textit{T}.$  \newline
+Poszukiwana pochodna wyraża się następującym wzorem
+\begin{equation}
+\frac{d\bar{J}}{ds} = \frac{1}{T}\int_{0}^{T}(\frac{\partial\textbf{J}}{\partial \textbf{u}}v+\frac{\partial\textbf{J}}{\partial \textbf{s}})dt,
+\label{eq8}
+\end{equation}
+gdzie $v = \frac{\partial\textbf{u}}{\partial \textbf{s}}.$ Funkcje celu leżące w kręgu naszych zainteresowań charakteryzują się dużą dysproporcją liczby wyjść w stosunku do liczby wejść układu (zmiennych niezależnych). W praktyce wartościami takich funkcji są skalary lub wektory o stosunkowo niewielkiej liczbie współrzędnych (najczęściej stanowiące statystyki wielkości fizycznych), wejścia natomiast charakteryzują parametry modelu (na przykład współrzędne punktów rozpinających projektowaną geometrię) i ich liczba może być rzędu dziesiątek tysięcy. Wyznacznie gradientu ze wzoru (\ref{eq8}) jest kosztowne numerycznie, ponieważ każda perturbacja wektora \textbf{s} wymaga wyznacznia \textit{v} na nowo, co narzuca konieczność ponownego rozwiązania układu (\ref{dyn_eq}). Dla tak dużej liczby zmiennych niezależnych powoduje to duży koszt czasowy procesu optymalizacji.\newline 
+Wobec powyższych rozważań chcemy przekształcić to wyrażenie, tak aby móc wyznaczyć wrażliwość rozważanej funkcji względem całego wektora zmiennych projektowych symultanicznie. Aby usunąć kłopotliwe wyrazy posłużymy się techniką tzw. \textit{mnożników lagranża} \textbf{w}(t). Zauważmy, że równość (\ref{J_bar}) możemy zapisać w postaci 
+\begin{equation}\langle \textbf{J} \rangle = \frac{1}{T}\int_{0}^{T}\textbf{J}(\textbf{u}(t,\textbf{s}))dt + \int_{0}^{T}(\textbf{w}(t)(\frac{d\textbf{u}}{dt} -  \textbf{f}(\textbf{u},\textbf{s})))dt.
+\label{eq9}
+\end{equation}
+Ostatni składnik po prawej stronie ma zerową wartość na mocy (\ref{dyn_eq}). Własność ta jest prawdziwa dla dowolnego mnożnika Lagragne'a, w związku z czym otrzymujemy otrzymujemy. Niech zatem
+\begin{equation}
+-\frac{\partial{\textbf{w}}}{\partial{t}} = (\frac{\partial{\textbf{f}}}{\partial{\textbf{u}}})^{T}\textbf{w} +(\frac{\partial{J}}{\partial{\textbf{u}}})^{T} 
+\label{lagrange_mult}
+\end{equation}
+W wyniku różniczkowania wyrażenia (\ref{eq9}) wraz z narzuceniem warunku (\ref{lagrange_mult}) na funkcje \textbf{w}(t) otrzymujemy wyrażenie
+\begin{equation}
+\frac{d\bar{J}}{ds} = \frac{1}{T}\int_{0}^{T}\textbf{w}^{T}(\frac{\partial{\textbf{f}}}{\partial{\textbf{s}}} + \frac{\partial{J}}{\partial{\textbf{s}}})dt
+\end{equation} 
+Należy w tym miejscu poczynić uwagę techniczną: iloczyn \textbf{w} i \textbf{f} pod całką w ogólności jest dobrze zdefiniowany w sensie iloczynu skalarnego nad ustaloną przestrzenią Hilberta. W celu zachowania przejrzystości nie odróżniamy tutaj tej operacji od iloczynu liczb. \newline
+W reprezentacji dyskretnej wyrażenia ma to postać: 
+\begin{equation}
+\frac{d\bar{J}}{ds} = \sum_{i=0}^{N-1}\textbf{w}_{i+1}^T\triangle t\frac{\partial\textbf{f}}{\partial s},
+\end{equation} 
+gdzie \textit{N} oznacza liczbę kroków dyskretyzacji czasowej, zaś $ \triangle t $ krok czasowy. \newline
+Oczywiście pochodna $ \frac{\partial \textbf{f}}{\partial s} $ nie stanowi dużego problemu. Podkreślamy tutaj, że chwilowa wartość funcji zadającej dynamikę ma postać $ \textbf{f} = \textbf{f}(\textbf{u}, s)$ , w związku z czym pochodna cząstkowa wzięta jest względem drugiej zmiennej traktowanej jako niezależna. Mówiąc nieco kolokwialnie: pochodna ta 'nie widzi' zależności zagnieżdżonej $ \textbf{u} = \textbf{u}(t,s) $. 
 \newpage
 \section{Metoda Trajektorii Cienia}
 \subsection{Wstęp}
@@ -565,7 +597,7 @@ Z praktycznego punktu widzenia obiektem zainteresowania pozostają wartości śr
 \end{equation}
 Istnienie długookresowych średnich całkowych związane jest z założeniem ergodyczności (podobnie jak ich niezależność od warunków początkowych), jednakże różniczkowalność takich średnich nie jest oczywista. Głębokie rezultaty poczynione przez D. Ruelle'a przekonują (\cite{Ruelle1}), że dla klasy układów zwanych 'quasi-hiperbolicznymi' takie wartości są nie tylko dobrze określone, ale również wyrażają się formułą:
 Do systemów takich zalicza się z pewnością układ Lorenza. Istniją ponadto przesłanki, że duża część istotnych z inżynierskiego punktu widzenia przypadków przepływów również wykazuje cechę 'quasi-hiperboliczności' \cite{Qiqi1} (również heurystyczne obserwacje pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki), wobec czego z teoretycznego punktu widzenia nie ma przeszkód w wyznaczaniu czułości tak zdefiniowanych funkcji. Jednakże zlinearyzowane równania używane do tego celu (niezależnie od wybranej metody, których przegląd zawiera Rozdział ) skutkują w wynikach o bardzo niskiej jakości. Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział). Innymi słowy: 
- \begin{equation}
+\begin{equation}
 \frac{d\bar{J}}{ds} 
 \neq \lim\limits_{\textit{T}\to\infty}\frac{d}{d\textbf{s}}\frac{1}{T}\int_{0}^{T}J(s)dt.
 \label{J_derivative2}
