@@ -525,13 +525,21 @@ Kluczowym pojęciem tego rozdziału jest pseudotrajektoria.
 	\end{center} 
 	gdzie $ d $ oznacza metrykę przestrzeni metrycznej $ M_{ph} $.
 \end{defi}
-Widzimy, że 
+Widzimy (Rysunek), że punkty $\delta$-pseudotrajektorii są blisko punktom prawdziwej trajektorii jedynie lokalnie, tzn. przechodząc od zadanego punktu przestrzeni fazowej do jego obrazu (zgodnie z dynamiką układu), znajdziemy się $\delta$-otoczeniu punktu $\delta$-pseudoorbity. 
 \begin{figure}[H]
 	\includegraphics[scale=0.5]{figures/pseudotrajectory.png} 
 	\centering
 	\caption{Ilustracja pseudotrajektorii dla układu punktów w płaszczyźnie.}
 \end{figure}
-
+Istotną cechą układów dynamicznych jest globalny odpowiednik tej własności, która w literaturze nosi nazwę \textit{własności cienia} (ang. \textit{shadowing property}).
+\begin{defi}\label{shadowing_property}
+	Powiemy, że układ postaci (\ref{dyn_eq}) ma własność cienia o ile dla dowolnego $ \epsilon \in \mathbb{R}_{+} $ istnieje $ \delta \in \mathbb{R}_{+} $ taka, że dla dowolnej $\delta$-pseudotrajektorii układu (\ref{dyn_eq}) istnieje punkt $ p \in M_{ph} $ taki,że
+	\begin{center}
+		$ d(u_{k}, f^{k}(p)) < \epsilon, k \in \mathbb{Z}$
+	\end{center}
+\end{defi}
+Istnieje wiele wariacji tej definicji. Na przykład lipszycowska własność cienia określa wspólne ograniczenie na odległości występujące w definicji szacując je stałą nazywaną stałą lipszyca. W związku z czym tą bazową własność określa się mianem standardowej - w dalszej części pracy mówiąc o własności cienia mamy na myśli jej standardową wersję.\newline
+Przyjrzyjmy się chwilę co oznacza iż rozważany układ ma wspomnianą własność. W poprzednich podrozdziałach wielokrotnie wspomniane zostało, iż jedną z cech charakterystycznych układów chaotycznych jest ich wrażliwość na warunki początkowe. Można by przypuszczać, iż nawet niewielkie perturbacje warunków początkowych (rzędu błędów numerycznych) spowodują całkowitą rozbieżność wyników. Własność cienia daje podstawy, aby sądzić, iż nie stanie się tak koniecznie. Oczywiście sama definicja nie specyfikuje oczekiwanej wartości przy której taka rozbieżność nie zachodzi, jedank daje to pewną (lokalną) regularność zachowania się rozwiązań.
 \newpage
 \section{Wybrane metody optymalizacji lokalnej stosowane w technice}
 Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent (???) oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice [].
@@ -553,7 +561,12 @@ Metoda ta jest bardzo prosta w implementacji i dość łatwo pozwala kontrolowa�
 \end{equation}
 gdzie $ Im $ oznacza część zespoloną, zaś $\epsilon$ jest liczbą rzeczywistą. Zabieg ten pozwala na separację badanego punktu przestrzeni parametrów oraz zaburzenia na dwa niezależne obiekty numeryczne, dzięki czemu problem błędów zaokrągleń zostaje wyeliminowany. Dokładność szacowanej pochodnej pozostaje ograniczona jedynie precyzją maszynową.
 \subsection{Metoda Tangent (???)}
-
+Idea tej metody polage na śledzeniu wrażliwości rozwiązania układu (\ref{dyn_eq}) w zależności od wektora parametrów projektowych. Zakładając odpowiednią regularność rozwiązania i funkcji $ f $ można formalnie zróżniczkować to równanie względem wektora $ s $. W wyniku otrzymujemy nowe równanie:
+\begin{equation}
+\frac{d{\textbf{v}}}{d{t}} = \frac{\partial{\textbf{f}}}{\partial{\textbf{u}}}\textbf{v} + \frac{\partial{\textbf{f}}}{\partial{\textbf{s}}}
+\label{tangent},
+\end{equation}
+gdzie $ v = \frac{\partial{\textbf{u}}}{\partial{\textbf{s}}} $. Człon ten jest 
 \subsection{Metoda Operatora Sprzężonego}
 Naszym celem jest znalezienie gradientu funkcji postaci (\ref{J_bar}). Zauważamy, że funkcja podcałkowa zależy od rozwiązania układu (\ref{dyn_eq}), które z kolei zależy od wektora parametrów projektowych. W praktyce oprócz takiej zagnieżdżonej zależności funkcjia celu zależy \textit{explcite} od wektora zmiennych decyzyjnych
 \begin{equation}
@@ -563,7 +576,7 @@ J = J(\textbf{u}(t,\textbf{s})),\textbf{s}),
 gdzie \textbf{u} jest rozwiązaniem układu (\ref{dyn_eq}) z odpowiednim warunkiem początkowym.\newline Należy przy tym zwrócić uwagę, że funkcja, której ekstremów szukamy nie zależy od czasu. Jawna zależność funkcji celu od zmiennych decyzyjnych może referować do składnika odpowiadającego za stan końcowy,tj  stan w chwili $\textit{t} = \textit{T}$, a za niejawną zależność odpowiada składnik dla chwil $\textit{t} < \textit{T}.$  \newline
 Poszukiwana pochodna wyraża się następującym wzorem
 \begin{equation}
-\frac{d\bar{J}}{ds} = \frac{1}{T}\int_{0}^{T}(\frac{\partial\textbf{J}}{\partial \textbf{u}}v+\frac{\partial\textbf{J}}{\partial \textbf{s}})dt,
+\frac{d\bar{J}}{ds} = \frac{1}{T}\int_{0}^{T}(\frac{\partial{J}}{\partial \textbf{u}}v+\frac{\partial{J}}{\partial \textbf{s}})dt,
 \label{eq8}
 \end{equation}
 gdzie $v = \frac{\partial\textbf{u}}{\partial \textbf{s}}.$ Funkcje celu leżące w kręgu naszych zainteresowań charakteryzują się dużą dysproporcją liczby wyjść w stosunku do liczby wejść układu (zmiennych niezależnych). W praktyce wartościami takich funkcji są skalary lub wektory o stosunkowo niewielkiej liczbie współrzędnych (najczęściej stanowiące statystyki wielkości fizycznych), wejścia natomiast charakteryzują parametry modelu (na przykład współrzędne punktów rozpinających projektowaną geometrię) i ich liczba może być rzędu dziesiątek tysięcy. Wyznacznie gradientu ze wzoru (\ref{eq8}) jest kosztowne numerycznie, ponieważ każda perturbacja wektora \textbf{s} wymaga wyznacznia \textit{v} na nowo, co narzuca konieczność ponownego rozwiązania układu (\ref{dyn_eq}). Dla tak dużej liczby zmiennych niezależnych powoduje to duży koszt czasowy procesu optymalizacji.\newline 
