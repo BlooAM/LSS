@@ -492,6 +492,83 @@ Jest to równanie ruchu obrotowego punktu w płaszczyźnie ($ \omega $ stanowi p
 \end{figure}
 Sytuacja w przypadku $ \lambda >0 $ generuje atraktory cykliczne w postaci okręgów o promieniach $ r = \sqrt{\lambda} $. Trajektorie odpowiadające punktom zaczynającym się na zewnątrz takiego okręgu nawijają się nań, zaś te zaczynające się wewnątrz - stopniowo się do niego zbliżają (Rysunek)
 \paragraph{Bifurkacja Henona}
+Kolejnym dwuwymiarowym układem posiadającym atraktor fraktalnej natury jest model Henona opisany równaniami dyskretnymi:
+\begin{equation}
+\begin{array}{rcl} 
+x_{n+1} & = & 1-ax_{n}^2+y_{n} \\
+y_{n+1} & = & bx_{n}
+\end{array}
+\end{equation}
+gdzie $ a,b \in \mathbb{R} $ stanowią parametry modelu. Jakobian przekształcenia wynosi $ |b| $,w związku z czym dla $ |b|<1 $ otrzymujemy kontrakcję, które na mocy twierdzenia Banacha ma dokładnie jeden punkt stały stanowiący atraktor punktowy\newline
+Dla $ |b|>1 $ układ ten można rozwiązać rozbijając każdą iterację na trzy kroki stanowiące elementarne operacje geometryczne:
+\begin{itemize}
+	\item zginanie powierzchni przy zachowaniu jej miary:
+	\begin{equation}
+	\begin{array}{rcl} 
+	x' & = & x \\
+	y' & = & 1-ax^{2}+y
+	\end{array},
+	\end{equation}
+	\item skracanie odległości między punktami wzdłuż osi odciętych
+	\begin{equation}
+	\begin{array}{rcl} 
+	x'' & = & bx' \\
+	y'' & = & y'
+	\end{array},
+	\end{equation}
+	\item obrót o kąt prosty
+	\begin{equation}
+	\begin{array}{rcl} 
+	x''' & = & y'' \\
+	y''' & = & -x''
+	\end{array}.
+	\end{equation}
+\end{itemize}
+Oczywiście parametrem bifurkacji jest w tym przypadku $ b=1 $. Atraktor tego układu przedstawia Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.4]{figures/Henon.png} 
+	\centering
+	\caption{Atraktor Henona}
+\end{figure}
+\paragraph{Bifurkacja Rosslera}
+Ostatnim klasycznym przykładem będzie trójwymiarowy układ Otto Rosslera. Ma on następującą postać:
+\begin{equation}
+\begin{array}{rcl} 
+\frac{dx}{dt} & = & -y-z \\
+\frac{dy}{dt} & = & x+ay \\
+\frac{dz}{dt} & = & bx-cz+xz
+\end{array}.
+\end{equation}
+Parametry $ a,b,c \in \mathbb{R}_{+} $ warunkują zachowanie się rozwiązań. \newline
+Łatwo zauważyć, iż kłopotliwe jest ostatnie z równań ze względu na obecność członu nieliniowego. Można spróbować zrozumieć dynamikę poprzez tymczasowe usunięcie tego równania (formalnie $ z = 0 $). Mamy wówczas
+\begin{equation}
+\begin{array}{rcl} 
+\frac{dx}{dt} & = & -y \\
+\frac{dy}{dt} & = & x+ay \\
+\end{array}.
+\end{equation}
+Dla $ a \in (0,2) $ otrzymujemy ponownie spiralę, ale tym razem rozwijającą się. Dodanie ostatniego równania spowoduje 'wygięcie' się owej spirali (człon nieliniowy), przy czym będzie ono stabilne o ile $ x<c $. Wówczas wysokość jego wysokość osiąga $ z = \frac{b}{x-c} $. Dalszy wzrost współrzędnej $ x $ jest kontrolowany przez człon $ (-z) $ w pierwszym równaniu i trajektoria wygina się w drugą stronę powracając na płaszczyznę $ z=0 $. Kształt atraktora ilustruje Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.4]{figures/Rossler.png} 
+	\centering
+	\caption{Atraktor Rosslera}
+\end{figure}
+Sama fizyka również dostarcza inspiracji do tworzenia modeli o nieprzewidywalnych zachowaniach. Układem chemicznym o takiej własności jest reakcja Biełousowa-Żabotyńskiego. Hydrodynamika nie jest tuaj wyjątkiem - przejścia do chaosu jest w tym przypadku na tyle popularne, iż zyskało swoją nazwę: turbulencja.
+\paragraph{Komórki Bernada}
+Ekperyment, który pozwolił odkryć to zjawisko miał za zadanie zbadać mechanizm wymiany ciepła pomiędzy warstwami wody znajdującej się w naczyniu podgrzewanym od dołu. Parametrem kontrolnym jest w tym przypadku gęstość strumienia ciepła przekazywana cieczy. Przy niewielkiej ilości ciepła w jednostce czasu wymiana ciepła w wodzie następuje na skutek wymiany pędu między jej cząsteczkami. Jest to zatem poziom mikroskopowy - następuje stopniowe podgrzewanie kolejnych warstw. Od pewnej krytycznej wartości (odpowiednik parametru bifurkacji) następuje destabilizacja znajdującej się w naczyniu cieczy. Tworzą się struktury dynamicze - wirujące przeciwlegle rolki zwane komórkami Bernada. Mechanizm wymiany ciepła zmienia się w sposób jakościowy - następuje makroskopowy ruch płynu w objętości wywołany dużymi różnicami gęstości. Mówi się wówczas o konwekcji naturalnej. Sytuację ilustruje Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.6]{figures/Bernad.png} 
+	\centering
+	\caption{Schemat komórek Bernada}
+\end{figure}
+Pewną analogię stanowi tu mechaniczne zjawisko zwane wyboczeniem (analogiem sił jest tutaj oczywiście różnica temperatur, zaś samo zjawisko wyboczenia reprezentowane jest przez utratę stabilności cieczy). Pewne ilościowe wnioski na ten temat Czytelnik znajdzie w klasycznej pozycji [Lifszyc].\newline
+Model matematyczny takiego zjawiska opisywany jest poprzez układ równań Naviera-Stokesa sprzężony z równaniem opisującym wymianę ciepła. Jest on zatem bardzo skomplikowany i w celu jego rozwiązania stosuje się pewne uproszczenia. Najprostszym może być przyjęcie nieskończonej długości naczynia, co implikuje brak wymiany ciepła wzdłuż rolek konwekcyjnych - model taki stanowi podstawę innego, bardzo znanego układu, którego autorem jest Edward Lorenz. Model ten jest sztandarowym przykładem układu o skomplikowanym zachowniu, zaś jego atraktor stał się symbolem teorii chaosu (Rysunek). Znacznie więcej informacji na temat układu Lorenza wraz z analizą wrażliwości funkcji zdefiniowanej dla tego systemu zawiera Rozdział.\newline
+Powyższe rozważania przekonują, iż do listy cech charakteryzujących każdy układ dynamiczny można dopisać dodatkowe dwie pozycje:
+\begin{itemize}
+	\item nierozkładalność przestrzeni fazowej na dwie, dynamicznie rozłączne, niepuste podprzestrzenie,
+	\item gęstość punktów okresowych przestrzeni fazowej.
+\end{itemize}
+
 \subsection{Lemat cienia}
 Na koniec tego rozdziału wprowadzimy narzędzie, które w pewnym sensie gwarantuje, iż przedstawiona metoda jest deterministyczna \footnote{Mówiąc nieco ściślej - trajektoria cienia zawsze istnieje przy przyjmowanych założeniach, ale nie zawsze jest ona reprezentatywna, o czym będzie mowa w późniejszych rozdziałach}. Wprowadźmy najpierw kilka pojęć pomocniczych. Skupimy się przy nich na układach dyskretnych, co 
 \begin{defi}\label{trajectory_discrete}
