@@ -568,6 +568,32 @@ Powyższe rozważania przekonują, iż do listy cech charakteryzujących każdy 
 	\item nierozkładalność przestrzeni fazowej na dwie, dynamicznie rozłączne, niepuste podprzestrzenie,
 	\item gęstość punktów okresowych przestrzeni fazowej.
 \end{itemize}
+\paragraph{Istota chaosu} Poprzez wymienione przykłady stworzyliśmy pewien ogląd na układy dynamiczne. Zauważmy, że we wszystkich układach (modelach matematycznych lub fizycznych) istnieje generyczny schemat otrzymania chaosu. Polega on na parametryzowaniu układu w celu wzmocnienia wpływu konkretnych członów (najczęściej nieliniowych) na zachowanie rozwiązań. Jest to dość ogólne spostrzeżenie. Można wyróżnić wiele podtypów dróg do chaosu i nie istnieje na ten moment ogólna teoria ich istnienia. Najczęściej wyróżnia się trzy scenariusze (bifurkacyjne):
+\begin{itemize}
+	\item poprzez podwajanie okresu, tj. według schematu Feigenbauma opisanego wcześniej w tym podrozdziale,
+	\item poprzez tzw. \textit{intermitencję}, czyli powstawanie podokresów chaotycznego zachowania - im większa wartość parametru kontrolnego tym (statystycznie) mniejsza długość okresów ruchu uporządkowanego,
+	\item schemat Ruelle'a-Takensa-Newhouse'a, który w istocie opiera się o omawianą w tym podrozdziale bifurkację Hopfa, jednakże w jej trójwymiarowej wersji (w przypadku dwuwymiarowej przestrzeni fazowej możliwe są tylko punkty i cykle graniczne), dla której cyklem granicznym jest powierzchnia torusa.
+\end{itemize}
+Przedstawione schematy powstawania chaosu ilustrują czym samo zjawisko się objawia. Również na gruncie intuicji jest ono zrozumiałe, charakteryzuje się ono bowiem skomplikowanym zachowaniem rozwiązań oraz ich wrażliwością na warunki początkowe (lub parametru modelu) w ramach deterministycznych układów nieliniowych. \newline 
+Pozostało jeszcze scharakteryzować klasę takich systemów poprzez pewną jakościową miarę - taka charakterystyka pozwala stwierdzić jak 'bardzo chaotyczny' jest układ lub też rozstrzygnąć który układ jest 'bardziej chaotyczny'. Aby wygenerować wspomnianą miarę i tym samym dobrze zrozumieć jej znaczenie zacznijmy od najprostrzej klasy odwzorowań - funkcji liniowych określonych na przestrzeniach skończenie wymiarowych. W tym przypadku układ (\ref{dyn_eq}) sprowadza się do postaci
+\begin{equation}
+	\textbf{u}_{n+1} = \textbf{A}\textbf{u}_{n},
+\end{equation}
+gdzie $ A \in M^{N \bigtimes N} $ jest macierzą przekształcenia (o stałych współczynnikach), zaś $ N \in \mathbb{N} $ oznacza wymiar przestrzeni fazowej. Tutaj ponownie będziemy zainteresowani niezmiennikami - w tym przypadku interesujące są wektory, których kierunek jest niezmienniczy ze względu na transformację $ A $, tj wektory niezerowe $ \textbf{v} \in \mathbb{R}^{N} $ takie, że
+\begin{equation}
+	\textbf{A}\textbf{v} = \lambda \textbf{v}.
+\end{equation}
+Przyjmując nomenklaturę znaną z algebry liniowej możemy mówić o takich wektorach $ \textbf{v} \in \mathbb{R}^{N} $ jako w wektorach własnych macierzy $ A $ (o ile takie wektory istnieją). Odpowiadające im skalary $ \lambda \in \mathbb{R} $ nazywają się wartościami własnymi, których wartość modułu większa od jedności oznacza, iż punkty leżące na kierunku wektora własnego oddalają się od siebie, zaś wartości te mniejsze od jedności wskazują na zbliżanie się takich punktów względem siebie. Sytuację dla przypadku dwuwymiarowego (tj. $ v = (x,y) \in \mathbb{R}^2 $, gdzie $ \lambda > 1 $) ilustruje Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.4]{figures/Eigenvalues.png} 
+	\centering
+	\caption{Ilustracja zachowania wektorów własnych}
+\end{figure}
+Oczywiście różne wektory własne mogą różnie się deformować pod wpływem przekształcenia. Mówi się zatem, że danej wartości własnej odpowiada wektor własny, przy czym takie wektory są zawsze liniowo niezależne, a zatem tworzą podprzestrzeń liniową przestrzeni stanowiącej dziedzinę rozważanego przekształcenia. W tym miejscu należy podkreślić, że wektory te w ogólności nie stanowią bazy całej przestrzeni (wymiar generowanej przez nie podprzestrzeni jest istotnie mniejszy od wymiaru całej przestrzeni) oraz wektory te nie są w   ogólności ortogonalne (taka sytuacja zachodzi, gdy przekształcenie jest samosprzężone, a więc w naszym przypadku, gdy macierz $ A $ jest symetryczna). \newline
+Informacja na temat tych charakterystycznych obiektów ma ogromną wartość. Mówi ona bowiem jak punkty znajdujące się w sąsiedztwie rozpatrywanego punktu trajektorii (wzdłuż wektorów własnych) będę się względe niego zachowywały. Jest to zatem ilościowa informacja na temat dynamiki układu, której poszukujemy! Wystarczy teraz tę sytuację uogólnić na przypadek dowolnego przekształcenia $ \textbf{f}: M_{ph} \rightarrow M_{ph}$. Zakładając na chwilę, że $ dim(M_{ph}) < \infty $ i pamiętając o regularności $ \textbf{f} $ przekonujemy się, że odpowiednikiem macierzy $ A $ jest macierz gradientu (jacobiego) funkcji $ f $ oznaczanej dalej jako $ Df $. Jest to zrozumiałe, gdyż funkcja będąca dyfeomorfizmem jest dobrze aproksymowana funkcją liniową, przy czym cecha ta ma charakter lokalny, co oczywiście stanowi przeszkodę z punktu widzenia numerycznego wyznaczania takich macierzy, gdy tych wymiarów jest dużo. Zauważmy, że i w tym przypadku otrzymujemy wektory i wartości własne takich macierzy, przy czym mają one dokładnie tą samą interpretację. Możemy zatem przyjąć następującą definicję
+\begin{defi}
+	Niech $ \lambda_{i} \in \mathbb{R}_{+} $ stanowią wartości własne macierzy gradientu $ Df $. Wówczas $ ln(\lambda_{i}) \in \mathbb{R} $ nazywamy wykładnikami Lyapunova, zaś odpowiadające im wektory własne nazywamy wektorami kowariantnymi Lyapnova.
+\end{defi} 
 
 \subsection{Lemat cienia}
 Na koniec tego rozdziału wprowadzimy narzędzie, które w pewnym sensie gwarantuje, iż przedstawiona metoda jest deterministyczna \footnote{Mówiąc nieco ściślej - trajektoria cienia zawsze istnieje przy przyjmowanych założeniach, ale nie zawsze jest ona reprezentatywna, o czym będzie mowa w późniejszych rozdziałach}. Wprowadźmy najpierw kilka pojęć pomocniczych. Skupimy się przy nich na układach dyskretnych, co 
