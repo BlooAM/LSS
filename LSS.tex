@@ -594,9 +594,14 @@ Informacja na temat tych charakterystycznych obiektów ma ogromną wartość. M�
 \begin{defi}
 	Niech $ \lambda_{i} \in \mathbb{R}_{+} $ stanowią wartości własne macierzy gradientu $ Df $. Wówczas $ ln(\lambda_{i}) \in \mathbb{R} $ nazywamy wykładnikami Lyapunova, zaś odpowiadające im wektory własne nazywamy wektorami kowariantnymi Lyapnova.
 \end{defi} 
-
+Wobec takiej definicji znamy już podstawowe własności wykładników i wektorów Lyapunova. Różnica polega na tym, że macierz gradientu zależy od punktu na trajektorii $ Df = Df(t) $, w związku z czym wykładniki i wektory Lyapunova zmieniają się wraz z rozwojem układu. Komplikuje to istotnie proces analizy układu, gdyż w każdym kroku czasowym konieczne jest ich ponowne wyznaczanie. \newline
+Możemy już teraz zdefiniować formalnie układ przejawiający zachowania chaotyczne.
+\begin{defi}
+	Układ dynamiczny postaci (\ref{dyn_eq}) nazywamy chaotycznym, gdy posiada przynajmniej jeden dodatni wykładnik Lyapunova.
+\end{defi}
+Definicja taka nie jest przyjęta za jedyną słuszną. Wiele innych można znaleść w bogatej encyklopedii poświeconej zjawisku chaosu \cite{Encyclopedie}. Niemniej dla celów pragmatycznych jest ona najbardziej dogodna. W następnym podrozdziale przedstawione zostanie narzędzie, które wyróżni klasę układów strukturalnie stabilnych.
 \subsection{Lemat cienia}
-Na koniec tego rozdziału wprowadzimy narzędzie, które w pewnym sensie gwarantuje, iż przedstawiona metoda jest deterministyczna \footnote{Mówiąc nieco ściślej - trajektoria cienia zawsze istnieje przy przyjmowanych założeniach, ale nie zawsze jest ona reprezentatywna, o czym będzie mowa w późniejszych rozdziałach}. Wprowadźmy najpierw kilka pojęć pomocniczych. Skupimy się przy nich na układach dyskretnych, co 
+Na koniec tego rozdziału wprowadzimy lemat, który w pewnym sensie gwarantuje, iż przedstawiona w dalszyej części pracy metoda jest deterministyczna \footnote{Mówiąc nieco ściślej - trajektoria cienia zawsze istnieje przy przyjmowanych założeniach, ale nie zawsze jest ona reprezentatywna, o czym będzie mowa w późniejszych rozdziałach}. Wprowadźmy najpierw kilka pojęć pomocniczych. Skupimy się przy nich na układach dyskretnych, co 
 \begin{defi}\label{trajectory_discrete}
 	Trajektorią (orbitą) dynamicznego układu (\ref{discrete_dyn_eq}) z czasem dyskretnym nazywamy zbiór
 	\begin{center}
@@ -706,20 +711,40 @@ Oczywiście pochodna $ \frac{\partial \textbf{f}}{\partial s} $ nie stanowi duż
 \newpage
 \section{Metoda Trajektorii Cienia}
 \subsection{Wstęp}
-Z praktycznego punktu widzenia obiektem zainteresowania pozostają wartości średnie wielkości chwilowych, w których okres uśredniania jest stosunkowo długi, tj. funkcje postaci (\ref{J_bar}). W rozdziale tym będziemy poszukiwali czułości tak zdefiniowanych funkcji względem parametru $ s \in \mathbb{R} $ (zakładamy przy tym, że parametr projektowy jest skalarem, aby nie komplikować istoty problemu niepotrzebnymi rachunkami - rozszerzenie na przypadek wektorowy nie jest trudne). Konkretnie: poszukujemy wartości wyrażenia
+Z praktycznego punktu widzenia obiektem zainteresowania pozostają wartości średnie wielkości chwilowych, w których okres uśredniania jest stosunkowo długi, tj. funkcje postaci (\ref{J_bar}). W rozdziale tym będziemy poszukiwali czułości tak zdefiniowanych funkcji względem parametru $ s \in \mathbb{R} $ (zakładamy przy tym, że parametr projektowy jest skalarem, aby nie komplikować istoty problemu niepotrzebnymi rachunkami - rozszerzenie na przypadek wektorowy nie jest trudne). Konkretnie: poszukujemy wartości wyrażenia:
 \begin{equation}
-\frac{d\bar{J}}{ds} = \lim\limits_{\delta s \rightarrow 0}\frac{1}{\delta s}(\lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(s + \delta s)dt - \lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(s)dt).
+\frac{d\bar{J}}{ds} = \lim\limits_{\delta s \rightarrow 0}\frac{1}{\delta s}(\lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(\textbf{u}(t,s + \delta s))dt - \lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(\textbf{u}(t,s))dt).
 \label{J_derivative}
 \end{equation}
-Istnienie długookresowych średnich całkowych związane jest z założeniem ergodyczności (podobnie jak ich niezależność od warunków początkowych), jednakże różniczkowalność takich średnich nie jest oczywista. Głębokie rezultaty poczynione przez D. Ruelle'a przekonują (\cite{Ruelle1}), że dla klasy układów zwanych 'quasi-hiperbolicznymi' takie wartości są nie tylko dobrze określone, ale również wyrażają się formułą:
-Do systemów takich zalicza się z pewnością układ Lorenza. Istniją ponadto przesłanki, że duża część istotnych z inżynierskiego punktu widzenia przypadków przepływów również wykazuje cechę 'quasi-hiperboliczności' \cite{Qiqi1} (również heurystyczne obserwacje pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki), wobec czego z teoretycznego punktu widzenia nie ma przeszkód w wyznaczaniu czułości tak zdefiniowanych funkcji. Jednakże zlinearyzowane równania używane do tego celu (niezależnie od wybranej metody, których przegląd zawiera Rozdział ) skutkują w wynikach o bardzo niskiej jakości. Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział). Innymi słowy: 
+Fizyczne przykłady takich wielkości to między innymi:
+\begin{itemize}
+	\item średni opór aeorydynamiczny skrzydła samolotu w trakcie lotu,
+	\item średni współczynnik przejmowania ciepła na powierzchni wymiennika,
+	\item średnia globalna temperatura powietrza,
+	\item średnia siła nośna działająca na łopatkę turbiny.
+\end{itemize}
+
+Istnienie takich długookresowych średnich całkowych związane jest z założeniem ergodyczności (podobnie jak ich niezależność od warunków początkowych), jednakże ich różniczkowalność nie jest oczywista. Głębokie rezultaty poczynione przez D. Ruelle'a przekonują (\cite{Ruelle1}, \cite{Ruelle2}), że dla klasy układów zwanych 'quasi-hiperbolicznymi' takie wartości są nie tylko dobrze określone, ale również wyrażają się formułą:
+
+Do systemów o takiej charakterystyce zalicza się z pewnością układ Lorenza. Istnieją ponadto przesłanki, że duża część istotnych z inżynierskiego punktu widzenia przypadków przepływów również wykazuje cechę 'quasi-hiperboliczności' \cite{Qiqi1} (również heurystyczne obserwacje bazujące na eksperymentach oraz symulacjach numerycznych pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki), wobec czego z teoretycznego punktu widzenia nie ma przeszkód w wyznaczaniu czułości tak zdefiniowanych funkcji. Jednakże zlinearyzowane równania używane do tego celu (niezależnie od wybranej metody, których przegląd zawiera Rozdział ) skutkują w wynikach o bardzo niskiej jakości. Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział). Innymi słowy: 
 \begin{equation}
 \frac{d\bar{J}}{ds} 
 \neq \lim\limits_{\textit{T}\to\infty}\frac{d}{d\textbf{s}}\frac{1}{T}\int_{0}^{T}J(s)dt.
 \label{J_derivative2}
 \end{equation}
-Główną przeszkodę stanowi fakt, iż czas numerycznej symulacji jest zawsze skończony. Zmienność wartości oczekiwanej aproksymowanej średnią na skończonej trajektorii pozostaje nieograniczona (w normie). Jak już zostało wspomniane, jako pierwsi zjawisko to zauważyli autorzy w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) i zaproponowali metodę regularyzacji bazującą na uśrednianiu dostatecznej liczby trajektorii (jednocześnie stanowi ona pierwszy przykład z rodziny metod wykorzystujących zespół trajektorii) \cite{Lea2}. Formalne uzasadnienie poprawności tego podejścia stanowią prace \cite{Ruelle1} . Metody takie są jednak numerycznie kosztowne, co pokazują prace \cite{Chandramoorthy}. Należy przy tym wspomnieć, że wymiar zagadnienia może być zredukowany koncentrując się jedynie na niestabilnych wektorach kowiariantnych Lyapunowa (wkład do średniej pochodzący od modów stabilnych jest wyznaczany poprzez klasyczne metody analizy wrażliwości). Jest to tak zwany algorytm S3 (ang. Space Split Sensitivity Analysis algorithm) i jest opisany wraz z analizą kosztowności tego podejścia w stosunkowo nowych pracach[]. Niniejsza praca koncentruje się na metodach, które wykorzystują jedną (generyczną) trajektorię, co od razu wyznacza kres górny wymiaru zagadnienia.\newline 
-Podstawową ideą Metody Trajektorii Cienia jest regularyzacja poprzez odpowiedni wybór trajektorii zaburzonej przy innym warunku początkowym. Postępowanie takie jest usprawiedliwione na mocy założenia ergodyczności (Rozdział). Głównym narzędziem jest operator cienia, którego własności zostaną przedstawione w następnych sekcjach. Skutkiem jego działania będzie uzyskanie trajektorii bliskej wyjściowej dla dowolnego czasu, co pozwoli uzyskać równość w (\ref{J_derivative2}). \newline 
+Główną przeszkodę stanowi fakt, iż czas numerycznej symulacji jest zawsze skończony. Zmienność wartości oczekiwanej aproksymowanej średnią na skończonej trajektorii pozostaje nieograniczona (w normie) i rozważane przejścia graniczne nie komutują, tj.:
+\begin{equation} 
+\lim\limits_{s'\to s}\lim\limits_{T\to\infty}(\frac{1}{T}\int_{0}^{T}\frac{J(\textbf{u}(t,s'))-J(\textbf{u}(t,s))}{s'-s}dt) \neq \lim\limits_{T\to\infty}\lim\limits_{s'\to s}(\frac{1}{T}\int_{0}^{T}\frac{J(\textbf{u}(t,s'))-J(\textbf{u}(t,s))}{s'-s}dt).
+\label{limits_commutation}
+\end{equation}
+Najważniejszą ideą tytułowej Metody Trajektorii Cienia jest 'wymuszenie' jednostajnej ograniczoności odległości między trajektoriami w przestrzeni fazowej w dowolnej chwili. Innymi słowy, chcemy aby : 
+\begin{equation}
+d(\textbf{u}(t,s'),\textbf{u}(t,s)) < M \thickspace \thickspace \forall t\in(0,\infty),
+\label{uniform_bound}
+\end{equation}
+dla pewnej stałej $ M \in \mathbb{R}_{+} $. Wówczas rozważane przejście graniczne (\ref{limits_commutation}) byłoby w istocie prawdziwe. W konsekwecji prawa strona nie 'wybuchałaby' wraz z rozwojem układu, jak to ma zazwyczaj miejsce w przypadku dowolnego wyboru trajektorii zaburzonej.
+Jak już zostało wspomniane, jako pierwsi zjawisko to zauważyli autorzy w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) i zaproponowali metodę regularyzacji bazującą na uśrednianiu dostatecznej liczby trajektorii (jednocześnie stanowi ona pierwszy przykład z rodziny metod wykorzystujących zespół trajektorii) \cite{Lea2}. Formalne uzasadnienie poprawności tego podejścia stanowią prace \cite{Ruelle1} . Metody takie są jednak numerycznie kosztowne, co pokazują prace \cite{Chandramoorthy}. Należy przy tym wspomnieć, że wymiar zagadnienia może być zredukowany koncentrując się jedynie na niestabilnych wektorach kowiariantnych Lyapunowa (wkład do średniej pochodzący od modów stabilnych jest wyznaczany poprzez klasyczne metody analizy wrażliwości). Jest to tak zwany algorytm S3 (ang. Space Split Sensitivity Analysis algorithm) i jest opisany wraz z analizą kosztowności tego podejścia w stosunkowo nowych pracach[]. Niniejsza praca koncentruje się na metodach, które wykorzystują jedną (generyczną) trajektorię, co od razu wyznacza kres górny wymiaru zagadnienia.\newline 
+Podstawową ideą Metody Trajektorii Cienia jest regularyzacja poprzez odpowiedni wybór trajektorii zaburzonej przy innym warunku początkowym, tak aby zachodzło (\ref{uniform_bound}). Postępowanie takie jest usprawiedliwione na mocy założenia ergodyczności (Rozdział). Głównym narzędziem jest przy tym operator cienia, którego własności zostaną przedstawione w następnych sekcjach. Skutkiem jego działania będzie uzyskanie trajektorii bliskej wyjściowej dla dowolnego czasu, co pozwoli uzyskać równość w (\ref{J_derivative2}). \newline 
 Do końca pracy przyjmujemy założenia z Rozdziału. W szczególności te dotyczące ergodyczności oraz hiperboliczności układu (\ref{dyn_eq}), jak i regularności funkcji $ \textbf{f}: M_{ph} \rightarrow M_{ph}$. 
 \subsection{Metoda Operatora Cienia}
 Przypuśćmy, że dana jest trajektoria pewnego układu dynamicznego postaci (\ref{dyn_eq}), którą zapiszemy w postaci
@@ -748,7 +773,13 @@ gdzie perturbacja dyfeomorfizmu $ \delta \textbf{f}: M \rightarrow M $ wyraża s
 \label{funct_pert}
 \end{equation}
 Wprowadzony powyżej liniowy operator $ S_{f}: \delta \textbf{u} \mapsto \delta \textbf{f} $ nazywamy \textit{operatorem cienia}.\newline
-Tak zdefiniowany operator jest dobrze określony (\cite{Qiqi1}), tj. w sposób jednoznaczny definiuje gładkie zaburzenie $ \delta \textbf{f}: M \rightarrow M $ odpowiadające gładkiej perturbacji wyjściowej trajektorii (\ref{trajectory}). Innymi słowy: zaburzona trajektoria (\ref{trajectory_pert}) spełnia jednoznacznie zaburzony układ (\ref{dyn_eq_pert}). Pewną komplikację stanowi fakt, że z punktu widzenia wyznaczania wrażliwości (\ref{J_derivative}) istotna jest operacja odwrotna. Perturbacja parametru projektowego $ s $ powoduje zmianę dynamiki $ \delta\textbf{f}(s) $, dla której poszukiwana jest perturbacja wyjściowej trajektorii $ \delta \textbf{u}(\delta \textbf{f}(s)) $ (pamiętając przy tym, że musi być ona 'dostatecznie mała'). Problem inwersji operatora cienia (przy założeniu, że takie odwzorowanie odwrotne istnieje) można rozwiązać numerycznie wykorzystując spektrum Lyapunowa - wykorzystując jednoznaczny rozkład wektorów w przestrzeni stycznej na wektory bazowe (tj. wektory kowariantne Lyapunowa) oraz liniowość operatora cienia otrzymuje się związki na współczynniki sperturbowanej trajektorii w zależności od współczynników odpowiadających zaburzeniu $ \delta \textbf{f}: M \rightarrow M $ (\cite{Qiqi1}). Pozostaje zastanowić się czy taka trajektoria pozostanie 'blisko' (w sensie metryki) trajektorii pierwotnej. Zauważmy w tym celu, że z (\ref{u_perturb}) wynika, że warunki początkowe nie muszę się pokrywać. Ponieważ ergodyczność w swej istocie zakłada, że poszukiwane średnie nie zależą od warunków brzegowych to można wybrać inny, bardziej dogodny (w ten sposób 'pozbyliśmy' się ograniczenia, które wpływało na złe uwarunkowanie numeryczne zadania). Powstają natychmiast dwa pytania:
+Tak zdefiniowany operator jest dobrze określony (\cite{Qiqi1}), tj. w sposób jednoznaczny definiuje gładkie zaburzenie $ \delta \textbf{f}: M \rightarrow M $ odpowiadające gładkiej perturbacji wyjściowej trajektorii (\ref{trajectory}). Innymi słowy: zaburzona trajektoria (\ref{trajectory_pert}) spełnia jednoznacznie zaburzony układ (\ref{dyn_eq_pert}).Pewną komplikację stanowi fakt, że z punktu widzenia wyznaczania wrażliwości (\ref{J_derivative}) istotna jest operacja odwrotna. Perturbacja parametru projektowego $ s $ powoduje zmianę dynamiki $ \delta\textbf{f}(s) $, dla której poszukiwana jest perturbacja wyjściowej trajektorii $ \delta \textbf{u}(\delta \textbf{f}(s))  = S^{-1}(\delta \textbf{f}(s))$ (pamiętając przy tym, że musi być ona 'dostatecznie mała'). Mając opracowaną procedurę wyznaczania odwrotności tego operatora mamy:
+\begin{equation}
+\lim\limits_{T\to\infty}\lim\limits_{s'\to s}(\frac{1}{T}\int_{0}^{T}\frac{J(\textbf{u}(t,s'))-J(\textbf{u}(t,s))}{s'-s}dt) = \lim\limits_{T\to\infty} \int_{0}^{T} {\frac{\partial{J}}{\partial{\textbf{u}}}\delta \textbf{u}(\delta \textbf{f}(s))}dt.
+\label{mid_step}	
+\end{equation}
+Przypomnijmy, że wyrażenie po lewej stronie (\ref{mid_step}) wyznacza poszukiwaną wrażliwość tylko w przypadku, gdy zaburzona trajektoria pozostaje blisko w sensie metryki przestrzeni fazowej trajektorii generycznej. \newline
+Problem inwersji operatora cienia (przy założeniu, że takie odwzorowanie odwrotne istnieje) można rozwiązać numerycznie wykorzystując spektrum Lyapunowa - wykorzystując jednoznaczny rozkład wektorów w przestrzeni stycznej na wektory bazowe (tj. wektory kowariantne Lyapunowa) oraz liniowość operatora cienia otrzymuje się związki na współczynniki sperturbowanej trajektorii w zależności od współczynników odpowiadających zaburzeniu $ \delta \textbf{f}: M \rightarrow M $ (\cite{Qiqi1}). Pozostaje zastanowić się czy taka trajektoria pozostanie 'blisko' (w sensie metryki) trajektorii pierwotnej. Zauważmy w tym celu, że z (\ref{u_perturb}) wynika, że warunki początkowe nie muszę się pokrywać. Ponieważ ergodyczność w swej istocie zakłada, że poszukiwane średnie nie zależą od warunków brzegowych to można wybrać inny, bardziej dogodny (w ten sposób 'pozbyliśmy' się ograniczenia, które wpływało na złe uwarunkowanie numeryczne zadania). Powstają natychmiast dwa pytania:
 \begin{itemize}
 	\item Czy dla dowolnej trajektorii można znaleść warunek początkowy trajektorii zaburzonej w taki sposób aby stale była ona blisko pierwotnej (tj. norma ich różnicy była dowolnie mała w sposób jednostajne względem czasu) ?
 	\item Czy w przypadku istnienia takiej trajektorii istnieje deterministyczny algorytm pozwalający ją wyznaczyć?
@@ -910,7 +941,25 @@ Pomimo tak prostej geometrii w przepływie takim występuje szereg zjawisk o sko
 wobec czego przypadek ten często traktywany jest jako sprawdzian testowy dla różnych modeli turbulencji \cite{Salazar}.
 \subsubsection{Aspekty numeryczne}
 Zanim przejdziemy do omówienia wyników należy chwilę poświęcić na aspekty implementacyjne, gdyż dla zagadnień wielowymiarowych odgrywają one kluczową rolę. W typowych przypadkach przepływów mogą nawet zadecydować o możliwości wykorzystania danej metody.
-\subsubsection{Wyniki symulacji}
+\subsubsection{Wyniki symulacji - pierwsze podejście}
+Geometrię obszaru obliczeniowego przedstawia Rysunek
+\begin{figure}[H]
+	\includegraphics[scale=1.8]{figures/geometry.png} 
+	\centering
+	\caption{Geometria obszaru obliczeniowego}
+\end{figure}
+W rozważanym przypadku $ H = 2 $, $ h_{i}=h=L_{i}=1 $ oraz $ L_{c}=9 $.\newline
+Jako funkcję celu przyjęty został średni spadek ciśnienia między wlotem a wylotem, zaś jako parametr kontrolny przyjęty został moduł prędkości wlotowej (przyjęty został tłokowy rozkład prędkości na wlocie):
+\begin{equation}
+\bar{J} = \frac{1}{T}\int_{0}^{T}(\hat{p}_{in}(t)-\hat{p}_{out}(t))dt,
+\end{equation}
+gdzie $ \hat{p}_{in}(t) $ oraz $ \hat{p}_{out}(t) $ oznaczają średnie ciśnienie w chwili $ t $ na wlocie oraz wylocie, odpowiednio. Funkcja ta dla badanej geometrii w przypadku różnych prędkości $ u \in [0.05 ; 0.15]$ na wlocie została zilustrowana na Rysunku.
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/Jbar.png} 
+	\centering
+	\caption{Wartość funkcji celu w zależności od parametru kontrolnego}
+\end{figure}
+Zależność ta ma kształt paraboliczny, co jest zgodne z oczekiwaniami. Uwagę tę potwierdza Rysunek, który ilustruje krzywą na tle najlepiej dopasowanej doń paraboli.
 Przebadane zostały trzy przypadki różniące się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne.
 \paragraph{Liczba Reynoldsa: 200}
 Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio (rysunki zostały odpowiednio przeskalowane w kierunku osi pionowej dla przejrzystości poglądu).
@@ -1041,6 +1090,10 @@ Wydawnictwo: WNT, Warszawa 2017.
 \emph{Differentiation of SRB states},
 Communications in Mathematical Physics, Vol. 187, 1997, pp. 227-241.
 
+\bibitem{Ruelle2} Ruelle D.,
+\emph{ A review of linear response theory for general differentiable dynamical systems},
+Nonlinearity 22 (4) (2009) 855.
+
 \bibitem{Salazar} Salazar J., Santos L.
 \emph{2d lattice-boltzmann simulations of flow over a backward-facing step at low to moderate reynolds numbers},
 GRAD - Fluid Physics and Transport Phenomena Research Group, Universidade Federal deSanta Catarina
@@ -1065,7 +1118,8 @@ SIAM Journal of Numerical Analysis, Vol 52, No. 1, 2014, pp. 156-170.
 \emph{Least Squares Shadowing sensitivity analysis of chaotic limit cycle oscillations},
 Journal of Computational Physics, Vol. 267, June 2014, pp. 210-224.  
 
-
+\bibitem{Encyclopedie}
+\emph{https://plato.stanford.edu/entries/chaos/},
 \end{thebibliography} 
 \end{document}
 
