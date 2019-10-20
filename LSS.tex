@@ -779,7 +779,50 @@ Tak zdefiniowany operator jest dobrze określony (\cite{Qiqi1}), tj. w sposób j
 \label{mid_step}	
 \end{equation}
 Przypomnijmy, że wyrażenie po lewej stronie (\ref{mid_step}) wyznacza poszukiwaną wrażliwość tylko w przypadku, gdy zaburzona trajektoria pozostaje blisko w sensie metryki przestrzeni fazowej trajektorii generycznej. \newline
-Problem inwersji operatora cienia (przy założeniu, że takie odwzorowanie odwrotne istnieje) można rozwiązać numerycznie wykorzystując spektrum Lyapunowa - wykorzystując jednoznaczny rozkład wektorów w przestrzeni stycznej na wektory bazowe (tj. wektory kowariantne Lyapunowa) oraz liniowość operatora cienia otrzymuje się związki na współczynniki sperturbowanej trajektorii w zależności od współczynników odpowiadających zaburzeniu $ \delta \textbf{f}: M \rightarrow M $ (\cite{Qiqi1}). Pozostaje zastanowić się czy taka trajektoria pozostanie 'blisko' (w sensie metryki) trajektorii pierwotnej. Zauważmy w tym celu, że z (\ref{u_perturb}) wynika, że warunki początkowe nie muszę się pokrywać. Ponieważ ergodyczność w swej istocie zakłada, że poszukiwane średnie nie zależą od warunków brzegowych to można wybrać inny, bardziej dogodny (w ten sposób 'pozbyliśmy' się ograniczenia, które wpływało na złe uwarunkowanie numeryczne zadania). Powstają natychmiast dwa pytania:
+Problem inwersji operatora cienia (przy założeniu, że takie odwzorowanie odwrotne istnieje) można rozwiązać numerycznie wykorzystując spektrum Lyapunowa. Konkretnie założmy, że dla każdej chwili $ t \in (0,T] $ dany jest układ wektorów Lyapunowa: 
+\begin{equation}
+\phi_{1}(\textbf{u}(t,s)), \phi_{2}(\textbf{u}(t,s)), ... , \phi_{n}(\textbf{u}(t,s)).
+\label{lyapunov_vectors}
+\end{equation}
+Załóżmy ponadto, że rozpinają one całą przestrzeń styczną w punkcie $ \textbf{u}(t,s) \in M_{ph} $, tj.
+\begin{equation}
+span(\phi_{1}(\textbf{u}(t,s)), \phi_{2}(\textbf{u}(t,s)), ... , \phi_{n}(\textbf{u}(t,s))) = T_{u}M_{ph}.
+\label{lyapunov_vectors_span}
+\end{equation}
+Pamiętając, że $ \delta \textbf{f}, \delta \textbf{u} \in T_{u}M_{ph} $ otrzymujemy
+\begin{equation}
+\begin{array}{rcl} 
+\delta \textbf{f}(\textbf{u}) = \sum_{i=1}^{n}a^{f}_{i}\phi_{i}(\textbf{u}) \\
+\delta \textbf{u}(\textbf{u}) = \sum_{i=1}^{n}a^{u}_{i}\phi_{i}(\textbf{u})
+\end{array},
+\end{equation}
+gdzie przez $ a^{f}_{i},a^{u}_{i} \thickspace \thickspace i=1,...,n$ oznaczono pola skalarne (jednoznacznie wyznaczone) odpowiadające $ \delta \textbf{f}  $ oraz $ \delta \textbf{u}  $, odpowiednio. Następnie działamy operatorem cienia na jeden ze składników sumy w powyższych wzorach i korzystając z (\ref{dyn_eq_pert}) dostajemy:
+\begin{equation}
+S_{f}(a^{u}_{i}\phi_{i}(\textbf{u})) = -a^{u}_{i}\frac{\partial{\textbf{f}}}{\partial{\textbf{u}}} \phi_{i}(\textbf{u}) + \frac{da^{u}_{i}}{dt}\phi_{i}(\textbf{u}) + a^{u}_{i}\frac{\phi_{i}(d\textbf{u})}{dt}.
+\label{shadow_operator}
+\end{equation}
+Zauważmy ponadto, że na mocy (\ref{funct_pert}) możemy zapisać dynamikę rozwoju wektorów Lyapunova jako:
+\begin{equation}
+\frac{d\phi_{i}(\textbf{u})}{dt} = \frac{\partial{\textbf{f}}}{\partial{\textbf{u}}}\phi_{i}(\textbf{u}) - \lambda_{i}\phi_{i}(\textbf{u}).
+\label{LV_dynamics}
+\end{equation}
+Aplikując (\ref{LV_dynamics}) do (\ref{shadow_operator}) otrzymujemy:
+\begin{equation}
+S_{f}(a^{u}_{i}\phi_{i}(\textbf{u})) = (\frac{da^{u}_{i}}{dt} - \lambda_{i}a^{u}_{i})\phi_{i}(\textbf{u}).
+\label{shadow_operator_v2}
+\end{equation}
+Korzystając z liniowości $ S_{f} $ ostatecznie dostajemy:
+\begin{equation}
+\delta f = \sum_{i=1}^{n}S_{f}(a^{u}_{i}\phi_{i}(\textbf{u})) = \sum_{i=1}^{n}a^{f}_{i}\phi_{i}(\textbf{u}),
+\label{shadow_operator_v3}
+\end{equation}
+gdzie 
+\begin{equation}
+a^{f}_{i} = \frac{da^{u}_{i}}{dt} - \lambda_{i}a^{u}_{i}
+\label{shadow_operator_v4}
+\end{equation}
+Powyższe formuły sugerują, że konsekwencją działania operatora cienia jest transformacja skalarnego pola $ a^{u}_{i} \rightarrow a^{f}_{i} $, co z liniowości tego operatora daje pełną informację o przekształceniu $ \delta u \rightarrow \delta f $. Zauważmy również, iż dysponując $ a^{f}_{i} $ jesteśmy w stanie wyznaczyć $ a^{u}_{i} $ poprzez równanie (\ref{shadow_operator_v4}), a zatem i odwrócić działanie operatora $ S_{f} $. \newline
+Pozostaje zastanowić się czy taka trajektoria pozostanie 'blisko' (w sensie metryki) trajektorii pierwotnej. Zauważmy w tym celu, że z (\ref{u_perturb}) wynika, że warunki początkowe nie muszę się pokrywać. Ponieważ ergodyczność w swej istocie zakłada, że poszukiwane średnie nie zależą od warunków brzegowych to można wybrać inny, bardziej dogodny (w ten sposób 'pozbyliśmy' się ograniczenia, które wpływało na złe uwarunkowanie numeryczne zadania). Powstają natychmiast dwa pytania:
 \begin{itemize}
 	\item Czy dla dowolnej trajektorii można znaleść warunek początkowy trajektorii zaburzonej w taki sposób aby stale była ona blisko pierwotnej (tj. norma ich różnicy była dowolnie mała w sposób jednostajne względem czasu) ?
 	\item Czy w przypadku istnienia takiej trajektorii istnieje deterministyczny algorytm pozwalający ją wyznaczyć?
