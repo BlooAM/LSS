@@ -592,14 +592,16 @@ Przyjmując nomenklaturę znaną z algebry liniowej możemy mówić o takich wek
 Oczywiście różne wektory własne mogą różnie się deformować pod wpływem przekształcenia. Mówi się zatem, że danej wartości własnej odpowiada wektor własny, przy czym takie wektory są zawsze liniowo niezależne, a zatem tworzą podprzestrzeń liniową przestrzeni stanowiącej dziedzinę rozważanego przekształcenia. W tym miejscu należy podkreślić, że wektory te w ogólności nie stanowią bazy całej przestrzeni (wymiar generowanej przez nie podprzestrzeni jest istotnie mniejszy od wymiaru całej przestrzeni) oraz wektory te nie są w   ogólności ortogonalne (taka sytuacja zachodzi, gdy przekształcenie jest samosprzężone, a więc w naszym przypadku, gdy macierz $ A $ jest symetryczna). \newline
 Informacja na temat tych charakterystycznych obiektów ma ogromną wartość. Mówi ona bowiem jak punkty znajdujące się w sąsiedztwie rozpatrywanego punktu trajektorii (wzdłuż wektorów własnych) będę się względe niego zachowywały. Jest to zatem ilościowa informacja na temat dynamiki układu, której poszukujemy! Wystarczy teraz tę sytuację uogólnić na przypadek dowolnego przekształcenia $ \textbf{f}: M_{ph} \rightarrow M_{ph}$. Zakładając na chwilę, że $ dim(M_{ph}) < \infty $ i pamiętając o regularności $ \textbf{f} $ przekonujemy się, że odpowiednikiem macierzy $ A $ jest macierz gradientu (jacobiego) funkcji $ f $ oznaczanej dalej jako $ Df $. Jest to zrozumiałe, gdyż funkcja będąca dyfeomorfizmem jest dobrze aproksymowana funkcją liniową, przy czym cecha ta ma charakter lokalny, co oczywiście stanowi przeszkodę z punktu widzenia numerycznego wyznaczania takich macierzy, gdy tych wymiarów jest dużo. Zauważmy, że i w tym przypadku otrzymujemy wektory i wartości własne takich macierzy, przy czym mają one dokładnie tą samą interpretację. Możemy zatem przyjąć następującą definicję
 \begin{defi}
-	Niech $ \lambda_{i} \in \mathbb{R}_{+} $ stanowią wartości własne macierzy gradientu $ Df $. Wówczas $ ln(\lambda_{i}) \in \mathbb{R} $ nazywamy wykładnikami Lyapunova, zaś odpowiadające im wektory własne nazywamy wektorami kowariantnymi Lyapnova.
+	Niech $ \lambda_{i} \in \mathbb{R}_{+} $ stanowią wartości własne macierzy gradientu $ Df $. Wówczas $ ln(\lambda_{i}) \in \mathbb{R} $ nazywamy wykładnikami Lyapunova.
 \end{defi} 
-Wobec takiej definicji znamy już podstawowe własności wykładników i wektorów Lyapunova. Różnica polega na tym, że macierz gradientu zależy od punktu na trajektorii $ Df = Df(t) $, w związku z czym wykładniki i wektory Lyapunova zmieniają się wraz z rozwojem układu. Komplikuje to istotnie proces analizy układu, gdyż w każdym kroku czasowym konieczne jest ich ponowne wyznaczanie. \newline
+Wobec takiej definicji znamy już podstawowe własności wykładników Lyapunova. \newline
 Możemy już teraz zdefiniować formalnie układ przejawiający zachowania chaotyczne.
 \begin{defi}
 	Układ dynamiczny postaci (\ref{dyn_eq}) nazywamy chaotycznym, gdy posiada przynajmniej jeden dodatni wykładnik Lyapunova.
 \end{defi}
-Definicja taka nie jest przyjęta za jedyną słuszną. Wiele innych można znaleść w bogatej encyklopedii poświeconej zjawisku chaosu \cite{Encyclopedie}. Niemniej dla celów pragmatycznych jest ona najbardziej dogodna. W następnym podrozdziale przedstawione zostanie narzędzie, które wyróżni klasę układów strukturalnie stabilnych.
+Definicja taka nie jest przyjęta za jedyną słuszną. Wiele innych można znaleść w bogatej encyklopedii poświeconej zjawisku chaosu \cite{Encyclopedie}. Niemniej dla celów pragmatycznych jest ona najbardziej dogodna.\newline
+Można by sądzić, że odpowiadające omawianym wartościom własnym wektory własne nazywamy wektorami (kowariantnymi) Lyapunova, jednak nie jest prawda. Wyznaczenie wektorów własnnych macierzy gradientu wymaga jedynie informacji o lokalnej dynamice, podczas gdy wspomniane wektory Lyapunova zależą od macierzy gradientu we wszystkich chwilach. \newline
+W następnym podrozdziale przedstawione zostanie narzędzie, które wyróżni klasę układów strukturalnie stabilnych.
 \subsection{Lemat cienia}
 Na koniec tego rozdziału wprowadzimy lemat, który w pewnym sensie gwarantuje, iż przedstawiona w dalszyej części pracy metoda jest deterministyczna \footnote{Mówiąc nieco ściślej - trajektoria cienia zawsze istnieje przy przyjmowanych założeniach, ale nie zawsze jest ona reprezentatywna, o czym będzie mowa w późniejszych rozdziałach}. Wprowadźmy najpierw kilka pojęć pomocniczych. Skupimy się przy nich na układach dyskretnych, co 
 \begin{defi}\label{trajectory_discrete}
@@ -821,7 +823,16 @@ gdzie
 a^{f}_{i} = \frac{da^{u}_{i}}{dt} - \lambda_{i}a^{u}_{i}
 \label{shadow_operator_v4}
 \end{equation}
-Powyższe formuły sugerują, że konsekwencją działania operatora cienia jest transformacja skalarnego pola $ a^{u}_{i} \rightarrow a^{f}_{i} $, co z liniowości tego operatora daje pełną informację o przekształceniu $ \delta u \rightarrow \delta f $. Zauważmy również, iż dysponując $ a^{f}_{i} $ jesteśmy w stanie wyznaczyć $ a^{u}_{i} $ poprzez równanie (\ref{shadow_operator_v4}), a zatem i odwrócić działanie operatora $ S_{f} $. \newline
+Powyższe formuły sugerują, że konsekwencją działania operatora cienia jest transformacja skalarnego pola $ a^{u}_{i} \rightarrow a^{f}_{i} $, co z liniowości tego operatora daje pełną informację o przekształceniu $ \delta u \rightarrow \delta f $. Zauważmy również, iż dysponując $ a^{f}_{i} $ jesteśmy w stanie wyznaczyć $ a^{u}_{i} $ poprzez równanie (\ref{shadow_operator_v4}), a zatem i odwrócić działanie operatora $ S_{f} $, pod warunkiem, że jest on odwracalny. Może się jednak okazać, że w dla pewnych $ \delta f $ operator ten jest nieodwracalny i uzyskane wyniki nie mają sensu. Sytuacja taka nie jest abstrakcyjna, bowiem każdy ciągły układ dynamiczny o nietrywialnym atraktorze posiada zerowy wykładnik Lyapunova (\cite{Qiqi1}). W sytuacji takiej (\ref{shadow_operator_v4}) redukuje się do równości
+\begin{equation}
+a^{f}_{n_{0}} = \frac{da^{u}_{n_{0}}}{dt},
+\label{shadow_operator_v5}
+\end{equation}
+gdzie przez $ n_{0} \in \mathbb{N} $ oznaczono indeks zerowego wykładnika Lyapunova. Biorą średnią całkową i przechodząc do granicy w równości (\ref{shadow_operator_v5}) dostajemy
+\begin{equation}
+\lim\limits_{T\rightarrow \infty}\int_{0}^{T}a^{f}_{n_{0}}(u)dt = \lim\limits_{T\rightarrow \infty} \frac{a^{u}_{n_{0}}(u(T))-a^{u}_{n_{0}}(u(0))}{T} = 0.
+\label{shadow_operator_v6}
+\end{equation}
 Pozostaje zastanowić się czy taka trajektoria pozostanie 'blisko' (w sensie metryki) trajektorii pierwotnej. Zauważmy w tym celu, że z (\ref{u_perturb}) wynika, że warunki początkowe nie muszę się pokrywać. Ponieważ ergodyczność w swej istocie zakłada, że poszukiwane średnie nie zależą od warunków brzegowych to można wybrać inny, bardziej dogodny (w ten sposób 'pozbyliśmy' się ograniczenia, które wpływało na złe uwarunkowanie numeryczne zadania). Powstają natychmiast dwa pytania:
 \begin{itemize}
 	\item Czy dla dowolnej trajektorii można znaleść warunek początkowy trajektorii zaburzonej w taki sposób aby stale była ona blisko pierwotnej (tj. norma ich różnicy była dowolnie mała w sposób jednostajne względem czasu) ?
