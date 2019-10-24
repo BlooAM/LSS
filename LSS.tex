@@ -676,7 +676,22 @@ Idea tej metody polage na śledzeniu wrażliwości rozwiązania układu (\ref{dy
 \frac{d{\textbf{v}}}{d{t}} = \frac{\partial{\textbf{f}}}{\partial{\textbf{u}}}\textbf{v} + \frac{\partial{\textbf{f}}}{\partial{\textbf{s}}}
 \label{tangent},
 \end{equation}
-gdzie $ v = \frac{\partial{\textbf{u}}}{\partial{\textbf{s}}} $. Człon ten jest 
+gdzie $ v = \frac{\partial{\textbf{u}}}{\partial{\textbf{s}}} $. Człon ten reprezentuje wrażliwość rozwiązania na parametr projektowy, a zatem równanie (\ref{tangent}) to opis dynamiki tej wielkości. Innymi słowy jest to propagacja początkowego zaburzenia w czasie, która dyktowana jest wrażliwością dynamiki układu na parametr projektowy. Referując teraz do chwilowej wartości funkcji postaci $ J(s) = J(\textbf{u(t,s)},s) $ i różniczkując względel $ s \in \mathbb{R} $ dostajemy:
+\begin{equation}
+\frac{dJ}{ds} = \frac{\partial{J}}{\partial{\textbf{u}}}\textbf{v} + \frac{\partial{J}}{\partial{s}}
+\end{equation} 
+Ostatecznie:
+\begin{equation}
+\frac{d\bar{J}}{ds} = \lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}(\frac{\partial{J}}{\partial{\textbf{u}}}v + \frac{\partial{J}}{\partial{s}})dt,
+\label{J_tangent}
+\end{equation}
+przy czym milcząco założono, iż prawdziwa jest równość 
+\begin{equation}
+\frac{d\bar{J}}{ds} = \bar{\frac{dJ}{ds}}.
+\label{djbar_bardj}
+\end{equation}
+W następnym Rozdziale okaże się, iż stosowalność takiego założenia jest mocno ograniczona. Jest to główna przyczyna załamania się klasycznych metod optymalizacji lokalnej dla układów o nieprzewidywalnym zachowaniu rozwiązań. \newline
+Postać wzoru (\ref{J_tangent}) sugreuje potencjalne źródło problemów - rozwiązanie równania (\ref{tangent}) jest numerycznie czasochłonne. Człon $ v = \frac{\partial{\textbf{u}}}{\partial{\textbf{s}}} $ to człon, którego wyznaczenie w przypadku wielowymiarowego wektora $ s \in \mathbb{R}^n $ jest niezwykle czasochłonne (por. Metoda różnic skończonych). Wobec tego metoda ta może się sprawdzić w praktyce, gdy wektor parametrów projektowych ma niski wymiar.
 \subsection{Metoda Operatora Sprzężonego}
 Naszym celem jest znalezienie gradientu funkcji postaci (\ref{J_bar}). Zauważamy, że funkcja podcałkowa zależy od rozwiązania układu (\ref{dyn_eq}), które z kolei zależy od wektora parametrów projektowych. W praktyce oprócz takiej zagnieżdżonej zależności funkcjia celu zależy \textit{explcite} od wektora zmiennych decyzyjnych
 \begin{equation}
@@ -832,6 +847,20 @@ gdzie przez $ n_{0} \in \mathbb{N} $ oznaczono indeks zerowego wykładnika Lyapu
 \begin{equation}
 \lim\limits_{T\rightarrow \infty}\int_{0}^{T}a^{f}_{n_{0}}(u)dt = \lim\limits_{T\rightarrow \infty} \frac{a^{u}_{n_{0}}(u(T))-a^{u}_{n_{0}}(u(0))}{T} = 0.
 \label{shadow_operator_v6}
+\end{equation}
+Widzimy zatem, że przy nieodpowiednim zaburzeniu dynamiki (na przykład $ \delta f = f $) operator cienia jest nieodwracalny, tj. $ S^{-1}_{f} \delta f = \emptyset$.\newline
+Aby pokonać tę trudność raz jeszcze możemy wykorzystać założenie ergodyczności. Pozwala ono bowiem wprowadzić paramatr, którego wartość możemy modyfikować nie zmieniając przy tym interesujących nas średnich. Zauważmy, że dla $ \epsilon \in \mathbb{R}_{+} $  średnia zdefiniowana jak w (\ref{J_bar}) dla zmodyfikowanego równania postaci
+\begin{equation}
+\frac{d\textbf{u}}{dt} = (1 + \epsilon \eta)f(\textbf{u})
+\end{equation}
+ma tę samą wartość na mocy wspomnianego założenia. Oczywiście w ogólności może zachodzić $ \eta = \eta(t) $, a więc dysponujemy wektorem zmiennych, których wartości możemy dobierać dowolnie, a więc tak aby dla dowolnego zaburzenia $ \delta f$ (pamiętając, że musi być ono gładkie) istniał przeciwobraz $ S^{-1}_{f} $, tj. operator cienia był odwracalny. Istotnie bowiem równanie charakteryzujące zerowy wykładnik Lyapunova (\ref{shadow_operator_v6}) zamienia się w równość
+\begin{equation}
+\lim\limits_{T\rightarrow \infty}\int_{0}^{T}a^{f}_{n_{0}}(u)dt + \eta(t) = 0,
+\end{equation}
+co daje związake na $ \eta(t) $. Wówczas możemy wyznaczyć
+\begin{equation}
+\delta u = S^{-1}_{f}(\delta f + \eta f).
+\label{shadow_operator_8}
 \end{equation}
 Pozostaje zastanowić się czy taka trajektoria pozostanie 'blisko' (w sensie metryki) trajektorii pierwotnej. Zauważmy w tym celu, że z (\ref{u_perturb}) wynika, że warunki początkowe nie muszę się pokrywać. Ponieważ ergodyczność w swej istocie zakłada, że poszukiwane średnie nie zależą od warunków brzegowych to można wybrać inny, bardziej dogodny (w ten sposób 'pozbyliśmy' się ograniczenia, które wpływało na złe uwarunkowanie numeryczne zadania). Powstają natychmiast dwa pytania:
 \begin{itemize}
