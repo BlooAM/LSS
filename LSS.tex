@@ -120,6 +120,7 @@
 \newtheorem{defi}{Definicja}
 \newtheorem{przyklad}{Przykład}
 \newtheorem{tw}{Twierdzenie}
+\newtheorem{lem}{Lemat Cienia}
 
 \begin{document}
 
@@ -649,7 +650,15 @@ Istotną cechą układów dynamicznych jest globalny odpowiednik tej własności
 	\end{center}
 \end{defi}
 Istnieje wiele wariacji tej definicji. Na przykład lipszycowska własność cienia określa wspólne ograniczenie na odległości występujące w definicji szacując je stałą nazywaną stałą lipszyca. W związku z czym tą bazową własność określa się mianem standardowej - w dalszej części pracy mówiąc o własności cienia mamy na myśli jej standardową wersję.\newline
-Przyjrzyjmy się chwilę co oznacza iż rozważany układ ma wspomnianą własność. W poprzednich podrozdziałach wielokrotnie wspomniane zostało, iż jedną z cech charakterystycznych układów chaotycznych jest ich wrażliwość na warunki początkowe. Można by przypuszczać, iż nawet niewielkie perturbacje warunków początkowych (rzędu błędów numerycznych) spowodują całkowitą rozbieżność wyników. Własność cienia daje podstawy, aby sądzić, iż nie stanie się tak koniecznie. Oczywiście sama definicja nie specyfikuje oczekiwanej wartości przy której taka rozbieżność nie zachodzi, jedank daje to pewną (lokalną) regularność zachowania się rozwiązań.
+Przyjrzyjmy się chwilę co oznacza iż rozważany układ ma wspomnianą własność. W poprzednich podrozdziałach wielokrotnie wspomniane zostało, iż jedną z cech charakterystycznych układów chaotycznych jest ich wrażliwość na warunki początkowe. Można by przypuszczać, iż nawet niewielkie perturbacje warunków początkowych (rzędu błędów numerycznych) spowodują całkowitą rozbieżność wyników. Własność cienia daje podstawy, aby sądzić, iż nie stanie się tak koniecznie. Oczywiście sama definicja nie specyfikuje oczekiwanej wartości przy której taka rozbieżność nie zachodzi, jedank daje to pewną (lokalną) regularność zachowania się rozwiązań. Własność taka jest zatem niezwykle przydatna. Szeroklą klasę układów, których ona dotyczy specyfikuje tytułowy
+\begin{lem}
+Niech dany będzie układ dynamiczny postaci (\ref{dyn_eq_discr}) i niech będą spełnione postulowane dotychczas założenia. Niech $\Lambda$ oznacza atraktor tego układu. Istnieje wówczas otoczenie $ U \supset \Lambda $, który ma następującą własność: dla dowolnej liczby $\delta \in \mathbb{R}_{+}$ istnieje $\epsilon \in \mathbb{R}_{+}$  taki, że dla dowolnej $\epsilon$-pseudoorbity $ \{u_{n}\}_{n \in \mathbb{N}} \subset U $ istnieje orbita tegoż układu $ \{u^{r}_{n}\}_{n \in \mathbb{N}} $, taka że
+\begin{equation}
+\forall{n \in \mathbb{N}} \thickspace \thickspace u_{n} \in U_{\delta}(u^{r}_{n}).
+\end{equation}
+\end{lem}
+Dowód szczególnej wersji tego lematu podany został w Rozdziale. \newline
+Dysponując już odpowiednią nomenklaturą oraz szerokim arsenałem technik możemy przyjrzeć się metodom poświęconym analizie czułości oraz dotrzeć do sedna postawionego problemu. 
 \newpage
 \section{Wybrane metody optymalizacji lokalnej stosowane w technice}
 Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent (???) oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice [].
@@ -862,14 +871,15 @@ co daje związake na $ \eta(t) $. Wówczas możemy wyznaczyć
 \delta u = S^{-1}_{f}(\delta f + \eta f).
 \label{shadow_operator_8}
 \end{equation}
-Pozostaje zastanowić się czy taka trajektoria pozostanie 'blisko' (w sensie metryki) trajektorii pierwotnej. Zauważmy w tym celu, że z (\ref{u_perturb}) wynika, że warunki początkowe nie muszę się pokrywać. Ponieważ ergodyczność w swej istocie zakłada, że poszukiwane średnie nie zależą od warunków brzegowych to można wybrać inny, bardziej dogodny (w ten sposób 'pozbyliśmy' się ograniczenia, które wpływało na złe uwarunkowanie numeryczne zadania). Powstają natychmiast dwa pytania:
-\begin{itemize}
-	\item Czy dla dowolnej trajektorii można znaleść warunek początkowy trajektorii zaburzonej w taki sposób aby stale była ona blisko pierwotnej (tj. norma ich różnicy była dowolnie mała w sposób jednostajne względem czasu) ?
-	\item Czy w przypadku istnienia takiej trajektorii istnieje deterministyczny algorytm pozwalający ją wyznaczyć?
-\end{itemize} 
-Odpowiedź na pierwsze z nich stanowi treść Lematu Cienia (patrz Rozdział ). Drugie również ma pozytywną odpowiedź. Algorytm taki zaproponowany po raz pierwszy w pracy \cite{Qiqi2} nazywa się Metodą Trajektorii Cienia.
+Pozostaje się zastanowić czy dla dowolnej trajektorii rozważanego układu istnieje gładkie zaburzenie o którym mowa w początkowym założeniu tego rozdziału (tzn. takie, które pozostaje jednostajnie blisko (\ref{uniform_bound})). Twierdzącą odpowiedź uzyskujemy powołując się na Lemat Cienia, co w konsekwencji daje deterministyczny algorytm obliczania wrażliwości funkcji postaci (\ref{J_bar}).
 \subsection{Metoda Trajektorii Cienia} 
-
+Sposób wyznaczania gradientu funkcji w układach dynamicznych oparty o odwracanie operatora cienia jest numerycznie kosztowny ze względu na konieczność obliczenia spektrum Lyapunova. \newline
+W sytuacjach podobnych do zaistniałej dobrym pomysłem jest próba przeformułowania problemu. Inspitację mogą stanowić techniki rozwiązywania równań różniczkowych cząstkowych. Wykorzystuję się w nich podejście wariacyjne, zarówno w ujęciu numerycznym (na tym oparta jest Metoda Elementów Skończonych) jak i analitycznym (dowodzi się istnienia słabych rozwiązań, które to spełniają pewne wariacyjne równości całkowe, a następnie podnosi się ich regularność wykorzystując topologię przestrzeni w jakiej są one zdefiniowane). Wspomniane już zostało, że aby w (\ref{limits_commutation}) zachodziła równość musimy zapewnić spełnienie warunku (\ref{uniform_bound}). Chcemy zatem znaleść trajektorię pozostającą blisko trajektorii wyjściowej w dowolnej chwili. Formułując to spostrzeżenei w języku optymalizacji - chcemy zminimalizować normę odległości pomiędzy dwiema trajektoriami (generyczną oraz tą, której poszukujemy) w przestrzeni fazowej. Poszukujemy zatem funkcji $ \textbf{u}_s: [0,T] \rightarrow M_{ph} $ takiej, że
+\begin{equation}
+L(\textbf{u}_s) = \inf_{\textbf{u}}\frac{1}{T}\int_{0}^{T}d^{2}(\textbf{u}(t),\textbf{u}_r(t))dt,
+\label{LSS_v1}
+\end{equation}
+gdzie przez $ d(,) $ oznaczono metrykę w przestrzeni fazowej $ M_{ph} $, zaś $ \textbf{u}_r $ jest rozwiązaniem równania (\ref{dyn_eq}), czyli stanowi trajektorię referencyjną. Winni jesteśmy ponadto narzucić warunki na (\ref{LSS_v1}) w celu dookreślenia postawionego problemu. Wiemy, iż poszukiwana funkcja $ \textbf{u}_s: [0,T] \rightarrow M_{ph} $ powinna spełniać równanie (\ref{dyn_eq}) dla odpowiednio sperturbowanego parametru $ s \in \mathbb{R}^{n} $. Raz jeszcze zaznaczamy, że nie ma konieczności, aby warunek początkowy był taki sam jak dla trajektorii referencyjnej. 
 \subsection{LSS - podejście bazujące na intuicji}
 \newpage
 \section{Implementacja metody LSS}
