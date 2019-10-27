@@ -874,13 +874,139 @@ co daje związake na $ \eta(t) $. Wówczas możemy wyznaczyć
 Pozostaje się zastanowić czy dla dowolnej trajektorii rozważanego układu istnieje gładkie zaburzenie o którym mowa w początkowym założeniu tego rozdziału (tzn. takie, które pozostaje jednostajnie blisko (\ref{uniform_bound})). Twierdzącą odpowiedź uzyskujemy powołując się na Lemat Cienia, co w konsekwencji daje deterministyczny algorytm obliczania wrażliwości funkcji postaci (\ref{J_bar}).
 \subsection{Metoda Trajektorii Cienia} 
 Sposób wyznaczania gradientu funkcji w układach dynamicznych oparty o odwracanie operatora cienia jest numerycznie kosztowny ze względu na konieczność obliczenia spektrum Lyapunova. \newline
-W sytuacjach podobnych do zaistniałej dobrym pomysłem jest próba przeformułowania problemu. Inspitację mogą stanowić techniki rozwiązywania równań różniczkowych cząstkowych. Wykorzystuję się w nich podejście wariacyjne, zarówno w ujęciu numerycznym (na tym oparta jest Metoda Elementów Skończonych) jak i analitycznym (dowodzi się istnienia słabych rozwiązań, które to spełniają pewne wariacyjne równości całkowe, a następnie podnosi się ich regularność wykorzystując topologię przestrzeni w jakiej są one zdefiniowane). Wspomniane już zostało, że aby w (\ref{limits_commutation}) zachodziła równość musimy zapewnić spełnienie warunku (\ref{uniform_bound}). Chcemy zatem znaleść trajektorię pozostającą blisko trajektorii wyjściowej w dowolnej chwili. Formułując to spostrzeżenei w języku optymalizacji - chcemy zminimalizować normę odległości pomiędzy dwiema trajektoriami (generyczną oraz tą, której poszukujemy) w przestrzeni fazowej. Poszukujemy zatem funkcji $ \textbf{u}_s: [0,T] \rightarrow M_{ph} $ takiej, że
+W sytuacjach podobnych do zaistniałej dobrym pomysłem jest próba przeformułowania problemu. Inspirację mogą stanowić techniki rozwiązywania równań różniczkowych cząstkowych. Wykorzystuję się w nich podejście wariacyjne, zarówno w ujęciu numerycznym (na tym oparta jest Metoda Elementów Skończonych) jak i analitycznym (dowodzi się istnienia słabych rozwiązań, które to spełniają pewne wariacyjne równości całkowe, a następnie podnosi się ich regularność wykorzystując topologię przestrzeni w jakiej są one zdefiniowane). Wspomniane już zostało, że aby w (\ref{limits_commutation}) zachodziła równość musimy zapewnić spełnienie warunku (\ref{uniform_bound}). Chcemy zatem znaleść trajektorię pozostającą blisko trajektorii wyjściowej w dowolnej chwili. Formułując to spostrzeżenei w języku optymalizacji - chcemy zminimalizować normę odległości pomiędzy dwiema trajektoriami (generyczną oraz tą, której poszukujemy) w przestrzeni fazowej. Poszukujemy zatem funkcji $ \textbf{u}_s: [0,T] \rightarrow M_{ph} $ takiej, że
 \begin{equation}
-L(\textbf{u}_s) = \inf_{\textbf{u}}\frac{1}{T}\int_{0}^{T}d^{2}(\textbf{u}(t),\textbf{u}_r(t))dt,
+L'(\textbf{u}_{shadow}) = \inf_{\textbf{u}}\frac{1}{T}\int_{0}^{T}d^{2}(\textbf{u}(t),\textbf{u}_r(t))dt,
 \label{LSS_v1}
 \end{equation}
-gdzie przez $ d(,) $ oznaczono metrykę w przestrzeni fazowej $ M_{ph} $, zaś $ \textbf{u}_r $ jest rozwiązaniem równania (\ref{dyn_eq}), czyli stanowi trajektorię referencyjną. Winni jesteśmy ponadto narzucić warunki na (\ref{LSS_v1}) w celu dookreślenia postawionego problemu. Wiemy, iż poszukiwana funkcja $ \textbf{u}_s: [0,T] \rightarrow M_{ph} $ powinna spełniać równanie (\ref{dyn_eq}) dla odpowiednio sperturbowanego parametru $ s \in \mathbb{R}^{n} $. Raz jeszcze zaznaczamy, że nie ma konieczności, aby warunek początkowy był taki sam jak dla trajektorii referencyjnej. 
-\subsection{LSS - podejście bazujące na intuicji}
+gdzie przez $ d(,) $ oznaczono metrykę w przestrzeni fazowej $ M_{ph} $, zaś $ \textbf{u}_r $ jest rozwiązaniem równania (\ref{dyn_eq}), czyli stanowi trajektorię referencyjną. Winni jesteśmy ponadto narzucić warunki na (\ref{LSS_v1}) w celu dookreślenia postawionego problemu. Wiemy, iż poszukiwana funkcja $ \textbf{u}_s: [0,T] \rightarrow M_{ph} $ powinna spełniać równanie (\ref{dyn_eq}) dla odpowiednio sperturbowanego parametru $ s \in \mathbb{R}^{n} $. Raz jeszcze zaznaczamy, że nie ma konieczności, aby warunek początkowy był taki sam jak dla trajektorii referencyjnej.\newline
+Problem w takim sformułowaniu jest oczywiście dobrze postawiony (powołując się na ponownie na Lemat Cienia wnioskujemy, że zbiór trajektorii, dla których wartość funkcjonału (\ref{LSS_v1}) jest skończona jest niepusty). Pozostaje zauważyć, że rozumowanie dotyczące dodatkowej funkcji spełniającej rolę swobodnego parametru $ \eta: [0,T] \rightarrow \mathbb{R} $ pozostaje słuszne dokładnie z tych samych powodów co poprzednio. Aby możliwe było jej zaimplementowanie do wariacyjnego sformułowania konieczne jest zrozumienie wpływu tej funkacji na dynamikę układu. W poprzednim rozdziale została ona wprowadzona jako techniczny parametr odpowiednio rozszerzający przeciwobraz operatora cienia tak aby dla dowolnego gładkiego zaburzenia dynamiki możliwe było znalezienie zaburzenia trajektorii. Samej dynamiki oczywiście nie możemy zmieniać, ale jej tempo już tak. Pomysł polega na tym, aby manipulować chwilami występowania punktów w przestrzeni fazowej zachowując ich kolejność. W konsekwencji obraz trajektorii nie zmienia się, jednak funkcja będąca rozwiązaniem będzie już inna. Można to zrobić poprzez transformację dziedziny. W tym celu wprowadźmy funkcję $ \tau \in C^{1}([0,T]) $, tj. funkcję różniczkowalną w sposób ciągły transformującą przedział $ [0,T] $ w siebie w sposób wzajemnie jednoznaczny. Otrzymane złożenie $ \textbf{u}(\tau(t)) $ spełnia:
+\begin{equation}
+\frac{d\textbf{u}(\tau (t))}{dt} = \textbf{f}(\textbf{u}(\tau(t)), s).
+\label{LSS_v2}
+\end{equation}  
+Taka konstrukcja pozwala na kontrolę tempa występowania konkretnych punktów w przestrzeni fazowej co w konsekwencji pozwala zachować odpowiednio małą odległość od trajektorii referencyjnej w odpowiadających sobie chwilach. \newline
+Funkcja taka odpowiedni 'przyspiesza' lub 'spowalnia' rozwiązanie w wybranych chwilach wzdłuż trajektorii. Oczywiście w początkowej chwili musi zachodzić $ \tau(t=0) = 0 $. Interesująca jest zatem jej pochodna. W szczególnym przypadku braku jej wpływu, tj. gdy $ \tau(t) = id $ mamy $ \frac{d\tau(t)}{dt} = 1$ dla każdego $ t \in [0,T] $. Wprowadźmy oznaczenie $ \eta(t) = \frac{\tau(t)}{dt}-1 $. Poprzednie spostrzeżenia wskazują, że 'przyspieszanie' rozwiązania następuje przy $ \eta(t) > 0$, zaś 'hamowanie' dla  $ \eta(t) < 0$, w związku z czym funkcję $ \eta(t) $ nazywamy \textit{dylatacją czasu}.\newline
+Wyjątkowo prosta jej interpretacja zachodzi dla układów z czasem dyskretnym, a więc i dla realizacji numerycznych równań zwyczajnych. Sprowadza się ona bowiem do powszechie stosowanej techniki adaptacyjnego kroku czasowego. Podsumowanie jej wpływu ilustruje Rysunek.
+Wprowadzając taką funkcję modyfikujemy postać funkcjonału (\ref{LSS_v1}). Otrzymujemy
+\begin{equation}
+L(\textbf{u}_{shadow}) = \inf_{\textbf{u},\tau}\frac{1}{T}\int_{0}^{T}(d^{2}(\textbf{u}(\tau(t)),\textbf{u}_r(t)) + \alpha^{2}\eta^{2}(t))dt,
+\label{LSS_v3}
+\end{equation}
+gdzie poszukiwana funkcja $ \textbf{u}(\tau(t)) $ spełnia (\ref{LSS_v2}). Minimalizacja tej formy całkowej stanowi istotę Metody Trajketorii Cienia.\newline
+Wartość funkcji celu można wyznaczyć ze wzoru przybliżonego:
+\begin{equation}
+\bar{J}^{\infty}(s) \approx \bar{J}^{T}_{shadow}(s) = \frac{1}{\tau(T) - \tau(0)}\int_{\tau(0)}^{\tau(T)}J(\textbf{u}^{T}_{shadow}(t,s),s)dt.
+\label{LSS_v4}
+\end{equation}
+Oczywiście skończony okres uśredniania $ T $ powinien być odpowiednio długi, aby oddać asymptotyczne zachowanie rozważanego układu. \newline
+Dysponując taką trajektorią oraz funkcją celu dla niej określoną jesteśmy w stanie wyznaczyć poszukiwaną wrażliwość. Można to zrobić za pomocą dowolnej z metod opisanych w Rozdziale. Jest to możliwe, gdyż znaleziona w opisany sposób trajektoria pozostaje w odpowiednio bliskim sąsiedztwie trajektorii referencyjnej przez cały okres uśredniania i w konsekwencji otrzymujemy równość w (\ref{limits_commutation}).
+\paragraph{Zdyskretyzowane równania Metody Trajektorii Cienia}
+Za pomocą równanie (\ref{tangent}) otrzymujemy formułę wyrażającą poszukiwaną wrażliwość:
+\begin{equation}
+\frac{d\langle\textbf{J}\rangle}{d\textbf{s}} \approx \frac{\int_{0}^{T}(\frac{\partial \textbf{J}}{\partial u}v+\frac{\partial \textbf{J}}{\partial s}+\eta(\textbf{J}-\bar{J}))dt}{T}, 
+\label{LSS_v5}
+\end{equation}
+gdzie
+\begin{equation}
+\bar{J} = \frac{1}{T}\int_{0}^{T}(\textbf{J})dt.
+\label{LSS_v6}
+\end{equation}
+Dyskretna postać zagadnienia (\ref{LSS_v4}) wyraża się wzorem:
+\begin{equation}
+\min_{v_{i},\eta_{i}}\sum_{i=0}^{m-1}\frac{\Vert v_{i+\frac{1}{2}}\Vert}{2} + \alpha^{2}\sum_{i=1}^{m-1}\frac{\eta^{2}_{i}}{2} ,
+\label{LSS_v7}
+\end{equation}
+przy czym zachodzi:
+\begin{equation}
+E_{i}v_{i-\frac{1}{2}}+f_{i}\eta_{i}+G_{i}v_{i+\frac{1}{2}} = b_{i} \thickspace \thickspace \thickspace 1\leq i < m,
+\label{LSS_v8}
+\end{equation}
+gdzie
+\begin{equation}
+\begin{array}{rcl}
+E_{i} &=& -\frac{1}{\Delta t}I-\frac{\partial{f}}{\partial{u}}(u_{i-\frac{1}{2}},s), \\
+f_{i} &=& \frac{u_{i+\frac{1}{2}}-u_{i-\frac{1}{2}}}{\Delta t}, \\
+G_{i} &=& \frac{1}{\Delta t}I-\frac{\partial{f}}{\partial{u}}(u_{i+\frac{1}{2}},s), \\ 
+b_{i} &=& \frac{1}{2}(\frac{\partial{f}(u_{i-\frac{1}{2}},s)}{\partial{s}}+\frac{\partial{f}(u_{i+\frac{1}{2}},s)}{\partial{s}}) 
+\end{array}.
+\label{LSS_v9}
+\end{equation}
+Ostatecznie dochodzimy do układu równań liniowych (układu Karusha-Kuhna-Tuckera), który w przypadku metody Tangent ma postać:
+\begin{equation}
+\begin{bmatrix}
+\textbf{A} & \textbf{B} \\
+\textbf{C} & \textbf{D} 
+\end{bmatrix}
+\begin{bmatrix}
+\textbf{V} \\
+\textbf{W} 
+\end{bmatrix}
+= \begin{bmatrix}
+\textbf{F} \\
+\textbf{H} 
+\end{bmatrix},
+\label{LSS_v10}
+\end{equation}
+gdzie 
+\begin{equation}
+\textbf{A} = \begin{bmatrix}
+I &  &  &  &  &  &  &  \\
+& \alpha^2 &  &  &  &  &  &  \\
+&  & I &  &  &  &  &  \\
+&  &  & \alpha^2 &  &  &  &  \\
+&  &  &  & I &  &  &  \\
+&  &  &  &  & \ddots &  &  \\
+&  &  &  &  &  & \alpha^2 &  \\
+&  &  &  &  &  &  & I 
+\end{bmatrix},
+\textbf{B} = \begin{bmatrix}
+E_1^T &  &  &  \\
+f_1^T &  &  &  \\
+G_1^T & E_2^T &  &  \\
+& f_2^T &  &  \\
+& G_2^T &  &  \\
+&  & \ddots & E_m^T \\
+&  &  & f_m^T \\
+&  &  & G_m^T 
+\end{bmatrix},\
+\label{LSS_v11}
+\end{equation}
+oraz
+\begin{equation}
+\textbf{C} = \begin{bmatrix}
+E_{1} & f_{1} & G_{1} &  &  &  &  &  \\
+& E_{2} & f_{2} & G_{2} &  &  &  &  \\
+&  &  &  & \ddots & \ddots &  &  \\
+&  &  &  &  & E_{m} & f_{m} & G_{m} 
+\textbf{V} = 	
+\end{bmatrix},
+\textbf{V} = \begin{bmatrix}
+\upsilon_{\frac{1}{2}} \\
+\eta_{1} \\
+\upsilon_{1 + \frac{1}{2}} \\
+\eta_{2} \\
+\upsilon_{3 + \frac{1}{2}} \\
+\vdots \\
+\upsilon_{m - \frac{1}{2}} \\
+\eta_{m-1} 
+\end{bmatrix},
+\textbf{F} = \begin{bmatrix}
+\frac{1}{m}\frac{\partial J(u_{\frac{1}{2}},s)}{\partial u} \\
+\frac{1}{m-1}\bar{J}_{1} \\
+\frac{1}{m}\frac{\partial J(u_{1+\frac{1}{2}},s)}{\partial u}\\
+\frac{1}{m-1}\bar{J}_{2} \\
+\frac{1}{m}\frac{\partial J(u_{2+\frac{1}{2}},s)}{\partial u}\\
+\vdots \\
+\frac{1}{m-1}\bar{J}_{m-1} \\
+\frac{1}{m}\frac{\partial J(u_{m-\frac{1}{2}},s)}{\partial u}\\
+\end{bmatrix},
+\label{LSS_v12}
+\end{equation}
+zaś \textbf{W} oraz \textbf{H} są macierzami zerowymi. Wspominamy, że macierz układu () ma tę samą postać w przypadku tzw. \textit{metody tangent}, wobec czego dalsze uwagi będą dotyczyły obu metod.
+
+
+\subsection{LSS - analiza zbieżności}
 \newpage
 \section{Implementacja metody LSS}
 W niniejszym rozdziale przedstawione zostały wyniki symulacji numerycznej dla dwóch scenariuszy:
