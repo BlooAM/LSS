@@ -979,8 +979,7 @@ E_{1} & f_{1} & G_{1} &  &  &  &  &  \\
 & E_{2} & f_{2} & G_{2} &  &  &  &  \\
 &  &  &  & \ddots & \ddots &  &  \\
 &  &  &  &  & E_{m} & f_{m} & G_{m} 
-\textbf{V} = 	
-\end{bmatrix},
+\end{bmatrix},	
 \textbf{V} = \begin{bmatrix}
 \upsilon_{\frac{1}{2}} \\
 \eta_{1} \\
@@ -991,6 +990,54 @@ E_{1} & f_{1} & G_{1} &  &  &  &  &  \\
 \upsilon_{m - \frac{1}{2}} \\
 \eta_{m-1} 
 \end{bmatrix},
+\textbf{H} = \begin{bmatrix}
+-b_{1} \\
+-b_{2} \\
+\vdots \\
+-b_{3}\\
+\end{bmatrix},
+\label{LSS_v12}
+\end{equation}
+zaś \textbf{D} oraz \textbf{F} są macierzami zerowymi.\newline
+Układ taki można uprości stosując klasyczną metodę eliminacji Gaussa uzyskując postać nazywaną w literaturze dopełnieniem Shura \cite{Qiqi2}:
+\begin{equation}
+\textbf{B}\textbf{B}^{T}\textbf{w} = \textbf{b},
+\label{LSS_v13}
+\end{equation}
+gdzie
+\begin{equation}
+\textbf{B} = \begin{bmatrix}
+E_{1} & \frac{f_{1}}{\alpha} & G_{1} &  &  &  &  &  \\
+& E_{2} & \frac{f_{2}}{\alpha} & G_{2} &  &  &  &  \\
+&  &  &  & \ddots & \ddots &  &  \\
+&  &  &  &  & E_{m} & \frac{f_{m}}{\alpha} & G_{m} 
+\end{bmatrix},
+\textbf{w} = \begin{bmatrix}
+w_{1} \\
+w_{2} \\
+\vdots \\
+w_{3}\\
+\end{bmatrix},
+\textbf{b} = \begin{bmatrix}
+b_{1} \\
+b_{2} \\
+\vdots \\
+b_{3}\\
+\end{bmatrix}.	
+\label{LSS_v14}
+\end{equation}
+Zauważmy, że macierz główna układu $ \textbf{B}\textbf{B}^{T} $ jest symetryczna oraz dodatio określona. Jest ona także blokowo-trójdiagonalna. Ma ona następującą strukturę:
+\begin{equation}
+\textbf{B}\textbf{B}^{T}(i,i) = E_{i}E_{i}^{T}+f_{i}f_{i}^{T}+G_{i}G_{i}^{T} 
+\label{LSS_v16}
+\end{equation}
+oraz
+\begin{equation}
+\textbf{B}\textbf{B}^{T}(i,i+1) = \textbf{B}\textbf{B}^{T}(i+1,i) = G_{i}E_{i+1}^{T},
+\label{LSS_v17}
+\end{equation}
+gdzie para indeksów oznacza macierz kwadratową, której wymiar jest równy wymiarowi punktu przestrzeni fazowej (w kontekście numerycznej mechaniki płynów jest on proporcjonalny do wymiarów siatki obliczeniowej). Pozostałe bloki to macierze zerowe.
+\begin{equation}
 \textbf{F} = \begin{bmatrix}
 \frac{1}{m}\frac{\partial J(u_{\frac{1}{2}},s)}{\partial u} \\
 \frac{1}{m-1}\bar{J}_{1} \\
@@ -1001,10 +1048,7 @@ E_{1} & f_{1} & G_{1} &  &  &  &  &  \\
 \frac{1}{m-1}\bar{J}_{m-1} \\
 \frac{1}{m}\frac{\partial J(u_{m-\frac{1}{2}},s)}{\partial u}\\
 \end{bmatrix},
-\label{LSS_v12}
 \end{equation}
-zaś \textbf{W} oraz \textbf{H} są macierzami zerowymi. Wspominamy, że macierz układu () ma tę samą postać w przypadku tzw. \textit{metody tangent}, wobec czego dalsze uwagi będą dotyczyły obu metod.
-
 
 \subsection{LSS - analiza zbieżności}
 \newpage
