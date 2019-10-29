@@ -1036,7 +1036,25 @@ oraz
 \textbf{B}\textbf{B}^{T}(i,i+1) = \textbf{B}\textbf{B}^{T}(i+1,i) = G_{i}E_{i+1}^{T},
 \label{LSS_v17}
 \end{equation}
-gdzie para indeksów oznacza macierz kwadratową, której wymiar jest równy wymiarowi punktu przestrzeni fazowej (w kontekście numerycznej mechaniki płynów jest on proporcjonalny do wymiarów siatki obliczeniowej). Pozostałe bloki to macierze zerowe.
+gdzie para indeksów oznacza macierz kwadratową, której wymiar jest równy wymiarowi punktu przestrzeni fazowej (w kontekście numerycznej mechaniki płynów jest on proporcjonalny do wymiarów siatki obliczeniowej). Pozostałe bloki to macierze zerowe. Wspomnijmy, iż używając bezpośrednich metod rozwiązywania takiego układu, koszt numeryczny jest rzędu O($ mn^{3} $) (przypominamy, iż przez $ m $ oznaczono liczbę kroków czasowych, zaś $ n $ to wymiar punktu przestrzeni fazowej). W związku z tym, dla odpowiednio gęstej dyskretyzacji obszaru obliczeniowego lepszym wyborem są metody iteracyjne. Powrócimy do tematu wydajności różnych metod numerycznych w rozważanej klasie przypadków w Rozdziale. \newline
+Następnie z (\ref{LSS_v9}) dostajemy
+\begin{equation}
+\begin{array}{rcl}
+v_{i+\frac{1}{2}} &=&  -G_{i}^{T}w_{i} - E{i+1}^{T}w_{i+1} \thickspace \thickspace \thickspace 1\leq i <m;\\
+\eta_{i} &=& -\frac{f_{i}^{T}w_{i}}{\alpha^{2}} \thickspace \thickspace \thickspace 0<i<n
+\end{array}.
+\label{LSS_v18}
+\end{equation}
+Ostatecznie otrzymujemy (dla warunków $ w_{0} = w_{m+1} = 0  $):
+\begin{equation}
+\frac{d\bar{J}}{ds} \approx \frac{1}{m}\sum_{i=0}^{m-1}(\frac{\partial{J(u_{i+\frac{1}{2}},s)}}{\partial{u}}v_{i+\frac{1}{2}} + \frac{\partial{J(u_{i+\frac{1}{2}},s)}}{\partial{s}}) + \frac{1}{m-1}\sum_{i=1}^{m-1}\eta_{i}\tilde{J}_{i},
+\label{LSS_v19}
+\end{equation}
+gdzie 
+\begin{equation}
+\tilde{J}_{i} = \frac{J(u_{i-\frac{1}{2}},s)+J(u_{i+\frac{1}{2}},s)}{2} - \frac{1}{m}\sum_{i=0}^{m-1}J(u_{i+\frac{1}{2}},s) \thickspace \thickspace \thickspace 1\leq i < m.
+\end{equation}
+Z powyższych wzorów wnioskujemy, iż postać równania Tangent w Metodzie Trajektorii Cienia zawiera dodatkowy człon związany z dylatacją czasu w stosunku do (\ref{J_tangent}). Cała idea tkwi w odpowiednim rozwiązaniu $ \{v_{i}\}_{i=1,...,m} $, który nazywamy \textit{kierunkiem cienia}.
 \begin{equation}
 \textbf{F} = \begin{bmatrix}
 \frac{1}{m}\frac{\partial J(u_{\frac{1}{2}},s)}{\partial u} \\
