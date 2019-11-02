@@ -1053,8 +1053,25 @@ Ostatecznie otrzymujemy (dla warunków $ w_{0} = w_{m+1} = 0  $):
 gdzie 
 \begin{equation}
 \tilde{J}_{i} = \frac{J(u_{i-\frac{1}{2}},s)+J(u_{i+\frac{1}{2}},s)}{2} - \frac{1}{m}\sum_{i=0}^{m-1}J(u_{i+\frac{1}{2}},s) \thickspace \thickspace \thickspace 1\leq i < m.
+\label{LSS_v20}
 \end{equation}
-Z powyższych wzorów wnioskujemy, iż postać równania Tangent w Metodzie Trajektorii Cienia zawiera dodatkowy człon związany z dylatacją czasu w stosunku do (\ref{J_tangent}). Cała idea tkwi w odpowiednim rozwiązaniu $ \{v_{i}\}_{i=1,...,m} $, który nazywamy \textit{kierunkiem cienia}.
+Z powyższych wzorów wnioskujemy, iż postać równania Tangent w Metodzie Trajektorii Cienia zawiera dodatkowy człon związany z dylatacją czasu w stosunku do (\ref{J_tangent}). Jest to jednak jedynie techniczny parametr regularyzujący, a cała idea tkwi w odpowiednim rozwiązaniu $ \{v_{i}\}_{i=1,...,m} $, który nazywamy \textit{kierunkiem cienia}.
+W Rozdziale zostąło wspomniane, iż w celu wyznaczenia gradientu funkcji celu posługujemy się techniką mnożników Lagrange'a. Wprzypadku minimalizacji funkcjonału (\ref{LSS_v3}) z ograniczeniem w postaci (\ref{LSS_v2}) odpowoienia funkcja ma postać:
+\begin{equation}
+\Lambda = \int_{0}^{T}(v^{T}v + \alpha^{2}\eta^{2}+2w^{T} + 2w^{T}(\frac{dv}{dt}-\frac{\partial{f}}{\partial{u}}v-\frac{\partial{f}}{\partial{s}}-\eta f)),
+\label{LSS_v21}
+\end{equation}
+gdzie przez $ w = w(t) $ oznaczono wspomniane mnożniki. Rozumowanie przedstawione w Rozdziale prowadzi do układu
+\begin{equation}
+\begin{cases}
+	\frac{dv}{dt}-\frac{\partial{f}}{\partial{u}}v-\frac{\partial{f}}{\partial{s}}-\eta f = 0 \\
+	\frac{dw}{dt} + \frac{\partial{f}}{\partial{u}}^{T}w-v = 0 \\
+	w(0) = w(T) = 0 \\
+	\alpha^{2}\eta -w^{T}f = 0
+\end{cases}.
+\label{LSS_v22}
+\end{equation}
+Dyskretna postać jest taka sama jak w przypadku metody Tangent (\ref{LSS_v10}), przy tych samych oznaczeniach (\ref{LSS_v9}), przy czym prawa strona tego układu jest inna: macierz $ \textbf{H} $ składa się z samych zer zaś
 \begin{equation}
 \textbf{F} = \begin{bmatrix}
 \frac{1}{m}\frac{\partial J(u_{\frac{1}{2}},s)}{\partial u} \\
@@ -1065,9 +1082,16 @@ Z powyższych wzorów wnioskujemy, iż postać równania Tangent w Metodzie Traj
 \vdots \\
 \frac{1}{m-1}\bar{J}_{m-1} \\
 \frac{1}{m}\frac{\partial J(u_{m-\frac{1}{2}},s)}{\partial u}\\
-\end{bmatrix},
+\end{bmatrix}.
+\label{LSS_v23}
 \end{equation}
-
+Wobec powyższego komplementacja Shura ma postać 
+\begin{equation}
+\textbf{B}\textbf{B}^{T}\textbf{w} = \textbf{B}\textbf{g}
+\label{LSS_v24},
+\end{equation}
+gdzie oie strony wyrażają się wzorami (\ref{LSS_v14}), (\ref{LSS_v16}) oraz (\ref{LSS_v17}). \newline
+Zauważmy na koniec, iż obie metody charakteryzuje ta sama macierz główna układu.
 \subsection{LSS - analiza zbieżności}
 \newpage
 \section{Implementacja metody LSS}
