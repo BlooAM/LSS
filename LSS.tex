@@ -1189,13 +1189,20 @@ Podobna analiza została wykonana dla drugiego przypadku ($ T=50 $), a jej wynik
 Kod zaimplementowany w środowisku skryptowym MATLAB jest dostępny na publiczny repozytorium autora \cite{Marek1}.
 \subsection{Scenariusz II - oblicze chaosu}
 \subsubsection{Słowo wstępne}
-Jak zostało zaznaczone na wstępie, głównym celem niniejszej pracy jest analiza wrażliwości wybranej funkcji celu dla zagadnienia przepływowego modelowanego równaniem Boltzmanna. Konkretniej: chcemy zastosować Metodę Trajektorii Cienia do zagadnienia rozwiązywanego Metodą Siatek Boltzmanna (ang. \textit{Lattice Boltzmann Method}). Istnieje cały szereg zalet nautry numerycznej, które pokrótce zostaną przedstawione w następnym podrozdziale. Jednak już w tym momencie należy wmienić obszary praktycznych zastosować, które wykorzystują wspomnianą metodę. Są to między innymi:
-W poprzednim rozdziale została przedstawiona metoda LSS w sposób generyczny. Obecnie należy dopasować jej schemat w celu regularyzacji równań opisujących dynamikę rozważanego przepływu. W momencie pisania tej pracy autor nie spotkał się z żadną istniejącą implementacją tej metody dla zdyskretyzowanych równań Boltzmanna - znane są jedynie aplikacje dla solverów bazujących na równaniach Naviera-Stokesa. Należy przy tym dodatkowo zaznaczyć, że wszystkie one oparte są o przechowywanie powstałej macierzy układu równań w pamięci. W dalszej części pracy ukazane zostaną wady takiego podejścia (w szczególności, zajętość pamięci operacyjnej w takich przypadkach całkowicie niweluje, zdaniem autora, jakiekolwiek szanse na ich użycie w praktycznych zastosowaniach - nawet dla układów dwuwymiarowych korzystających z modeli turbulencji klasy RANS). Praca owa skupia się na podejściu, w którym macierz układu trajktuje się w sposób 'abstrakcyjny' - jako funktor, którego argumentami są wektory wejściowe, zaś wyjście stanowi iloczyn macierzy i wektorów wejściowych.
+Jak zostało zaznaczone na wstępie, głównym celem niniejszej pracy jest analiza wrażliwości wybranej funkcji celu dla zagadnienia przepływowego modelowanego równaniem Boltzmanna. Konkretniej: chcemy zastosować Metodę Trajektorii Cienia do zagadnienia rozwiązywanego Metodą Siatek Boltzmanna (ang. \textit{Lattice Boltzmann Method}). Istnieje cały szereg zalet nautry numerycznej, które pokrótce zostaną przedstawione w następnym podrozdziale. Jednak już w tym momencie należy wmienić obszary praktycznych zastosować, które wykorzystują wspomnianą metodę. Są to między innymi (\cite{Espinoza}) obliczenia związane z
+\begin{itemize}
+	\item ośrodkami porowatymi (na przykład filtracja gleby)
+	\item ogniowami paliwowymi
+\end{itemize}
+W poprzednim Rozdziale została przedstawiona metoda LSS w sposób generyczny. Obecnie należy dopasować jej schemat w celu regularyzacji równań opisujących dynamikę rozważanego przepływu. W momencie pisania tej pracy autor nie spotkał się z żadną istniejącą implementacją tej metody dla zdyskretyzowanych równań Boltzmanna - znane są jedynie aplikacje dla solverów bazujących na równaniach Naviera-Stokesa. Należy przy tym dodatkowo zaznaczyć, że wszystkie one oparte są o przechowywanie powstałej macierzy układu równań w pamięci. W dalszej części pracy ukazane zostaną wady takiego podejścia (w szczególności, zajętość pamięci operacyjnej w takich przypadkach całkowicie niweluje, zdaniem autora, jakiekolwiek szanse na ich użycie w praktycznych zastosowaniach - nawet dla układów dwuwymiarowych korzystających z modeli turbulencji klasy RANS). Praca owa skupia się na podejściu, w którym macierz układu trajktuje się w sposób 'abstrakcyjny' - jako funktor, którego argumentami są wektory wejściowe, zaś wyjście stanowi iloczyn macierzy i wektorów wejściowych.
 Do opisu implementacji Metody Trajektorii Cienia konieczna jest znajomośc równań wykorzystywanych w Metodzie Siatek Boltzmanna, dlatego też w dalszej części pracy skrótowo opisane zostały podstawowe jej założenia i płynące z nich wnioski w postaci gotowych formuł. Następnie zaprezentowane zostanły wyniki obliczeń dla przykładowego zagadnienia, w którym następuje oderwanie strugi na skutek skokowej zmiany geometrii. Zbadana zostanie przy tym czułość średniego spadku ciśnienia w długim horyzoncie czasowym w stosunku do modułu prędkości zadanej na wlocie do obszaru obliczeniowego.
 \subsubsection{Metoda Siatek Boltzmanna}
-Jak już zostało nieformalnie wspomniane (przy okazji omawiania pojęcia ergodyczności) w mechanice statystycznej definiuje się rokład prawdopodobieństwa związany z nazwiskami Boltzmanna oraz Maxwella. Ma on następującą postać
-Podstawowym założeniem prowadzącym do takiej dystrybucji prędkości wśród cząstek jest przyjęcie modelu gazu doskonałego oraz założenie równowagi termodynamicznej między układem jego otoczeniem. Należy zwrócić uwagę na znaczenie tego rozkładu - jest to gęstość prawdopodobieństwa stanowiąca miarę liczności cząstek w danym zakresie prędkości. Jak każda funkcja gęstości prawdopodobieństwa jest ona równa prawie wszędzie pochodnej dystrybuanty związanej z tym rozkładem. Wobec tego, na poziomie intuicji, można taką funkcję utożsamiać ze stosunkiem liczby cząstek mających ograniczony zakres przyjmowanych prędkości w stosunku do całkowitej ich liczby. Zauważmy, że podejście to nie opisuje każdej cząstki jako oddzielnego składnika złożonego systemu (podejście mikroskopowe). Jednakże jest ono również odmienne od dobrze znanego z obecnie najpopularniejszych metod modelowania komputerowego przepływów uśredniania w relatywnie niewielkiej (w sensie rozciągłości przestrzennej) parametrów statystycznie istotnej liczby cząstek, z którego generowane są pola parametrow makroskopowych takich jak ciśnienie, temperatura czy prędkość (podejście to bazuje na założeniu ciągłości badanego ośrodka i nazywane jest podejściem makroskopowym). Głównym zamysłem Metody Siatek Boltzmanna jest symulowanie ewolucji w czasie analogicznego rozkładu (niekoniecznie dla stanów równowagowych).
-
+Jak już zostało nieformalnie wspomniane (przy okazji omawiania pojęcia ergodyczności) w mechanice statystycznej definiuje się rokład prawdopodobieństwa związany z nazwiskami Boltzmanna oraz Maxwella. Ma on następującą postać 
+\begin{equation}
+f(v) = 4\pi(\frac{m}{2\pi kT})^{\frac{2}{3}}v^{2}exp(-\frac{\frac{1}{2}mv^{2}}{kT}),
+\end{equation}
+gdzie przez $ v $ oznaczono prędkość cząstki, $ m $ jej masę, $ T $ temperaturę bezwzględną, oraz przez $ k $ stałą Boltzmana.
+Podstawowym założeniem prowadzącym do takiej dystrybucji prędkości wśród cząstek jest przyjęcie modelu gazu doskonałego oraz założenie równowagi termodynamicznej między układem jego otoczeniem. Należy zwrócić uwagę na znaczenie tego rozkładu - jest to gęstość prawdopodobieństwa stanowiąca miarę liczności cząstek w danym zakresie prędkości. Jak każda funkcja gęstości prawdopodobieństwa jest ona równa prawie wszędzie pochodnej dystrybuanty związanej z tym rozkładem. Wobec tego, na poziomie intuicji, można taką funkcję utożsamiać ze stosunkiem liczby cząstek mających ograniczony zakres przyjmowanych prędkości w stosunku do całkowitej ich liczby. Zauważmy, że podejście to nie opisuje każdej cząstki jako oddzielnego składnika złożonego systemu (podejście mikroskopowe). Jednakże jest ono również odmienne od dobrze znanego z obecnie najpopularniejszych metod modelowania komputerowego przepływów uśredniania w relatywnie niewielkiej (w sensie rozciągłości przestrzennej) objętości parametrów statystycznie istotnej liczby cząstek, z którego generowane są pola parametrów makroskopowych takich jak ciśnienie, temperatura czy prędkość (podejście to bazuje na założeniu ciągłości badanego ośrodka i nazywane jest podejściem makroskopowym). Głównym zamysłem Metody Siatek Boltzmanna jest symulowanie ewolucji w czasie analogicznego rozkładu (niekoniecznie dla stanów równowagowych).
 \subsubsection{Model matematyczny}
 Jako schemat połączeń węzłów siatki przyjęty został typ d2Q9 (Rysunek)
 \begin{figure}[H]
@@ -1234,7 +1241,16 @@ Dodatkowo, gdy na cząsteczki działa zewnętrzna siła $F$, to makroskopowa pr�
 U(x,t) = u(x,t) + \frac{1}{2}\frac{F(x,t)}{\rho(x,t)}.
 \end{equation}
 Dynamika w podejściu tej metody modelowana jest zatem dwustopniowo: pierwszy etap stanowi kolizja (reprezentowana operatorem kolizji), drugi zaś stanowi propagację funkcji rozkładu zgodnie z dyskretnymi kierunkami wybranych wektorów prędkości. W pracy operator kolizji jest aproksymowany dobrze rozpoznanym modelem BGK. Należy zwrócić uwagę, iż rozkład równowagowy jest wielomianowym przybliżeniem rozkładu Maxwella-Boltzmanna.\newline
+\subsubsection{Aspekty numeryczne}
+Zanim przejdziemy do omówienia wyników należy chwilę poświęcić na aspekty implementacyjne, gdyż dla zagadnień wielowymiarowych odgrywają one kluczową rolę. W typowych przypadkach przepływów mogą nawet zadecydować o możliwości wykorzystania danej metody.
+\subsubsection{Wyniki symulacji - pierwsze podejście}
 Kształt obszaru obliczeniowego został zilustrowany na Rysunku
+\begin{figure}[H]
+	\includegraphics[scale=1.8]{figures/geometry.png} 
+	\centering
+	\caption{Geometria obszaru obliczeniowego}
+\end{figure}
+W rozważanym przypadku $ H = 2 $, $ h_{i}=h=L_{i}=1 $ oraz $ L_{c}=9 $.\newline
 Pomimo tak prostej geometrii w przepływie takim występuje szereg zjawisk o skomplikowanej naturze:
 \begin{itemize}
 	\item niestabilność przepływu
@@ -1243,18 +1259,8 @@ Pomimo tak prostej geometrii w przepływie takim występuje szereg zjawisk o sko
 	\item oderwanie warstwy przyściennej
 	\item recyrkulacja,
 \end{itemize}
-wobec czego przypadek ten często traktywany jest jako sprawdzian testowy dla różnych modeli turbulencji \cite{Salazar}.
-\subsubsection{Aspekty numeryczne}
-Zanim przejdziemy do omówienia wyników należy chwilę poświęcić na aspekty implementacyjne, gdyż dla zagadnień wielowymiarowych odgrywają one kluczową rolę. W typowych przypadkach przepływów mogą nawet zadecydować o możliwości wykorzystania danej metody.
-\subsubsection{Wyniki symulacji - pierwsze podejście}
-Geometrię obszaru obliczeniowego przedstawia Rysunek
-\begin{figure}[H]
-	\includegraphics[scale=1.8]{figures/geometry.png} 
-	\centering
-	\caption{Geometria obszaru obliczeniowego}
-\end{figure}
-W rozważanym przypadku $ H = 2 $, $ h_{i}=h=L_{i}=1 $ oraz $ L_{c}=9 $.\newline
-Jako funkcję celu przyjęty został średni spadek ciśnienia między wlotem a wylotem, zaś jako parametr kontrolny przyjęty został moduł prędkości wlotowej (przyjęty został tłokowy rozkład prędkości na wlocie):
+wobec czego przypadek ten często traktywany jest jako sprawdzian testowy dla różnych modeli turbulencji \cite{Salazar}. \newline
+Jako funkcję celu przyjęty został średni spadek ciśnienia między wlotem a wylotem, zaś jako parametr kontrolny przyjęty został moduł prędkości wlotowej (przyjęty został tłokowy rozkład prędkości na wlocie, zaś liczba kroków czasowych $ T = 4000 $):
 \begin{equation}
 \bar{J} = \frac{1}{T}\int_{0}^{T}(\hat{p}_{in}(t)-\hat{p}_{out}(t))dt,
 \end{equation}
@@ -1264,8 +1270,26 @@ gdzie $ \hat{p}_{in}(t) $ oraz $ \hat{p}_{out}(t) $ oznaczają średnie ciśnien
 	\centering
 	\caption{Wartość funkcji celu w zależności od parametru kontrolnego}
 \end{figure}
-Zależność ta ma kształt paraboliczny, co jest zgodne z oczekiwaniami. Uwagę tę potwierdza Rysunek, który ilustruje krzywą na tle najlepiej dopasowanej doń paraboli.
-Przebadane zostały trzy przypadki różniące się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne.
+Zależność ta ma kształt paraboliczny, co jest zgodne z oczekiwaniami. Uwagę tę potwierdza Rysunek, który ilustruje krzywą na tle najlepiej dopasowanej doń paraboli (oznaczoną kolorem czerwonym)
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/Jbar_parabola.png} 
+	\centering
+	\caption{Najlepiej dopasowana parabola na tle krzywej funkcji celu}
+\end{figure}
+Odpowiadające im wartości wrażliwości ilustruje Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/Jbar_parabola.png} 
+	\centering
+	\caption{Najlepiej dopasowana parabola na tle krzywej funkcji celu}
+\end{figure}
+Kolejną charakterystyką jest średni skumulowany spadek ciśnienia (tj. średni spadek ciśnienia liczony od początku do danej chwili), którego wykres dla pierwszych $ T = 100 $  kroków czasowych oraz dla parametru wlotowego $ u=0.1 $ przedstawia Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/mean_dp_100.png} 
+	\centering
+	\caption{Skumulowany średni spadek ciśnienia}
+\end{figure}
+Wspomnijmy przy okazji, iż ergodyczność układu oznacza w tym przypadku, że taki średni skumulowany spadek ciśnienia będzie asymptotycznie dążył do tej samej wartości niezależnie od początkowego pola funkcji rozkładu, które w tej pracy inicjalizowane są poprzez rozkład równowagowy.\newline
+Przebadane zostały trzy przypadki różniące się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne: w kierunku wlotu zastosowano podział na $ m=20 $ komórek, zaś w kierunku poziomym $ n=10m $.
 \paragraph{Liczba Reynoldsa: 200}
 Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio (rysunki zostały odpowiednio przeskalowane w kierunku osi pionowej dla przejrzystości poglądu).
 \begin{figure}[H]
@@ -1284,6 +1308,7 @@ Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kr
 	\includegraphics[scale=0.3]{figures/LBM/u0_05_4.png} 
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
 \end{figure}
+
 \paragraph{Liczba Reynoldsa: 400}
 Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
 \begin{figure}[H]
@@ -1338,6 +1363,10 @@ Chaos Solitons Fractals, 64, 2014, 16-25.
 \bibitem{Chandramoorthy} Chandramoorthy, N., Fernandez, P., Talnikar, C., Wang, Q. 2017 
 \emph{An Analysis of the Ensemble Adjoint Approach to Sensitivity Analysis in Chaotic Systems} 
 AIAA Paper 2017-3799. 
+
+\bibitem{Espinoza} Espinoza, Mayken 
+\emph{Compress effects on porosity, gas-phase tortuosity, and gas permeability in a simulated PEM gas diffusion layer},
+International Journal of Energy Research. 39 (11): 1528–1536
 
 \bibitem{Evans} Evans L.C.,
 \emph{Równania różniczkowe cząstkowe},
