@@ -147,12 +147,18 @@
 
 \section{Wprowadzenie}
 \subsection{Ogólna charakterystyka}
-Istotę niniejszej pracy stanowi efektywna implementacja metody wyznaczania wrażliwości dla pewnej klasy funkcji celu stanowiących długookresowe wartości średnie w przypadku układów dynamicznych, których rozwiązania przejawiają skomplikowane zachowania. Analiza taka jest niezbędna w wielu praktycznych zastosowaniach, takich jak optymalizacja kształtu elementów maszyn i urządzeń cieplno-przepływowych [], sterowanie z przesuwnym horyzontem czasowym (predykcyjne) [], adaptacja siatek obliczeniowych [], szacowanie błędów i niepewności []. Mimo że praca ta skupia się głównie na zastosowaniach związanych z mechaniką płynów, przedstawione algorytmy mogą być pomocne do rozwiązywania szerszej klasy problemów związanych z układami dynamicznymi.\newline 
-W ostatnich latach powstało kilka prac sugerujących sposób rozwiązania postawionego problemu (zobacz Rozdział 1.2), jednakże wspólną ich cechą jest wysoki koszt numeryczny. W niniejszej pracy wykorzystuje się podstawowe ich idee - w szczególności zaimplementowana została Metoda Trajektorii Cienia (ang. \textit{Least Squares Shadowing}) w formie wariacyjnej. Całość została zaimplementowana w języku skryptowym \textit{MATLAB} oraz w języku wysokiego poziomu: \textit{C++}. Nowość stanowi sposób dyskretyzacji równań mechaniki płynów - zastosowana została Metoda Siatkowa Boltzmanna. Poza tym wykorzystane zostało narzędzie do automantycznego różniczkowania kodu.
+Istotę niniejszej pracy stanowi efektywna implementacja metody wyznaczania wrażliwości dla pewnej klasy funkcji celu stanowiących długookresowe wartości średnie w przypadku układów dynamicznych, których rozwiązania przejawiają skomplikowane zachowania. Analiza taka jest niezbędna w wielu praktycznych zastosowaniach, takich jak optymalizacja kształtu elementów maszyn i urządzeń cieplno-przepływowych \cite{Jameson}, sterowanie z przesuwnym horyzontem czasowym (predykcyjne) \cite{Bewley1}\cite{Bewley2}, adaptacja siatek obliczeniowych \cite{Venditti}, szacowanie błędów i niepewności \cite{Cavaglieri}, asymilacja danych związana z prognozami pogody \cite{Thepaut}. Mimo że praca ta skupia się głównie na zastosowaniach związanych z mechaniką płynów, przedstawione algorytmy mogą być pomocne do rozwiązywania szerszej klasy problemów związanych z układami dynamicznymi.\newline 
+W ostatnich latach powstało kilka prac sugerujących sposób rozwiązania postawionego problemu, jednakże wspólną ich cechą jest wysoki koszt numeryczny. W niniejszej pracy wykorzystuje się podstawowe ich idee - w szczególności zastosowana została Metoda Trajektorii Cienia (ang. \textit{Least Squares Shadowing}) w formie wariacyjnej. Całość została zaimplementowana w języku skryptowym \textit{MATLAB} oraz w języku wysokiego poziomu: \textit{C++}. Nowość stanowi sposób dyskretyzacji równań mechaniki płynów - zastosowana została Metoda Siatkowa Boltzmanna.
 \subsection{Tło literaturowe badanego problemu}
-Opracowane do tej pory klasyczne metody estymacji czułości bazujące na wyznaczaniu gradientu funkcji celu pozostają nieskuteczne wobec istotnych z punktu widzenia techniki układów niestacjonarnych, których dynamika (silnie nieliniowa) przekłada się na praktycznie nieprzewidywalne zachowanie. Mówi się wówczas o układach chaotycznych (patrz Rozdział). Świetną pozycję opisującą historię odkryć takich układów, związane z nimi problemy oraz pierwsze próby ich matematycznego opisu stanowi książka \cite{Gleick}. Trudności polegające na załamaniu się klasycznych metod wyznaczania wrażliwości zotały po raz pierwszy zauważone w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) stanowiącego skrajnie uproszczony model termicznej konwekcji naturalnej w atmosferze. Ci sami autorzy w pracy \cite{Lea2} zaproponowali sposób regularyzacji poprzez uśrednianie całkowe w przestrzeni fazowej dla skal czasowych zdeterminowanych poprzez największą wartość wykładników Lyapunowa. Uzasadnienie takiego postępowania stanowi pozycja \cite{Ruelle1}, w której autor dowodzi poprawności sformułowania problemu (tj. pokazuje, że poszukiwana pochodna istnieje i jest ograniczona przy pewnych ogólnych założeniach) oraz podaje \textit{explicite} jej wzór. Podejście takie bez znaczących modyfikacji jest niepraktyczne ze względu na koszt numeryczny, co zostało pokazane w pracy \cite{Chandramoorthy}.
+Opracowane do tej pory klasyczne metody estymacji czułości bazujące na wyznaczaniu gradientu funkcji celu pozostają nieskuteczne wobec istotnych z punktu widzenia techniki układów niestacjonarnych, których dynamika (silnie nieliniowa) przekłada się na praktycznie nieprzewidywalne zachowanie. Mówi się wówczas o układach chaotycznych (patrz Rozdział 2). Świetną pozycję opisującą historię odkryć takich układów, związane z nimi problemy oraz pierwsze próby ich matematycznego opisu stanowi książka \cite{Gleick}. Trudności polegające na załamaniu się klasycznych metod wyznaczania wrażliwości zotały po raz pierwszy zauważone w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) stanowiącego skrajnie uproszczony model termicznej konwekcji naturalnej w atmosferze. Ci sami autorzy w pracy \cite{Lea2} zaproponowali sposób regularyzacji poprzez uśrednianie całkowe w przestrzeni fazowej dla skal czasowych zdeterminowanych poprzez największą wartość wykładników Lyapunowa. Uzasadnienie takiego postępowania stanowi pozycja \cite{Ruelle1}, w której autor dowodzi poprawności sformułowania problemu (tj. pokazuje, że poszukiwana pochodna istnieje i jest ograniczona przy pewnych ogólnych założeniach) oraz podaje \textit{explicite} jej wzór. Podejście takie bez znaczących modyfikacji jest niepraktyczne ze względu na koszt numeryczny, co zostało pokazane w pracy \cite{Chandramoorthy}.\newline
+Innym podejściem jest próba rozwiązania równań Fokkera-Plancka odnoszących się do funckji gęstości prawdopodobieństwa zdefiniowanej na przestrzeni fazowej ujęte w pracy \cite{Thuburn}. Kontynuację tego podejścia można znaleść w pracy \cite{Blonigan1}. Dużym problemem jest regularność wspomniaej funkcji rozkładu - uzyskuje się ją poprzez dodanie sztucznego członu do równań wprowadzając tym samym błędy rozwiązań. Podobna procedura wykorzystuje Twierdzenie o Dyssypacji Fluktuacji \cite{Abramov}, jednakże zmaga się ona z analogicznymi problemami.\newline
+Pomysł Metody Trajektorii Cienia, stanowiącej główny obiekt zainteresowań w ramach niniejszej pracy, narodził się w ramach zdefiniowania Operatora Cienia w pracy \cite{Qiqi1}, w której autor rozwiązuje postawiony problem poprzez dekompozycję przestrzeni fazowej na wektory kowariantne Lyapunova. Takie rozwiązanie jest kosztowne w przypadku obecności wielu dodatnich wykładników Lyapunova, co jest cechą charakterystyczną układów chaotycznych. Pierwszą pracą, w której wspomniana metoda została formalnie zdefiniowana jest \cite{Qiqi3}. Analizę zbieżności zregularyzowanego w ten sposób rozwiązania ilustruje \cite{Qiqi2}. Przykład jej zastosowania w ramach równań Kuramoto-Shivashinsky zawiera praca \cite{Blonigan3}. Wyznaczenie wrażliwości dla dwuwymiarowego układu przepływowego zdyskretyzowanego równaniami RANS zawiera \cite{Blonigan2}.
 \subsection{Układ pracy}
-W Rozdziale 2 przedstawiono wybrane metody klasyczne wyznaczania gradientu funkcji celu, na których bazują algorytmy optymalizacji lokalnej stosowane w technice. Rozdział 3 zawiera przegląd definicji oraz niezbędnych faktów dotyczących teorii układów dynamicznych i chaosu deterministycznego wykorzystywanych w dalszych rozdziałach. Rozdział 4 prezentuje metodę najmniejszych kwadratów dla trajektorii cienia (ang. \textit{Least Squares Shadowing}, oznaczana dalej jako LSS). W rozdziale 5 zestawiono wyniki dla dwóch przypadków:
+Rozdział 2 zawiera przegląd definicji oraz niezbędnych faktów dotyczących teorii układów dynamicznych i chaosu deterministycznego wykorzystywanych w dalszych rozdziałach. W Rozdziale 3 przedstawiono wybrane metody klasyczne wyznaczania gradientu funkcji celu, na których bazują algorytmy optymalizacji lokalnej stosowane w technice.  Rozdział 4 prezentuje metodę najmniejszych kwadratów dla trajektorii cienia (ang. \textit{Least Squares Shadowing}, oznaczana dalej również jako LSS). W rozdziale 5 zestawiono wyniki dla dwóch przypadków:
+\begin{itemize}
+	\item układu Lorenza (1963),
+	\item dwuwymiarowego zagadnienia przepływowego, w którym geometrię stanowi kanał o skokowo zmiennej szerkości.
+\end{itemize}
 \newpage
 \newpage
 \section{Elementy teorii gładkich układów dynamicznych}
@@ -1092,7 +1098,6 @@ Wobec powyższego komplementacja Shura ma postać
 \end{equation}
 gdzie oie strony wyrażają się wzorami (\ref{LSS_v14}), (\ref{LSS_v16}) oraz (\ref{LSS_v17}). \newline
 Zauważmy na koniec, iż obie metody charakteryzuje ta sama macierz główna układu.
-\subsection{LSS - analiza zbieżności}
 \newpage
 \section{Implementacja metody LSS}
 W niniejszym rozdziale przedstawione zostały wyniki symulacji numerycznej dla dwóch scenariuszy:
@@ -1243,7 +1248,7 @@ U(x,t) = u(x,t) + \frac{1}{2}\frac{F(x,t)}{\rho(x,t)}.
 Dynamika w podejściu tej metody modelowana jest zatem dwustopniowo: pierwszy etap stanowi kolizja (reprezentowana operatorem kolizji), drugi zaś stanowi propagację funkcji rozkładu zgodnie z dyskretnymi kierunkami wybranych wektorów prędkości. W pracy operator kolizji jest aproksymowany dobrze rozpoznanym modelem BGK. Należy zwrócić uwagę, iż rozkład równowagowy jest wielomianowym przybliżeniem rozkładu Maxwella-Boltzmanna.\newline
 \subsubsection{Aspekty numeryczne}
 Zanim przejdziemy do omówienia wyników należy chwilę poświęcić na aspekty implementacyjne, gdyż dla zagadnień wielowymiarowych odgrywają one kluczową rolę. W typowych przypadkach przepływów mogą nawet zadecydować o możliwości wykorzystania danej metody.
-\subsubsection{Wyniki symulacji - pierwsze podejście}
+\subsubsection{Wyniki symulacji}
 Kształt obszaru obliczeniowego został zilustrowany na Rysunku
 \begin{figure}[H]
 	\includegraphics[scale=1.8]{figures/geometry.png} 
@@ -1282,13 +1287,6 @@ Odpowiadające im wartości wrażliwości ilustruje Rysunek.
 	\centering
 	\caption{Najlepiej dopasowana parabola na tle krzywej funkcji celu}
 \end{figure}
-Kolejną charakterystyką jest średni skumulowany spadek ciśnienia (tj. średni spadek ciśnienia liczony od początku do danej chwili), którego wykres dla pierwszych $ T = 100 $  kroków czasowych oraz dla parametru wlotowego $ u=0.1 $ przedstawia Rysunek.
-\begin{figure}[H]
-	\includegraphics[scale=0.7]{figures/mean_dp_100.png} 
-	\centering
-	\caption{Skumulowany średni spadek ciśnienia}
-\end{figure}
-Wspomnijmy przy okazji, iż ergodyczność układu oznacza w tym przypadku, że taki średni skumulowany spadek ciśnienia będzie asymptotycznie dążył do tej samej wartości niezależnie od początkowego pola funkcji rozkładu, które w tej pracy inicjalizowane są poprzez rozkład równowagowy.\newline
 Przebadane zostały trzy przypadki różniące się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne: w kierunku wlotu zastosowano podział na $ m=20 $ komórek, zaś w kierunku poziomym $ n=10m $.
 \paragraph{Liczba Reynoldsa: 200}
 Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio (rysunki zostały odpowiednio przeskalowane w kierunku osi pionowej dla przejrzystości poglądu).
@@ -1308,7 +1306,16 @@ Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kr
 	\includegraphics[scale=0.3]{figures/LBM/u0_05_4.png} 
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
 \end{figure}
-
+Dobrą charakterystyką jest średni skumulowany spadek ciśnienia (tj. średni spadek ciśnienia liczony od początku do danej chwili), którego wykres dla pierwszych $ T = 4000 $  kroków czasowych oraz dla parametru wlotowego $ u=0.05 $ przedstawia Rysunek.
+Wspomnijmy przy okazji, iż ergodyczność układu oznacza w tym przypadku, że taki średni skumulowany spadek ciśnienia będzie asymptotycznie dążył do tej samej wartości niezależnie od początkowego pola funkcji rozkładu, które w tej pracy inicjalizowane są poprzez rozkład równowagowy.\newline
+Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $ mają wartości
+\begin{equation}
+\begin{array}{rcl}
+grad\bar{J} &=& \\
+grad_{LSS}\bar{J} &=& 
+\end{array} 
+\label{result200}
+\end{equation}
 \paragraph{Liczba Reynoldsa: 400}
 Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
 \begin{figure}[H]
@@ -1327,6 +1334,15 @@ Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kr
 	\includegraphics[scale=0.3]{figures/LBM/u0_10_4.png} 
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
 \end{figure}
+Średni skumulowany spadek ciśnienia ilustruje Rysunek.
+Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $ mają wartości
+\begin{equation}
+\begin{array}{rcl}
+grad\bar{J} &=& \\
+grad_{LSS}\bar{J} &=& 
+\end{array} 
+\label{result400}
+\end{equation}
 \paragraph{Liczba Reynoldsa: 600}
 Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
 \begin{figure}[H]
@@ -1345,9 +1361,31 @@ Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kr
 	\includegraphics[scale=0.3]{figures/LBM/u0_15_4.png} 
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
 \end{figure}
+Średni skumulowany spadek ciśnienia ilustruje Rysunek.
+Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $ mają wartości
+\begin{equation}
+\begin{array}{rcl}
+grad\bar{J} &=& \\
+grad_{LSS}\bar{J} &=& 
+\end{array} 
+\label{result600}
+\end{equation}
 Kod zaimplementowany w języku C++ jest dostępny na publiczny repozytorium autora \cite{Marek2}.
 \newpage
 \begin{thebibliography}{99}
+
+\bibitem{Abramov} Abramov R., Majda A.,
+\emph{Blended response algorithms for linear fluctuation-dissipation for complex nonlinear dynamical systems},
+Nonlinearity, Vol. 20, No. 12, 2007, pp. 2793.
+	
+\bibitem{Bewley1} Bewley T.,
+\emph{Flow control: new challenges for a new Renaissance},
+Progress in Aerospace Sciences, Vol. 37, No. 1, 2001, pp. 21-58.
+
+\bibitem{Bewley2} Bewley T., Moin P., Temam R.,
+\emph{DNS-based predictive control of turbulence: an optimal target for feedback algorithms},
+J. Fluid Mech., Vol. 447, 2001, pp. 179-225.
+	
 \bibitem{Blonigan1} Blonigan P. J., Wang Q.,
 \emph{Probability density adjoint for sensitivity analysis of the mean chaos},
 Journal of Computational Physics, 235 (2014) 1-13.
@@ -1360,9 +1398,13 @@ in: 54th AIAA Aerosoace Sciences Meeting, January 2016, pp. 1-28.
 \emph{Least Squares Shadowing sensitivity analysis of a modified Kuramoto-Sivashinsky eqation},
 Chaos Solitons Fractals, 64, 2014, 16-25.
 
-\bibitem{Chandramoorthy} Chandramoorthy, N., Fernandez, P., Talnikar, C., Wang, Q. 2017 
+\bibitem{Chandramoorthy} Chandramoorthy N., Fernandez P., Talnikar C., Wang Q. 2017 
 \emph{An Analysis of the Ensemble Adjoint Approach to Sensitivity Analysis in Chaotic Systems} 
 AIAA Paper 2017-3799. 
+
+\bibitem{Cavaglieri} Cavaglieri D., Beyhaghi P., Bewley T.,  
+\emph{Low-storage IMEX Runge-Kutta schemes for the simulations of Navier-Stokes systems} 
+21st AIAA computational fluid dynamics conference, San Diego, CA, June 2013.
 
 \bibitem{Espinoza} Espinoza, Mayken 
 \emph{Compress effects on porosity, gas-phase tortuosity, and gas permeability in a simulated PEM gas diffusion layer},
@@ -1379,6 +1421,10 @@ Wydawnictwo: Zysk i S-ka, 2018.
 \bibitem{Golub} Golub G. H., Loan C. V. F.,
 \emph{Matrix Computations},
 The Johns Hopkins Univ. Press, Baltimore, 1996.
+
+\bibitem{Jameson} Jameson A.,
+\emph{Aerodynamic design via control theory},
+Journal of Scientific Computing 3 (1988) 233-260.
 
 \bibitem{Kudrewicz} Kudrewicz J., 
 \emph{Fraktale i chaos},
@@ -1440,6 +1486,14 @@ Westview Press, Philadelphia, PA, 1994.
 \emph{Teoria chaosu dla odważnych},
 Wydawnictwo: PWN, Warszawa 2002.
 	
+\bibitem{Thepaut} Thepaut J-N., Courtier P., 
+\emph{Four-dimensional variational data assimilation using the adjoint of a multilevel primitive-equation model},
+Quarterly Journal of the Royal Meteorological Society 117 (502) (1991) 1225-1254.
+
+\bibitem{Thuburn} Thuburn J.,
+\emph{Climate sensitivities via a Fokker-Planck adjoint approach},
+Quarterly Journal of the Royal Meteorological Society, Vol. 131, No. 605, 2005, pp. 73-92.
+
 \bibitem{Qiqi1} Wang Q.,
 \emph{Forward and adjoint sensitivity computation of chaotic dynamical systems},
 Journal of Computational Physics, 235 (2013) 1-13.
@@ -1451,6 +1505,10 @@ SIAM Journal of Numerical Analysis, Vol 52, No. 1, 2014, pp. 156-170.
 \bibitem{Qiqi3} Wang Q., 
 \emph{Least Squares Shadowing sensitivity analysis of chaotic limit cycle oscillations},
 Journal of Computational Physics, Vol. 267, June 2014, pp. 210-224.  
+
+\bibitem{Venditti} Venditti D., Darmofal D.,
+\emph{Grid adaptation for functional outputs: Application to two-dimensional inviscid flow},
+Journal of Computational Physics 176(2002) 4069.
 
 \bibitem{Encyclopedie}
 \emph{https://plato.stanford.edu/entries/chaos/},
