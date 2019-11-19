@@ -152,7 +152,8 @@ W ostatnich latach powstało kilka prac sugerujących sposób rozwiązania posta
 \subsection{Tło literaturowe badanego problemu}
 Opracowane do tej pory klasyczne metody estymacji czułości bazujące na wyznaczaniu gradientu funkcji celu pozostają nieskuteczne wobec istotnych z punktu widzenia techniki układów niestacjonarnych, których dynamika (silnie nieliniowa) przekłada się na praktycznie nieprzewidywalne zachowanie. Mówi się wówczas o układach chaotycznych (patrz Rozdział 2). Świetną pozycję opisującą historię odkryć takich układów, związane z nimi problemy oraz pierwsze próby ich matematycznego opisu stanowi książka \cite{Gleick}. Trudności polegające na załamaniu się klasycznych metod wyznaczania wrażliwości zotały po raz pierwszy zauważone w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) stanowiącego skrajnie uproszczony model termicznej konwekcji naturalnej w atmosferze. Ci sami autorzy w pracy \cite{Lea2} zaproponowali sposób regularyzacji poprzez uśrednianie całkowe w przestrzeni fazowej dla skal czasowych zdeterminowanych poprzez największą wartość wykładników Lyapunowa. Uzasadnienie takiego postępowania stanowi pozycja \cite{Ruelle1}, w której autor dowodzi poprawności sformułowania problemu (tj. pokazuje, że poszukiwana pochodna istnieje i jest ograniczona przy pewnych ogólnych założeniach) oraz podaje \textit{explicite} jej wzór. Podejście takie bez znaczących modyfikacji jest niepraktyczne ze względu na koszt numeryczny, co zostało pokazane w pracy \cite{Chandramoorthy}.\newline
 Innym podejściem jest próba rozwiązania równań Fokkera-Plancka odnoszących się do funckji gęstości prawdopodobieństwa zdefiniowanej na przestrzeni fazowej ujęte w pracy \cite{Thuburn}. Kontynuację tego podejścia można znaleść w pracy \cite{Blonigan1}. Dużym problemem jest regularność wspomniaej funkcji rozkładu - uzyskuje się ją poprzez dodanie sztucznego członu do równań wprowadzając tym samym błędy rozwiązań. Podobna procedura wykorzystuje Twierdzenie o Dyssypacji Fluktuacji \cite{Abramov}, jednakże zmaga się ona z analogicznymi problemami.\newline
-Pomysł Metody Trajektorii Cienia, stanowiącej główny obiekt zainteresowań w ramach niniejszej pracy, narodził się w ramach zdefiniowania Operatora Cienia w pracy \cite{Qiqi1}, w której autor rozwiązuje postawiony problem poprzez dekompozycję przestrzeni fazowej na wektory kowariantne Lyapunova. Takie rozwiązanie jest kosztowne w przypadku obecności wielu dodatnich wykładników Lyapunova, co jest cechą charakterystyczną układów chaotycznych. Pierwszą pracą, w której wspomniana metoda została formalnie zdefiniowana jest \cite{Qiqi3}. Analizę zbieżności zregularyzowanego w ten sposób rozwiązania ilustruje \cite{Qiqi2}. Przykład jej zastosowania w ramach równań Kuramoto-Shivashinsky zawiera praca \cite{Blonigan3}. Wyznaczenie wrażliwości dla dwuwymiarowego układu przepływowego zdyskretyzowanego równaniami RANS zawiera \cite{Blonigan2}.
+Pomysł Metody Trajektorii Cienia, stanowiącej główny obiekt zainteresowań w ramach niniejszej pracy, narodził się w ramach zdefiniowania Operatora Cienia w pracy \cite{Qiqi1}, w której autor rozwiązuje postawiony problem poprzez dekompozycję przestrzeni fazowej na wektory kowariantne Lyapunova. Takie rozwiązanie jest kosztowne w przypadku obecności wielu dodatnich wykładników Lyapunova, co jest cechą charakterystyczną układów chaotycznych. Pierwszą pracą, w której wspomniana metoda została formalnie zdefiniowana jest \cite{Qiqi3}. Analizę zbieżności zregularyzowanego w ten sposób rozwiązania ilustruje \cite{Qiqi2}. Przykład jej zastosowania w ramach równań Kuramoto-Shivashinsky zawiera praca \cite{Blonigan3}. Wyznaczenie wrażliwości dla dwuwymiarowego układu przepływowego zdyskretyzowanego równaniami RANS zawiera \cite{Blonigan2}. \newline
+Uproszczona wersja Metody Trajektorii Cienia po raz pierwszy pojawiła się w artykule \cite{Chater}, w której rolę funkcji odpowiadającej za dylatację czasu (zob. Rozdział 4) pełni z góry określona funkcja okienka, stanowiąca odpowiednio regularne jądro całkowe o zwartym nośniku. 
 \subsection{Układ pracy}
 Rozdział 2 zawiera przegląd definicji oraz niezbędnych faktów dotyczących teorii układów dynamicznych i chaosu deterministycznego wykorzystywanych w dalszych rozdziałach. W Rozdziale 3 przedstawiono wybrane metody klasyczne wyznaczania gradientu funkcji celu, na których bazują algorytmy optymalizacji lokalnej stosowane w technice.  Rozdział 4 prezentuje metodę najmniejszych kwadratów dla trajektorii cienia (ang. \textit{Least Squares Shadowing}, oznaczana dalej również jako LSS). W rozdziale 5 zestawiono wyniki dla dwóch przypadków:
 \begin{itemize}
@@ -1287,7 +1288,7 @@ Odpowiadające im wartości wrażliwości ilustruje Rysunek.
 	\centering
 	\caption{Najlepiej dopasowana parabola na tle krzywej funkcji celu}
 \end{figure}
-Przebadane zostały trzy przypadki różniące się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne: w kierunku wlotu zastosowano podział na $ m=20 $ komórek, zaś w kierunku poziomym $ n=10m $.
+Przebadane zostało pięć przypadków różniących się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne: w kierunku wlotu zastosowano podział na $ m=20 $ komórek, zaś w kierunku poziomym $ n=10m $.
 \paragraph{Liczba Reynoldsa: 200}
 Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio (rysunki zostały odpowiednio przeskalowane w kierunku osi pionowej dla przejrzystości poglądu).
 \begin{figure}[H]
@@ -1307,6 +1308,11 @@ Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kr
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
 \end{figure}
 Dobrą charakterystyką jest średni skumulowany spadek ciśnienia (tj. średni spadek ciśnienia liczony od początku do danej chwili), którego wykres dla pierwszych $ T = 4000 $  kroków czasowych oraz dla parametru wlotowego $ u=0.05 $ przedstawia Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/results/CumulatedPressureDrop200.png} 
+	\centering
+	\caption{Średni skumulowany spadek ciśnienia}
+\end{figure}
 Wspomnijmy przy okazji, iż ergodyczność układu oznacza w tym przypadku, że taki średni skumulowany spadek ciśnienia będzie asymptotycznie dążył do tej samej wartości niezależnie od początkowego pola funkcji rozkładu, które w tej pracy inicjalizowane są poprzez rozkład równowagowy.\newline
 Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $ mają wartości
 \begin{equation}
@@ -1335,6 +1341,11 @@ Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kr
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
 \end{figure}
 Średni skumulowany spadek ciśnienia ilustruje Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/results/CumulatedPressureDrop400.png} 
+	\centering
+	\caption{Średni skumulowany spadek ciśnienia}
+\end{figure}
 Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $ mają wartości
 \begin{equation}
 \begin{array}{rcl}
@@ -1362,6 +1373,11 @@ Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kr
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
 \end{figure}
 Średni skumulowany spadek ciśnienia ilustruje Rysunek.
+\begin{figure}[H]
+	\includegraphics[scale=0.7]{figures/results/CumulatedPressureDrop600.png} 
+	\centering
+	\caption{Średni skumulowany spadek ciśnienia}
+\end{figure}
 Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $ mają wartości
 \begin{equation}
 \begin{array}{rcl}
@@ -1398,13 +1414,17 @@ in: 54th AIAA Aerosoace Sciences Meeting, January 2016, pp. 1-28.
 \emph{Least Squares Shadowing sensitivity analysis of a modified Kuramoto-Sivashinsky eqation},
 Chaos Solitons Fractals, 64, 2014, 16-25.
 
+\bibitem{Cavaglieri} Cavaglieri D., Beyhaghi P., Bewley T.,  
+\emph{Low-storage IMEX Runge-Kutta schemes for the simulations of Navier-Stokes systems} 
+21st AIAA computational fluid dynamics conference, San Diego, CA, June 2013.
+
 \bibitem{Chandramoorthy} Chandramoorthy N., Fernandez P., Talnikar C., Wang Q. 2017 
 \emph{An Analysis of the Ensemble Adjoint Approach to Sensitivity Analysis in Chaotic Systems} 
 AIAA Paper 2017-3799. 
 
-\bibitem{Cavaglieri} Cavaglieri D., Beyhaghi P., Bewley T.,  
-\emph{Low-storage IMEX Runge-Kutta schemes for the simulations of Navier-Stokes systems} 
-21st AIAA computational fluid dynamics conference, San Diego, CA, June 2013.
+\bibitem{Chater} Chater M., Ni A., Wang Q., 
+\emph{Simplified Least Squares Shadowing sensitivity analysis for chaotic ODEs and PDEs},
+Journal of Computational Physics 329 (2017) 126-140.
 
 \bibitem{Espinoza} Espinoza, Mayken 
 \emph{Compress effects on porosity, gas-phase tortuosity, and gas permeability in a simulated PEM gas diffusion layer},
