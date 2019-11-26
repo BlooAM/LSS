@@ -160,7 +160,7 @@ Rozdział 2 zawiera przegląd definicji oraz niezbędnych faktów dotyczących t
 	\item układu Lorenza (1963),
 	\item dwuwymiarowego zagadnienia przepływowego, w którym geometrię stanowi kanał o skokowo zmiennej szerkości.
 \end{itemize}
-\newpage
+Rozdział 6 przedstawia omówienie wyników, a także konkluzje
 \newpage
 \section{Elementy teorii gładkich układów dynamicznych}
 Dla zrozumienia problemów związanych ze stabilnością układów ewoluujących w czasie konieczne jest zapoznanie się z nomenklaturą obowiązującą w matematycznym opisie takich układów. W rozdziale tym przedstawione zostały podstawowe definicje i fakty dotyczące zagadnień stabilności równań różniczkowych zwyczajnych oraz chaosu deterministycznego. Na wstępnie należy zaznaczyć, że nie należy mylić tego pojęcia z terminem chaotyczności przywołanym na wstępie pracy, który oznacza skomplikowane zachowanie rozwiązań i w ogólności nie musi zależeć od wartości wykładników Lyapunowa stanowiących formalne kryterium chaotyczności w sensie układów dynamicznych. Mimo że w tej pracy przedstawiona została między innymi metoda analizy wrażliwości na przykładzie układu Lorentza, który w istocie jest chaotyczny (dodatnie wykładniki Lyapunowa), celem zainteresowań będzie szersza klasa problemów, o których (w większości) nie ma informacji związanych z ich przynależnością do tej klasy problemów (w szczególności nie jest udowodniona chaotyczność układu równań Naviera-Stokesa). Zaproponowana metoda jest jednak dogodna do dużej klasy układów przejawiających skomplikowane zachowania, które w dalszej części pracy określa się mianem chaotycznych.\newline
@@ -176,14 +176,14 @@ z warunkiem początkowym
 \textbf{u}(0) = \textbf{u}_{s}
 \label{U1}
 \end{equation}
-gdzie $t\in(0,T]$ oznacza czas ($ T>0 $ - rozpatrywany okres),$ \textbf{s} $ oznacza wektor zmiennych decyzyjnych(w problemach optymalizacyjnych nazywany wektorem parametrów projektowych  - nie stanowi on zmiennej niezależnej, należy go traktować jako parametr), zaś $ \textbf{u}_{0} $ oznacza funkcję wektorową, której regularność uzależniona jest od struktury równania \ref{dyn_eq} (przykładowo w analizie równań Naviera-Stokesa przyjęlibyśmy założenie, że $ u_{0}\in V $, gdzie $ V $ oznacza domknięcie funkcji gładkich o zerowej dywergencji w odpowiedniej przestrzeni Sobolewa\footnote{Więcej informacji na ten temat Czytelnik znajdzie na przykład w [Teman]}). Autonomiczność układu oznacza, że jego prawa strona nie zależy \textit{explicite} od czasu $ t $.\newline
+gdzie $t\in(0,T]$ oznacza czas ($ T>0 $ - rozpatrywany okres),$ \textbf{s} $ oznacza wektor zmiennych decyzyjnych(w problemach optymalizacyjnych nazywany wektorem parametrów projektowych  - nie stanowi on zmiennej niezależnej, należy go traktować jako parametr), zaś $ \textbf{u}_{0} $ oznacza funkcję wektorową, której regularność uzależniona jest od struktury równania (\ref{dyn_eq}) (przykładowo w analizie równań Naviera-Stokesa przyjęlibyśmy założenie, że $ u_{0}\in V $, gdzie $ V $ oznacza domknięcie funkcji gładkich o zerowej dywergencji w odpowiedniej przestrzeni Sobolewa\footnote{Więcej informacji na ten temat Czytelnik znajdzie na przykład w \cite{Teman}}). Autonomiczność układu oznacza, że jego prawa strona nie zależy \textit{explicite} od czasu $ t $.\newline
 W tym momencie poczynione zostaną uwagi o charakterze technicznym, które pozostają w mocy do końca bieżącego rozdziału:
 \begin{itemize}
 	\item Równanie (\ref{dyn_eq}) jest w ogólności określone na przestrzeni funkcji (tj. na pewnej nieskończenie wymiarowej przestrzeni Banacha). Jednakże jakościowe warunki dotyczące istnienia i jednoznaczności rozwiązań takich równań zachodzą i w takich przypadkach (tj. twierdzenia: Peano oraz Picarda-Lindelöfa mają analogiczną postać do swoich skończenie wymiarowych odpowiedników).
 	\item Funkcję określoną na przestrzeni nieskończenie wymiarowej określa się często mianem operatora. W tej pracy konwencja ta nie będzie obowiązywała, aby nie zaciemniać istoty rzeczy.
 	\item Poprzez rozmaitość różniczkową $ M $ generowaną na pewnej przestrzeni Hilberta $ H $ rozumie się przestrzeń topologiczną Hausdorffa, w której każdy punkt ma otoczenie dyfeomorfincze z pewnym zbiorem otwartym w $ H$ (w przypadku skończenie wymiarowym każdy punkt ma otoczenie dyfeomorficzne z pewną kulą).
-	\item Metryka Riemanna jest w ogólności pojęciem bardzo abstrakcyjnym. Jej precyzyjna definicja wymaga pojęć takich jak: ..., których wprowadzanie pozostaje poza zakresem tej pracy. W związku z tym przedstawiona zostanie intuicja stojąca za tym pojęciem odsyłając zainteresowanego Czytelnika do literatury\footnote{Nonlinear Dynamical Systems Of Mathematical Physics: Spectral And Symplectic}
-	\item Pełne dookreślenie układu dynamicznego wymaga zdefiniowania niezmienniczej względem homeomorfizmu $ \textbf{f} $ miary. Oczywiście 'zwykła' miara Lebesgue'a nie jest odpowiednia ze względu na brak niezmienniczości (w większości przypadków objętości, pod wpływem dynamiki, redukują się do tworów niżej wymiarowych). W związku z czym wprowadzona została miara SRB (nazwa pochodzi od nazwisk jej twórców: Sinai, Ruelle, Bowen). Miara ta konieczna jest jedynie do zdefiniowania właśności układu zwaną ergodycznością, która zostanie wytłumaczona na gruncie intuicji, wobec czego formalna defnicja miary SRB nie zostanie sformułowana. Można ją znnaleść w pracach [].
+	\item Metryka Riemanna jest w ogólności pojęciem bardzo abstrakcyjnym. Jej precyzyjna definicja wymaga pojęcia kowariantnego pola tensorowego, którego wprowadzanie pozostaje poza zakresem tej pracy. W związku z tym przedstawiona zostanie intuicja stojąca za tym pojęciem odsyłając zainteresowanego Czytelnika do literatury \cite{Blackmore}, \cite{Maurin2}.
+	\item Pełne dookreślenie układu dynamicznego wymaga zdefiniowania niezmienniczej względem homeomorfizmu $ \textbf{f} $ miary. Oczywiście 'zwykła' miara Lebesgue'a nie jest odpowiednia ze względu na brak niezmienniczości (w większości przypadków objętości, pod wpływem dynamiki, redukują się do tworów niżej wymiarowych). W związku z czym wprowadzona została miara SRB (nazwa pochodzi od nazwisk jej twórców: Sinai, Ruelle, Bowen). Miara ta konieczna jest jedynie do zdefiniowania właśności układu zwaną ergodycznością, która zostanie wytłumaczona na gruncie intuicji, wobec czego formalna defnicja miary SRB nie zostanie sformułowana. Można ją znnaleść na przykład w pracy \cite{Ruelle1}.
 \end{itemize}
 Równanie (\ref{dyn_eq}) można interpretować jako ewolucję w czasie wielkości wektorowej, na przykład pola prędkości przy zadanych warunkach brzegowych, które w ogólności zależą od czasu, współrzędnych przestrzennych oraz od wektora zmiennych decyzyjnych:
 \begin{equation}
@@ -217,8 +217,7 @@ Tak zdefiniowana wiązka stanowi dziedzinę pochodnej odwzorowania $ \textbf{f} 
 	\centering
 	\caption{Wizualizacja pojęcia wiązki stycznej dla okręgu}
 \end{figure}
-Jednym z dwóch najważniejszych
-\\\\ założeń o rozpatrywanych układach dynamicznych jest możliwość dekompozycji ich przestrzeni fazowych na sumę prostą dwóch podprzestrzeni, których wektory cechują się podobnymi właściwościami dynamicznymi.
+Jednym z dwóch najważniejszych założeń o rozpatrywanych układach dynamicznych jest możliwość dekompozycji ich przestrzeni fazowych na sumę prostą dwóch podprzestrzeni, których wektory cechują się podobnymi właściwościami dynamicznymi.
 \begin{defi}\label{hyperbolic_set}
 	Powiemy, że zbiór $M_{ph}$ ma strukturę hiperboliczną, o ile istnieją zbiory $ E^{s},E^{u} \subseteq TM_{ph}$ (nazywane wiązką stabilną i niestabilną, odpowiednio) takie, że $ TM_{ph} = E^{s} \bigoplus E^{u}$ i spełniające warunki:
 	\begin{itemize}
@@ -227,8 +226,8 @@ Jednym z dwóch najważniejszych
 	\end{itemize}
 	Istnieją wówczas stałe $ \lambda \in (0,1), c \in (0,+\infty) $ takie, że:
 	\begin{itemize}
-		\item $ \| D\textbf{f}^{\ i}x_{s}\| \leq c\lambda^{i} \| x_{s}\|$ dla dowolnych $ x_{s} \in E^{s} $ oraz $ 0 < i \in \mathbb{N} $,
-		\item $ \| D\textbf{f}^{\ -i}x_{u}\| \leq c\lambda^{i} \| x_{u}\|$ dla dowolnych $ x_{u} \in E^{u} $ oraz $ 0 < i \in \mathbb{N} $.
+		\item $ \| D\textbf{f}^{\ i}x_{s}\|_{M} \leq c\lambda^{i} \| x_{s}\|_{M}$ dla dowolnych $ x_{s} \in E^{s} $ oraz $ 0 < i \in \mathbb{N} $,
+		\item $ \| D\textbf{f}^{\ -i}x_{u}\|_{M} \leq c\lambda^{i} \| x_{u}\|_{M}$ dla dowolnych $ x_{u} \in E^{u} $ oraz $ 0 < i \in \mathbb{N} $.
 	\end{itemize}
 \end{defi}
 Układ dynamiczny, którego przestrzeń fazowa ma strukturę hiperboliczną będzie nazywany układem hiperbolicznym. Ostatnie dwa warunki w Definicji grupują wektory przestrzeni stycznej ze względu na jakościowe zachowanie ich norm wraz z rozwojem układu. Jak się przekonamy w późniejszych rozdziałach jest to niezbędne założenie warunkujące użyteczność różnych metod regularyzacji pozwalających na wyznaczanie wrażliwości w rozważanych układach. \newline
@@ -269,11 +268,11 @@ Zauważamy, że położenie równowagi jest (stałym) rozwiązaniem równania (\
 \end{figure}
 Jak już zostało wspomniane narzucenie warunku początkowego w postaci punktu równowagi implikuje stałe rozwiązanie układu (\ref{dyn_eq}). Powstaje naturalne pytanie jak zachowują się rozwiązania owego układu dla warunków początkowych  $ \textbf{u}_{0} \in M_{ph}$ takich, że
 \begin{equation}
-	\| \textbf{u}_{c} - \textbf{u}_{0} \|_{X}  \leq \epsilon,
+	\| \textbf{u}_{c} - \textbf{u}_{0} \|_{M}  \leq \epsilon,
 \label{x_xc}
 \end{equation}
 gdzie $ \epsilon \in \mathbb{R}_{+} $.\newline
-Dla lepszego zrozumienia problemu oraz wytyczenia kierunku dalszych rozważań przytoczone zostaną dwa proste przykłady (w przypadku gdy $ M = \mathbb{R} $) ilustrujące zachowanie obrazu otoczenia punktów równowagi w przypadku zaburzenia warunków początkowych oraz przekształcenia $ \textbf{f} $ (poprzez perturbację wektora parametryzującego wspomnianą funkcję). \newline
+Dla lepszego zrozumienia problemu oraz wytyczenia kierunku dalszych rozważań przytoczony zostanie prosty przykład (w przypadku gdy $ M = \mathbb{R} $) ilustrujący zachowanie obrazu otoczenia punktów równowagi w przypadku zaburzenia warunków początkowych oraz przekształcenia $ \textbf{f} $ (poprzez perturbację wektora parametryzującego wspomnianą funkcję). \newline
 \begin{przyklad}\label{przyklad1}
 	Rozważmy układ postaci
 	\begin{equation}
@@ -300,12 +299,10 @@ Dla lepszego zrozumienia problemu oraz wytyczenia kierunku dalszych rozważań p
 	\end{figure}
 	Dla dowolnego punktu $ x_{0} \in (-1,1) $ odpowiadająca mu wartość funkcji $ f(x) = x^2-1 $ jest ujemna, wobec czego pochodna rozwiązania jest ujemna i w 'następnym kroku czasowym' będzie miało ono niższą wartość. Zostało to przedstawione za pomocą strzałki o grocie skierowanym w lewą stronę. Analogiczne rozumowanie pozwala dojść do wniosku, że dla $ x_{0} \in (-\infty,-1) \bigcup (1,\infty)$ rozwiązanie będzie zwiększało swoją wartość wraz z upływem czasu, co ilustrują strzałki skierowane w prawą stronę. Oczywiście dla  $ x_{0} = -1 $ lub $ x_{0} = 1 $ rozwiązanie nie będzie się zmieniało, ponieważ są to punkty równowagi. Na koniec zauważmy, że niewielka perturbacja pierwszego z tych punktów 'sprowadzi' rozwiązanie (po pewnym czasie) do warunku początkowego, podczas gdy dowolna zmiana drugiego punktu powoduje rozbieżność rozwiązania. Wobec tego punkty równowagi można podzielić na (lokalnie) stabilne ($ x_{0} = -1 $) i niestabilne ($ x_{0} = 1 $). Formalna definicja tych pojęć podana zostanie później w tym rozdziale.
 \end{przyklad}
-\begin{przyklad}
-\end{przyklad}
-Powyższe przykłady sugerują następującą definicję.
+Powyższy przykład sugeruje następującą definicję.
 \begin{defi}\label{stable_point}
 	Niech $ \bar{\textbf{u}} \in M_{ph} $ będzie rozwiązaniem układu (\ref{dyn_eq}). Powiemy, że jest ono stabilne w sensie Lyapunowa o ile $\forall \epsilon>0 \  \exists t_{0} \geq 0 \  \exists \eta>0 \  \forall t>t_{0}$ zachodzi implikacja:\newline
-\centerline {$ 	\|\bar{\textbf{u}}(t_{0}) - \textbf{u}(t_{0}) \|_{X}  \leq \eta \  \Rightarrow \ \|\bar{\textbf{u}}(t) - \textbf{u}(t) \|_{X}  \leq \epsilon$,}
+\centerline {$ 	\|\bar{\textbf{u}}(t_{0}) - \textbf{u}(t_{0}) \|_{M}  \leq \eta \  \Rightarrow \ \|\bar{\textbf{u}}(t) - \textbf{u}(t) \|_{M}  \leq \epsilon$,}
 gdzie symbolem $ \textbf{u} $ oznaczono dowolne rozwiązanie układu (\ref{dyn_eq}).\newline
 Ponadto jeśli \newline
 \centerline{$ \lim\limits_{t \rightarrow \infty}\|\bar{\textbf{u}}(t) - \textbf{u}(t) \|_{X} = 0$,}
@@ -430,7 +427,7 @@ Z powyższych ustaleń można dojść do wniosku, że o takim układzie niemalż
 		\item $\Lambda $ jest niezmienniczy względem $ \textbf{f} $, tj. $ \textbf{f}(\Lambda) \subset \Lambda $,
 		\item Istnieje zbiór otwarty $ U \subset M_{ph} $ taki, że
 		$\forall \textbf{u} \in M_{ph}$ zachodzi: \newline
-		$ \textbf{u}(0) \in U  \implies \lim\limits_{t->\infty} d(\Lambda, \textbf{u}(t))=0$, \newline gdzie przez $ d(,) $ oznaczono metrykę indukowaną przez normę w $ M_{ph} $,
+		$ \textbf{u}(0) \in U  \implies \lim\limits_{t->\infty} d(\Lambda, \textbf{u}(t))=0$, \newline gdzie przez $ d(,) $ oznaczono metrykę w $ M $,
 		\item $\Lambda$ jest minimalny w tym sensie, że żaden jego właściwy podzbiór nie spełnia powyższych dwóch warunków\footnote{Ze względu na trudności w dowodzeniu poprawności tego warunku w większości przypadków jest on pomijany.}.
 	\end{itemize}  
 \end{defi}
@@ -569,7 +566,7 @@ Ekperyment, który pozwolił odkryć to zjawisko miał za zadanie zbadać mechan
 	\centering
 	\caption{Schemat komórek Bernada}
 \end{figure}
-Pewną analogię stanowi tu mechaniczne zjawisko zwane wyboczeniem (analogiem sił jest tutaj oczywiście różnica temperatur, zaś samo zjawisko wyboczenia reprezentowane jest przez utratę stabilności cieczy). Pewne ilościowe wnioski na ten temat Czytelnik znajdzie w klasycznej pozycji [Lifszyc].\newline
+Pewną analogię stanowi tu mechaniczne zjawisko zwane wyboczeniem (analogiem sił jest tutaj oczywiście różnica temperatur, zaś samo zjawisko wyboczenia reprezentowane jest przez utratę stabilności cieczy). Pewne ilościowe wnioski na ten temat Czytelnik znajdzie w klasycznej pozycji \cite{Landau}.\newline
 Model matematyczny takiego zjawiska opisywany jest poprzez układ równań Naviera-Stokesa sprzężony z równaniem opisującym wymianę ciepła. Jest on zatem bardzo skomplikowany i w celu jego rozwiązania stosuje się pewne uproszczenia. Najprostszym może być przyjęcie nieskończonej długości naczynia, co implikuje brak wymiany ciepła wzdłuż rolek konwekcyjnych - model taki stanowi podstawę innego, bardzo znanego układu, którego autorem jest Edward Lorenz. Model ten jest sztandarowym przykładem układu o skomplikowanym zachowniu, zaś jego atraktor stał się symbolem teorii chaosu (Rysunek). Znacznie więcej informacji na temat układu Lorenza wraz z analizą wrażliwości funkcji zdefiniowanej dla tego systemu zawiera Rozdział.\newline
 Powyższe rozważania przekonują, iż do listy cech charakteryzujących każdy układ dynamiczny można dopisać dodatkowe dwie pozycje:
 \begin{itemize}
@@ -664,7 +661,6 @@ Niech dany będzie układ dynamiczny postaci (\ref{dyn_eq_discr}) i niech będą
 \forall{n \in \mathbb{N}} \thickspace \thickspace u_{n} \in U_{\delta}(u^{r}_{n}).
 \end{equation}
 \end{lem}
-Dowód szczególnej wersji tego lematu podany został w Rozdziale. \newline
 Dysponując już odpowiednią nomenklaturą oraz szerokim arsenałem technik możemy przyjrzeć się metodom poświęconym analizie czułości oraz dotrzeć do sedna postawionego problemu. 
 \newpage
 \section{Wybrane metody optymalizacji lokalnej stosowane w technice}
@@ -686,7 +682,7 @@ Metoda ta jest bardzo prosta w implementacji i dość łatwo pozwala kontrolowa�
 \frac{dJ}{ds}(s_{0}) \approx \frac{Im[J(s_{0}+i\epsilon)]}{\epsilon},
 \end{equation}
 gdzie $ Im $ oznacza część zespoloną, zaś $\epsilon$ jest liczbą rzeczywistą. Zabieg ten pozwala na separację badanego punktu przestrzeni parametrów oraz zaburzenia na dwa niezależne obiekty numeryczne, dzięki czemu problem błędów zaokrągleń zostaje wyeliminowany. Dokładność szacowanej pochodnej pozostaje ograniczona jedynie precyzją maszynową.
-\subsection{Metoda Tangent (???)}
+\subsection{Metoda Tangent}
 Idea tej metody polage na śledzeniu wrażliwości rozwiązania układu (\ref{dyn_eq}) w zależności od wektora parametrów projektowych. Zakładając odpowiednią regularność rozwiązania i funkcji $ f $ można formalnie zróżniczkować to równanie względem wektora $ s $. W wyniku otrzymujemy nowe równanie:
 \begin{equation}
 \frac{d{\textbf{v}}}{d{t}} = \frac{\partial{\textbf{f}}}{\partial{\textbf{u}}}\textbf{v} + \frac{\partial{\textbf{f}}}{\partial{\textbf{s}}}
@@ -1248,7 +1244,20 @@ U(x,t) = u(x,t) + \frac{1}{2}\frac{F(x,t)}{\rho(x,t)}.
 \end{equation}
 Dynamika w podejściu tej metody modelowana jest zatem dwustopniowo: pierwszy etap stanowi kolizja (reprezentowana operatorem kolizji), drugi zaś stanowi propagację funkcji rozkładu zgodnie z dyskretnymi kierunkami wybranych wektorów prędkości. W pracy operator kolizji jest aproksymowany dobrze rozpoznanym modelem BGK. Należy zwrócić uwagę, iż rozkład równowagowy jest wielomianowym przybliżeniem rozkładu Maxwella-Boltzmanna.\newline
 \subsubsection{Aspekty numeryczne}
-Zanim przejdziemy do omówienia wyników należy chwilę poświęcić na aspekty implementacyjne, gdyż dla zagadnień wielowymiarowych odgrywają one kluczową rolę. W typowych przypadkach przepływów mogą nawet zadecydować o możliwości wykorzystania danej metody.
+Zanim przejdziemy do omówienia wyników należy chwilę poświęcić na aspekty implementacyjne, gdyż dla zagadnień wielowymiarowych odgrywają one kluczową rolę. W typowych przypadkach przepływów mogą nawet zadecydować o możliwości wykorzystania danej metody.\newline
+W Rozdziale 4.3.1 wspomniane zostało, iż zarówno Metoda Tangent jak i Metoda Operatora Sprzężonego charakteryzują się tą samą macierzą główną dla układu KKT. Macierz ta ma strukturę opisaną wzorami (\ref{LSS_v16}) oraz (\ref{LSS_v17}). Zauważmy, że macierze $E_{i}, G_{i}$ są rzadkie (większość elementów ma zerową wartość), zaś $ f_{i} $ reprezentują wektory, które jednakże w ogólności nie są rzadkie. Ma to swoje poważne konsekwencje w odniesieniu do bloków diagonalny (bloki pod- i naddiagonalne opisane równaniami (\ref{LSS_v17}) są macierzami rzadkimi jako iloczn takich macierzy) - iloczyn $ f_{i}f_{i}^{T} $ jest  pełną macierzą kwadratową (przypominamy, że jej wymiar to wymiar zagadnienia $ m $). Bloków takich jest tyle ile jest kroków czasowych symulacji $ n $. W związku z tym, chcąc przechowywać macierz układu (w obydwu metodach) w pamięci, dostajemy dolne ograniczenie na ilość liczb zmiennopozycyjnych. Stosując notację \textit{dużego O} otrzymujemy
+\begin{equation}
+ N = O(m^{2}n).
+\label{no}
+\end{equation}
+Zakładając, iż wymiar zagadnienia zależy potęgowo od gęstości dyskretyzacji obszaru (kwadratowo w przypadku dwuwymiarowym oraz sześciennie dla sytuacji trójwymiarowej), oznaczając przez $ k $ średnią ilość punktów dyskretyzacji wzdłuż jednego wymiaru geometrycznego oraz także biorąc $ n = k $ mamy
+\begin{equation}
+N = O(k^{2d+1}),
+\label{no_v2}
+\end{equation}
+gdzie $ d = 2, 3$ oznacza ilość wymiarów geometrycznych. Dla uproszczenia przyjęliśmy, że każdy węzeł siatki obliczeniowej przechowuje jedną liczbę, co nie jest prawdą zarówno w przypadku zdyskretyzowanych równań Naviera-Stokesa jak i równań Boltzmanna.\newline Przyjmując dalej, iż liczba zmiennopozycyjna na typowej architekturze sprzętowej zajmuje $ 4 $ bajty oraz zakładając $ k=100 $ (co w przypadku dwuwymiarowym implikuje jedyne $ 10 000 $ węzłów) otrzymujemy szacunkową wartość $ N \approx 4\cdot 10^{10}$ bajtów, co oznacza, iż rozwiązując stosunkowo małe, dwuwymiarowe zagadnienie przepływowe (nieustalone) potrzebne jest ponad $ 36 $ GB pamięci. Dla symulacji trójwymiarowej sytacja jeszcze bardziej się komplikuje (tzw. \textit{klątwa wymiarowości}).\newline
+Powyższe szacunki pokazują, iż konieczna jest specjalna technika rozwiązywania układu, którego macierz opisywana jest równaniami (\ref{LSS_v16}) oraz (\ref{LSS_v17}). Wspomnieliśmy już, że jest to macierz symetryczna i dodatnio określona, więc jedną z pierwszych metod, która przychodzi na myśl jest Metoda Gradientów Sprzężonych (jako bardzo intuicyjna i stosunkowo prosta w implementacji). Wobec wspomnianej regularności macierzy jest ona w tym przypadku tożsama z popularną metodą \textit{GMRES} (ang. \textit{Generalized Minimal Residual}). Z założenia więc nie jest nam potrzebna macierz układu, a jedynie jej działanie na dowolny wektor zgodny z jej wymiarem. Potrzebujemy zatem funktora reprezentującego tę macierz (technika przynależąca do klasy metod tzw. \textit{matrix-free}).\newline
+Podejście takie wymaga prostych reguł wyznaczania współczynników takiej macierzy. W tym momencie pojawia się główny problem: zgodnie z definicjami macierzy $ E_{i}, G_{i} $, a także wektorów $ f_{i} $ zawierają one różnego rodzaju pochodne (patrz \ref{LSS_v10}). Ze względu na wymiary zagadnienia, a także na dokładność wyznaczanie ich w sposób numeryczny jest niesatysfakcjonujące. Ze względu na iteracyjny charakter układów dynamicznych różniczkowanie symboliczne również nie stanowi rozwiązania.\newline Pomysł polega na zastosowaniu automatycznego rózniczkowania, techniki stanowiącej niejako połączenie wspomnianów dwóch podejść. 
 \subsubsection{Wyniki symulacji}
 Kształt obszaru obliczeniowego został zilustrowany na Rysunku
 \begin{figure}[H]
@@ -1385,7 +1394,7 @@ Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ ora
 \begin{array}{rcl}
 grad\bar{J} &=& 6.99 \\
 grad_{LSS}\bar{J} &=& 6.12 \\
-\epsilon = 0.1245
+\epsilon &=& 0.1245
 \end{array} .
 \label{result400}
 \end{equation}
@@ -1418,7 +1427,7 @@ Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ ora
 \begin{array}{rcl}
 grad\bar{J} &=& 8.04 \\
 grad_{LSS}\bar{J} &=& 6.74 \\
-\epsilon = 0.1617 
+\epsilon &=& 0.1617 
 \end{array}.
 \label{results500}
 \end{equation} 
@@ -1455,6 +1464,7 @@ grad_{LSS}\bar{J} &=& 7.57 \\
 \end{array}.
 \label{result600}
 \end{equation}
+Kod zaimplementowany w języku C++ jest dostępny na publiczny repozytorium autora \cite{Marek2}.
 \section{Dyskusja wyników oraz wnioski}
 Zauważmy też, że wyniki tworzą silnie liniowy trend. Najlepiej dopasowana prosta pokazana na tle wyników (Rysunek) ilustruję tę uwagę.
 \begin{figure}[H]
@@ -1468,7 +1478,6 @@ r = \frac{cov(X,Y)}{\sigma_{X}\sigma_{Y}},
 \end{equation}
 która wynosi $ r = 0.9899 $ stanowi dodatkowe potwierdzenie ($ X, Y $ oznaczają zmienne losowe, w rozważanym przypadku są to: liczba Reynoldsa oraz wyznaczona wrażliwość, odpowiednio).\newline
 Powyższe uwagi są oczywiście efektem oczekiwanym, wobec parabolicznego charakteru funkcji celu.\newline
-Kod zaimplementowany w języku C++ jest dostępny na publiczny repozytorium autora \cite{Marek2}.
 \newpage
 \begin{thebibliography}{99}
 
@@ -1483,7 +1492,11 @@ Progress in Aerospace Sciences, Vol. 37, No. 1, 2001, pp. 21-58.
 \bibitem{Bewley2} Bewley T., Moin P., Temam R.,
 \emph{DNS-based predictive control of turbulence: an optimal target for feedback algorithms},
 J. Fluid Mech., Vol. 447, 2001, pp. 179-225.
-	
+
+\bibitem{Blackmore} Blackmore D., Prykarpatsky K. A., Samoylenko V. H.,
+\emph{Nonlinear Dynamical Systems Of Mathematical Physics: Spectral And Symplectic Integrability Analysis},
+Wydawnictwo: World Scientific, Singapore 2011.
+
 \bibitem{Blonigan1} Blonigan P. J., Wang Q.,
 \emph{Probability density adjoint for sensitivity analysis of the mean chaos},
 Journal of Computational Physics, 235 (2014) 1-13.
@@ -1527,6 +1540,10 @@ The Johns Hopkins Univ. Press, Baltimore, 1996.
 \bibitem{Jameson} Jameson A.,
 \emph{Aerodynamic design via control theory},
 Journal of Scientific Computing 3 (1988) 233-260.
+
+\bibitem{Landau} Landau L. D., Lifszyc J. M.,
+\emph{Hydrodynamika},
+Wydawnictwo: PWN, Warszawa 2009.
 
 \bibitem{Kudrewicz} Kudrewicz J., 
 \emph{Fraktale i chaos},
@@ -1587,6 +1604,10 @@ Westview Press, Philadelphia, PA, 1994.
 \bibitem{Tempczyk} Tempczyk M., 
 \emph{Teoria chaosu dla odważnych},
 Wydawnictwo: PWN, Warszawa 2002.
+
+\bibitem{Teman} Teman R., 
+\emph{Navier-Stokes Equations and Nonlinear Functional Analysis},
+Wydawnictwo: SIAM, Philadelphia 1983.
 	
 \bibitem{Thepaut} Thepaut J-N., Courtier P., 
 \emph{Four-dimensional variational data assimilation using the adjoint of a multilevel primitive-equation model},
