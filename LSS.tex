@@ -1261,7 +1261,7 @@ Podejście takie wymaga prostych reguł wyznaczania współczynników takiej mac
 Mając tak zdefiniowane liczby dualne można bez trudnu sprawdzić, iż dla wielomianu $ P \in $ zachodzi $ P(a + b\epsilon) = P(a) + bP’(a)\epsilon$, a więc  $ P(a + \epsilon) = P(a) + P’(a)\epsilon$.  W ogólności funkcje, które mają taką własność określane są mianem przestępnych. Aby więc policzyć pochodną funkcji przestępnej, wystarczy zbudować graf obliczeń (tak jak ma to miejsce w przypadku różniczkowania symbolicznego) z zaimplementowaną arytmetyką liczb dualnych, dzięki czemu ‘za jednym zamachem’ otrzymujemy wartość funkcji w rozważanym punkcie oraz jej pochodną tamże (arytmetyka symboliczna na grafie odpowiadającym funkcji jest dużo prostsza od generowania nowego grafu odpowiadającego jej pochodnej). \newline
 Metoda ta posiada podobną przypadłość do Metody Tangent – jest wrażliwa na funkcje o wielowymiarowej dziedzinie. Dla każdej zmiennej niezależnej trzeba bowiem ‘przejść’ po grafie aby wyznaczyć pochodną względem tej zmiennej (wartość samej funkcji jest redundantnie wyznaczana za każdym takim przejściem).  Również tutaj istnieje podobne rozwiązanie – analog Metody Operatora Sprzężonego (w swojej istocie jest to dokładnie to samo, tj. zadziałanie operatorem na rozważane przekształcenie) i nazywa się odwrotnym różniczkowaniem automatycznym.\newline
 Konkluzje są tutaj takie same – aby wyznaczyć pochodną w danym punkcie należy wyznaczyć wartość funkcji w tym punkcie, tj. przejście po grafie obliczeniowy w jego naturalnym kierunku, a następnie przejście w drugą stronę. Interesujące jest, iż mechanizm taki jest bardzo popularny w technikach uczenia maszynowego. W szczególności głębokie sieci neuronowe bazują na optymalizacji lokalnej, w której gradient wyznaczany jest wspomnianą metodą – jest to popularny algorytm wstecznej propagacji błędów (ang. Backpropagation algorithm). Co więcej techniki automatycznego różniczkowania wstecznego są stosowane w popularnych bibliotekach związanych z wspomnianym tematem (jako dobry przykład wystarczy wspomnieć otwartą bibliotekę TensorFlow autorstwa Google Brain Team). \newline
-Wracając do postawionego problemu można uznać, iż dysponując odpowiednimi narzędziami możliwe jest zaimplementowanie macierzy w formie funkcji – dalsze kroki procesu optymalizacyjnego przebiegają standardowo, zgodnie z Metodą Gradientów Sprzężonych, która została wykorzystana w niniejszej pracy. Automatyczne różniczkowanie jest wykonywane za pomocą otwartego silnika TAPENADE stworzonego przez grupę INRIA Sophia-Antipolis (zob. Dokumentacja []). Możemy już teraz przejść do analizy wyników symulacji numerycznej przedstawionych w następnym podrozdziale.
+Wracając do postawionego problemu można uznać, iż dysponując odpowiednimi narzędziami możliwe jest zaimplementowanie macierzy w formie funkcji – dalsze kroki procesu optymalizacyjnego przebiegają standardowo, zgodnie z Metodą Gradientów Sprzężonych, która została wykorzystana w niniejszej pracy. Automatyczne różniczkowanie jest wykonywane za pomocą otwartego silnika TAPENADE stworzonego przez grupę INRIA Sophia-Antipolis (zob. Dokumentacja \cite{Tapenade}). Możemy już teraz przejść do analizy wyników symulacji numerycznej przedstawionych w następnym podrozdziale.
 
 \subsubsection{Wyniki symulacji}
 Kształt obszaru obliczeniowego został zilustrowany na Rysunku
@@ -1283,6 +1283,7 @@ wobec czego przypadek ten często traktywany jest jako sprawdzian testowy dla r�
 Jako funkcję celu przyjęty został średni spadek ciśnienia między wlotem a wylotem, zaś jako parametr kontrolny przyjęty został moduł prędkości wlotowej (przyjęty został tłokowy rozkład prędkości na wlocie, zaś liczba kroków czasowych $ T = 4000 $):
 \begin{equation}
 \bar{J} = \frac{1}{T}\int_{0}^{T}(\hat{p}_{in}(t)-\hat{p}_{out}(t))dt,
+\label{J_numerical}
 \end{equation}
 gdzie $ \hat{p}_{in}(t) $ oraz $ \hat{p}_{out}(t) $ oznaczają średnie ciśnienie w chwili $ t $ na wlocie oraz wylocie, odpowiednio. Funkcja ta dla badanej geometrii w przypadku różnych prędkości $ u \in [0.05 ; 0.15]$ na wlocie została zilustrowana na Rysunku.
 \begin{figure}[H]
@@ -1477,7 +1478,7 @@ Wyniki symulacji dla układu Lorenza (1963) są zgodne z oczekiwaną wrażliwoś
 Rysunki ilustrują, że takowa liczona względem trajektorii cienia jest bardzo stabilna. Dodatkowo zauważmy, iż przebadany został dość obszerny zakres parametrów projektowych. 
 \subsection{Scenariusz drugi}
 Na początku zauważmy, że w każdym z przebadanych przypadków przyjęte założenie ergodyczności ma uzasadnienie (dostarczone wyniki nie dają podstaw, aby to założenie odrzucić) – skumulowane spadki ciśnień dążą bowiem asymptotycznie do stałych wartości (Rysunki).  Jest tak nawet pomimo różnych liczb Reynoldsa oraz wynikających z nich jakościowych zmian rozwiązań ilustrowanych poprzez mapy modułów prędkości (Rysunki). \newline
-Funkcja celu (\ref{}) dla średniego w czasie spadku ciśnienia ma character paraboliczny, co jest zgodne z danymi literaturowymi (na przykład []). Stanowi to wskazówkę, iż w odpowiadających analizowanym równaniom Boltzmanna równaniach Naviera-Stokesa człon nieliniowy nie mógłby zostać zlinearyzowany bez wprowadzania istotnych błędów. \newline
+Funkcja celu (\ref{J_numerical}) dla średniego w czasie spadku ciśnienia ma character paraboliczny, co jest zgodne z danymi literaturowymi (na przykład []). Stanowi to wskazówkę, iż w odpowiadających analizowanym równaniom Boltzmanna równaniach Naviera-Stokesa człon nieliniowy nie mógłby zostać zlinearyzowany bez wprowadzania istotnych błędów. \newline
 Dokładność wyników podsumowuje  poniższa tabela.
 Błąd względny rośnie wraz ze wzrostem liczby Reynoldsa. Obserwacja taka może być uzasadniona tym, że nieliniowości zaczynają dominować dynamikę zachowania rozwiązań i w związku z tym rośnie liczba niestabilnych modów Lyapunova. Rysunek ilustruje wykres błędu względnego w funkcji liczby Reynoldsa.
 Charakter paraboliczny wskazuje potencjalne problemy dla bardzo dużych liczb Reynoldsa. W takich przypadkach konieczne byłoby zastosowanie dłuższych okresów symulacji (poprzedni scenariusz sugeruje, iż taki zabieg ma działanie regularyzujące). \newline
@@ -1495,7 +1496,20 @@ r = \frac{cov(X,Y)}{\sigma_{X}\sigma_{Y}},
 która wynosi $ r = 0.9899 $ stanowi dodatkowe potwierdzenie ($ X, Y $ oznaczają zmienne losowe, w rozważanym przypadku są to: liczba Reynoldsa oraz wyznaczona wrażliwość, odpowiednio).\newline
 Powyższe uwagi są oczywiście efektem oczekiwanym, wobec parabolicznego charakteru funkcji celu.\newline
 \subsection{Konkluzje}
-Metoda Trajektorii Cienia w zaimplementowanej formie stanowi bardzo obiecujące narzędzie w analizie wrażliwości funkcji opisujących układy chaotyczne.  
+Metoda Trajektorii Cienia w zaimplementowanej formie stanowi bardzo obiecujące narzędzie w analizie wrażliwości funkcji opisujących układy chaotyczne. Sam algorytm, chociaż oparty na dość zaawansowanych wynikach z teorii chaosu, ma bardzo intuicyjną interpretację. Sformułowanie w formie zagadnienia minimalizacji formy całkowej z ograniczeniami w postaci prawa rządzącego dynamiką wrażlwości na parameter projektowy jest dobrze określone w przeciwieństwie do wyjściowego problemu, który przyjmuje postać zagadnienia początkowego. Skutkuje to dobrą zbieżnością rozwiązania związanego z nim układu równań. \newline
+Należy również zwrócić uwagę, iż metoda jest w pełni deterministyczna – w żadnym kroku nie są generowane liczby losowe (pseudolosowe), a więc wyniki dla tych samych danych wejściowych pozostają takie same. Odtwarzalność taka jest ważna w kontekście praktycznych zastosowań, a także ułatwia analizę zbieżności metody. Co więcej, wyniki niniejszej pracy pokazują, że rezultaty są numerycznie stabilne – niewielkie zmiany danych wejściowych nie powodują znacznych zmian w wynikach, a sama dokładność jest na stosunkowo wysokim poziomie. \newline
+Dalsze ograniczenia błędów można uzyskać poprzez wydłużenie okresu symulacji, co przeważnie ‘wygładza’ statystyki układu. Wniosek ten jak i możliwość zastosowania opisanej metody dotyczą szerokiego zakresu układów dynamicznych. Należy tutaj jednak stanowczo zaznaczyć, iż konieczne jest, aby układ taki był ergodyczny. Brak takiego założenia skutkuje w ogólności zależnością długookresowych średnich od warunków początkowych, co jest głównym powodem złego uwarunkowania zadania wyjściowego. \newline
+Wybór między metodą optymalizacji (Tangent lub też Metoda Operatora Sprzężonego) jest względnie prosty ze względu na tą samą macierz główną układu. Wspomniane zostało już, iż pierwsza z nich lepiej nadaje się do zagadnień, w któych wymiar wektora zmiennych decyzyjnych jest niski. Dla dużej liczby zmiennych projektowych Metoda Operatora Sprzężonego jest właściwszym wyborem. W przypadku pośrednim stosunkowo łatwo jest dobrać optymalną metodę poprzez ich porównanie wymagające jedynie zmiany wektora prawych stron, co z punktu widzenia istniejącej implementacji jest stosunkowo prostym zadaniem. \newline
+Dotychczasowe próby opisane w literaturze z punktu widzenia numerycznego zawsze polegały na przechowywaniu w pamięci macierzy głównej układu. W Rozdziale 5.2.4 pokazane zostało, że takie podejście jest bardzo kosztowne pod kątem pamięci operacyjnej. Eliminuje to użyteczność tej metody w większych zagadnieniach (w szczególności w przepływach trójwymiarowych). Stosowany tutaj pomysł polega na wykorzystaniu podejścia nie wymagającego przechowywania wspomnianej macierzy w pamięci (poprzez zaimplementowanie jej działania na dowolny wektor w postaci funktora) oraz technik automatycznego różniczkowania kodu (z wykorzystaniem otwartych bibliotek) do wyznaczenia współczynników takiej macierzy (narzędzia te nie generują błędów zaokrągleń, więc wyznaczane pochodne są bardzo dokłade – ograniczone jedynie precyzją maszynową). \newline
+Najistotniejszym elementem niniejszej pracy było zastosowanie Metody Trajektorii Cienia do zagadnienia przepływowego opisywanego równaniami Boltzmanna. W momencie pisania autor nie natknął się na inne tego typu próby. Niemniej praca ta daje podstawy, aby sądzić, iż jest to zadanie wykonalne, a uzyskane wyniki są obiecujące. Jest to o tyle ważne, ponieważ metoda dyskretyzacji równań ruchu płynu bazująca na podejściu Boltzmanna staje się coraz bardziej popularna ze względu na dobre własności numeryczne równań – w szczególności na możliwość masowej paralelizacji kodów obliczeniowych. 
+Oprócz wspomnianych zalet Metoda Trajektorii Cienia (jak każda inna) posiada wady. Patrząc krytycznym okiem można wspomnieć co najmniej kilka z nich:
+\begin{itemize}
+	\item Metoda jest trudna do zastosowania w gotowych kodach obliczeniowych ze względu na konieczność zróżniczkowania kodu (w przeciwnym przypadku zajętość pamięci jest nieakceptowalnie wysoka).
+	\item Pomimo istotnego ograniczenia wymaganej pamięci operacyjnej wciąż mogą pojawić się problemy dla naprawdę dużych zagadnień. Nadal bowiem konieczne jest przechowywanie całej trajektorii układu.
+	\item Innym problemem wspomnianym na przykład w pracach \cite{Chandramoorthy2}, \cite{Chandramoorthy3} jest wybór trajektorii, która jest niereprezentatywna ze względu na zaburzenie. Kłopot tkwi w tym, że wszystkie wspomniane własności (patrz Rozdział 2) zachodzą w sensie odpowiedniej miary, tj. nie zachodzą na zbiorach, których ta miara jest zerowa. Na przykład wspomniane juz w Rozdziale 2. trajektorie okresowe charakteryzują się takimi własnościami. Wybierając taką trajektorię nie mamy gwarancji regularnego jej zachowania. W pracy [] odnaleziono przykłady, w których taki zbiór (miary zero) jest gęsty w całej przestrzeni, co zwiększa szansę na wybór niereprezentatywnej trajektorii.
+\end{itemize}
+Wszystkie powyższe mankamenty wymagają dodatkowych badań. Obiecującym rozwiązaniem może okazać się na przykład podejście hybrydowe. Polega ono na połączeniu Metody Trajektorii Cienia z klasą metod opartych na uśrednianiu w przestrzeni całkowej. Przykład takiego algorytmu, który w istocie bazuje na rozbiciu przestrzeni fazowej – S3 (ang. Space Split Sensitivity algorithm) zaprezentowany jest w pracach \cite{Chandramoorthy2} oraz \cite{Chandramoorthy3}.
+	  
 \newpage
 \begin{thebibliography}{99}
 
@@ -1531,9 +1545,18 @@ Chaos Solitons Fractals, 64, 2014, 16-25.
 \emph{Low-storage IMEX Runge-Kutta schemes for the simulations of Navier-Stokes systems} 
 21st AIAA computational fluid dynamics conference, San Diego, CA, June 2013.
 
-\bibitem{Chandramoorthy} Chandramoorthy N., Fernandez P., Talnikar C., Wang Q. 2017 
+\bibitem{Chandramoorthy} Chandramoorthy N., Fernandez P., Talnikar C., Wang Q. 
 \emph{An Analysis of the Ensemble Adjoint Approach to Sensitivity Analysis in Chaotic Systems} 
 AIAA Paper 2017-3799. 
+
+\bibitem{Chandramoorthy2} Chandramoorthy N., Wang Z. N., Tucker P.,
+\emph{Toward computing sensitivities of average
+quantities in turbulent flows},
+Center for Turbulence Research, 2018.
+
+\bibitem{Chandramoorthy3} Chandramoorthy N., Wang Q.,
+\emph{Sensitivity computation of statistically stationary quantities in turbulent flows}
+Massachusetts Institute of Technology, Cambridge, MA, 02139.
 
 \bibitem{Chater} Chater M., Ni A., Wang Q., 
 \emph{Simplified Least Squares Shadowing sensitivity analysis for chaotic ODEs and PDEs},
@@ -1554,6 +1577,10 @@ Wydawnictwo: Zysk i S-ka, 2018.
 \bibitem{Golub} Golub G. H., Loan C. V. F.,
 \emph{Matrix Computations},
 The Johns Hopkins Univ. Press, Baltimore, 1996.
+
+\bibitem{Tapenade} Hascoet L., Pascual V.,
+\emph{TAPENADE 2.1 user’s guide},
+HAL Id: inria-00069880
 
 \bibitem{Jameson} Jameson A.,
 \emph{Aerodynamic design via control theory},
