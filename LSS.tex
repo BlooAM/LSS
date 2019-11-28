@@ -211,11 +211,12 @@ W dalszym ciągu pracy o przestrzeni fazowej $ M_{ph} $ zakłada się, iż ma od
 \begin{defi}\label{tan_bundle}
 	Wiązką styczną $ TM_{ph} $ do przestrzeni fazowej $M_{ph} \subseteq M $ nazywamy rodzinę przestrzeni stycznych $  TM_{ph} = \{ (x,y) | x \in M_{ph} , y \in T_{x} M_{ph}\} $.
 \end{defi}
-Tak zdefiniowana wiązka stanowi dziedzinę pochodnej odwzorowania $ \textbf{f} $, tj. $ D\textbf{f}:TM_{ph} \mapsto TM_{ph}  $. Wizualizację wiązki stycznej dla prostych kształtów geometrycznych ilustruje Rysunek.
+Tak zdefiniowana wiązka stanowi dziedzinę pochodnej odwzorowania $ \textbf{f} $, tj. $ D\textbf{f}:TM_{ph} \mapsto TM_{ph}  $. Wizualizację wiązki stycznej dla prostych kształtów geometrycznych ilustruje Rysunek (\ref{Fig1}).
 \begin{figure}[H]
 	\includegraphics[scale=0.2]{figures/tan_bundle.png} 
 	\centering
 	\caption{Wizualizacja pojęcia wiązki stycznej dla okręgu}
+	\label{Fig1}
 \end{figure}
 Jednym z dwóch najważniejszych założeń o rozpatrywanych układach dynamicznych jest możliwość dekompozycji ich przestrzeni fazowych na sumę prostą dwóch podprzestrzeni, których wektory cechują się podobnymi właściwościami dynamicznymi.
 \begin{defi}\label{hyperbolic_set}
@@ -242,7 +243,7 @@ gdzie $ J(u;s) $ oznacza chwilową wartość funkcji będącej obiektem zaintere
 \label{J_bar_approx}
 \end{equation}
 gdzie $ \Delta T $ oznacza przyjętą (odpowiednio dużą) długość okresu uśredniania,  $ (T_{i+1}-T_{i}) $ określa długość kroku czasowego w danym kroku (przyjęty został w tym przypadku schemat trapezów dla całkowania numerycznego).\newline
-Aby zastosować odpowiedni aparat matematyczny w dalszym ciągu rozpatrywana będzie formuła postaci (\ref{J_bar}) pozostawiając jej numeryczną realizację (\ref{J_bar_approx}) na moment opisu implementacji odpowiedniej metody. Poprzez wrażliwość tak zdefiniowanej funkcji będziemy rozumieli jej gradient względem wektora parametrów $ \textbf{s} $. Klasyczne metody wyznaczania takiej wielkości przedstawione zostały w Rozdziale, zaś problemy z nich wynikające przy aplikacji do układów chaotycznych wyjaśnia Rozdział. Należy przy tym zaznaczyć, że aby cały ten aparat mógł być użyty należy przyjąć kolejne, bardzo istotne założenie dotyczące ropatrywanego układu, które będzie rzutowało na regularność takiej funkcji: ergodyczność systemu.
+Aby zastosować odpowiedni aparat matematyczny w dalszym ciągu rozpatrywana będzie formuła postaci (\ref{J_bar}) pozostawiając jej numeryczną realizację (\ref{J_bar_approx}) na moment opisu implementacji odpowiedniej metody. Poprzez wrażliwość tak zdefiniowanej funkcji będziemy rozumieli jej gradient względem wektora parametrów $ \textbf{s} $. Klasyczne metody wyznaczania takiej wielkości przedstawione zostały w Rozdziale, zaś problemy z nich wynikające przy aplikacji do układów chaotycznych wyjaśnia Rozdział 4. Należy przy tym zaznaczyć, że aby cały ten aparat mógł być użyty należy przyjąć kolejne, bardzo istotne założenie dotyczące ropatrywanego układu, które będzie rzutowało na regularność takiej funkcji: ergodyczność systemu.
 \begin{defi}\label{ergodicity}
 Niech dany będzie układ dynamiczny $  \textbf{f}: M_{ph} \mapsto M_{ph}$ z niezmienniczną miarą $\mu$. O przekształceniu $  \textbf{f}$ powiemy, że jest ergodyczne o ile dla każdego zbioru mierzalnego $ A \subset M_{ph} $ zachodzi implikacja 
 $ T^{-1}(A) = A  \implies \mu(A)=0$ lub $\mu(M_{ph}-A)=0$.
@@ -255,16 +256,18 @@ Zagadnienie stabilności związane jest z odpowiedzią na pytanie jak zmieni si�
 \begin{defi}\label{crit_points}
 	Punkt $ \textbf{u}_{c} \in M_{ph}$ nazywamy położeniem równowagi równania (\ref{dyn_eq}), o ile jest to punkt krytyczny odwzorowania $ \textbf{f} $, tzn. $ \textbf{f}(u_{c}) = 0 $.
 \end{defi}
-Zauważamy, że położenie równowagi jest (stałym) rozwiązaniem równania (\ref{dyn_eq}) z takim samym warunkiem początkowym. Punkty takie jakościowo mogą istotnie się różnić ze względu na ewolucję w czasie swojego otoczenia. Ilustrację tej uwagi stanowi Rysunek przedstawiający ideę stabilnych  punktów równowagi oraz analogiczny Rysunek dla punktów niestabilnych (pojęcia te i ich znaczenie jest analogiczne dla rodzajów równowagi termodynamicznej: trwałej i chwiejnej, odpowiednio).
+Zauważamy, że położenie równowagi jest (stałym) rozwiązaniem równania (\ref{dyn_eq}) z takim samym warunkiem początkowym. Punkty takie jakościowo mogą istotnie się różnić ze względu na ewolucję w czasie swojego otoczenia. Ilustrację tej uwagi stanowi Rysunek (\ref{Fig2}) przedstawiający ideę stabilnych  punktów równowagi oraz analogiczny Rysunek (\ref{Fig3}) dla punktów niestabilnych (pojęcia te i ich znaczenie jest analogiczne dla rodzajów równowagi termodynamicznej: trwałej i chwiejnej, odpowiednio).
 \begin{figure}[H]
 	\includegraphics[scale=0.2]{figures/stable_equilibrium.png}
 	\centering
 	\caption{Ilustracja stabilnego punktu równowagi}
+	\label{Fig2}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.2]{figures/unstable_equilibrium.png} 
 	\centering
 	\caption{Ilustracja niestabilnego punktu równowagi}
+	\label{Fig3}
 \end{figure}
 Jak już zostało wspomniane narzucenie warunku początkowego w postaci punktu równowagi implikuje stałe rozwiązanie układu (\ref{dyn_eq}). Powstaje naturalne pytanie jak zachowują się rozwiązania owego układu dla warunków początkowych  $ \textbf{u}_{0} \in M_{ph}$ takich, że
 \begin{equation}
@@ -291,11 +294,12 @@ Dla lepszego zrozumienia problemu oraz wytyczenia kierunku dalszych rozważań p
 	C = \frac{1}{2}ln\frac{1-x_{0}}{1+x_{0}}.
 	\end{equation}	
 	Zauważmy jednak, że powyższy wzór ma sens jedynie w przypadku, gdy $ x_{0} \in (-1,1) $. Dla $ x_{0} = -1 $ lub $ x_{0} = 1 $ otrzymujemy stałe rozwiązanie równe $ x_{0} $ (punkt równowagi), zaś przypadek, gdy $ \| {x_{0}}\| > 1 $ należy rozpatrzeć osobno.\newline 
-	Powyższa analiza pokazuje, że jakościowe badanie równań wymaga dodatkowych technik (nawet w przypadku obecności analitycznego rozwiązania). Dużo lepsze efekty uzyskuje się poprzez podejście geometryczne z użyciem tzw. \textit{portretów fazowych}. Otrzymuje się je poprzez zwizualizowanie funkcji zadającej dynamikę w rozpatrywanym układzie. Następnie analizuje się ewolucję dowolnego punktu reprezentującego warunek początkowy w zależności od znaku funkcji. Idea ta została przedstawiona na Rysunku.
+	Powyższa analiza pokazuje, że jakościowe badanie równań wymaga dodatkowych technik (nawet w przypadku obecności analitycznego rozwiązania). Dużo lepsze efekty uzyskuje się poprzez podejście geometryczne z użyciem tzw. \textit{portretów fazowych}. Otrzymuje się je poprzez zwizualizowanie funkcji zadającej dynamikę w rozpatrywanym układzie. Następnie analizuje się ewolucję dowolnego punktu reprezentującego warunek początkowy w zależności od znaku funkcji. Idea ta została przedstawiona na Rysunku (\ref{Fig4}).
 	\begin{figure}[H]
 		\includegraphics[scale=0.7]{figures/example1.png} 
 		\centering
 		\caption{Portret fazowy układu z Przykładu 1}
+		\label{Fig4}
 	\end{figure}
 	Dla dowolnego punktu $ x_{0} \in (-1,1) $ odpowiadająca mu wartość funkcji $ f(x) = x^2-1 $ jest ujemna, wobec czego pochodna rozwiązania jest ujemna i w 'następnym kroku czasowym' będzie miało ono niższą wartość. Zostało to przedstawione za pomocą strzałki o grocie skierowanym w lewą stronę. Analogiczne rozumowanie pozwala dojść do wniosku, że dla $ x_{0} \in (-\infty,-1) \bigcup (1,\infty)$ rozwiązanie będzie zwiększało swoją wartość wraz z upływem czasu, co ilustrują strzałki skierowane w prawą stronę. Oczywiście dla  $ x_{0} = -1 $ lub $ x_{0} = 1 $ rozwiązanie nie będzie się zmieniało, ponieważ są to punkty równowagi. Na koniec zauważmy, że niewielka perturbacja pierwszego z tych punktów 'sprowadzi' rozwiązanie (po pewnym czasie) do warunku początkowego, podczas gdy dowolna zmiana drugiego punktu powoduje rozbieżność rozwiązania. Wobec tego punkty równowagi można podzielić na (lokalnie) stabilne ($ x_{0} = -1 $) i niestabilne ($ x_{0} = 1 $). Formalna definicja tych pojęć podana zostanie później w tym rozdziale.
 \end{przyklad}
@@ -403,11 +407,12 @@ Z przykładu tego można łatwo uogólnić następujący wniosek: w przypadku je
 		\item orbitę okresową $ u_{1}^1 + u_{2}^2 = 1 $,
 		\item orbity spiralne 'nawijające' się od zewnątrz i od wewnątrz na orbitę okresową.
 	\end{itemize}
-	Zostały one zilustrowane na Rysunku, gdzie pogrubioną linią zaznaczono trajektorię okresową.
+	Zostały one zilustrowane na Rysunku (\ref{Fig5}), gdzie pogrubioną linią zaznaczono trajektorię okresową.
 	\begin{figure}[H]
 		\includegraphics[scale=0.7]{figures/example4.png} 
 		\centering
 		\caption{Trajektorie rozważanego układu}
+		\label{Fig5}
 	\end{figure}
 \end{przyklad}
 Z powyższych przykładów łatwo można dojść do wniosku, że analiza trajektorii w przestrzeni fazowej jest dużo łatwiejsza niż badanie nieskończonej (być może nieprzeliczalnej) liczby rozwiązań danego układu. Dysponując już odpowiednim aparatem pojęciowym możemy przejść do analitycznego ujęcia zjawiska chaosu.
@@ -445,16 +450,18 @@ Patrząc na dotychczas omówione przkłady można dojść do wniosku, że różn
 	\begin{equation}
 	x(0) = x_{0},
 	\end{equation}
-	gdzie $ a \in \mathbb{R} $. Zauważmy, że kształt krzywej obrazującej funkcję prawej strony pozostaje niezmienny - zmieniają się jedynie punkty przecięcia z osiami współrzędnych. Dla $ a > 0 $ sytuacja odpowiada Rysunkowi (z dokładnością do miejsc zerowych). Odpowiadające portrety dla $ a = 0 $ oraz $ a = -1 $ przedstawione zostały na Rysunku, odpowiednio.
+	gdzie $ a \in \mathbb{R} $. Zauważmy, że kształt krzywej obrazującej funkcję prawej strony pozostaje niezmienny - zmieniają się jedynie punkty przecięcia z osiami współrzędnych. Dla $ a > 0 $ sytuacja odpowiada Rysunkowi (z dokładnością do miejsc zerowych). Odpowiadające portrety dla $ a = 0 $ oraz $ a = -1 $ przedstawione zostały na Rysunkach (\ref{Fig6}) oraz (\ref{Fig7}), odpowiednio.
 	\begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/example5a.png} 
 	\centering
 	\caption{Portret fazowy układu z Przykładu 5 dla a=0}
+	\label{Fig6}
 	\end{figure}
 	\begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/example5b.png} 
 	\centering
 	\caption{Portret fazowy układu z Przykładu 5 dla $ a<0 $}
+	\label{Fig7}
 	\end{figure}
 Zauważmy co stało się z punktami stabilnymi (w świetle nowo wprowadzonej nomenklatury możemy nazwać je również atraktorami, chociaż pojęcie to zarezerwowane jest dla bardziej skomplikowanych geometrycznie zbiorów). Wraz ze zmniejszaniem się parametru $ a $ punkty stabilne zbiegały do zera z różnych stron, aż w granicznym przypadku $ a=0 $ scaliły się w jednym miejscu. Należy zwrócić uwagę, że taki nazywany jest punktem częściowo stabilnym (przyciąga punkty ze swojego lewostronnego otoczenia i odpycha te z prawej strony, co symbolizują strzałki o zgodnie skierowanych grotach). Dalsze zmniejszanie parametru powoduje zanik punktów stabilnych - rozwiązanie z dowolnym warunkiem początkowym pozostaje niestabilne w sensie Lyapunowa. 
 \end{przyklad}
@@ -472,11 +479,12 @@ f(u_{n}) = ru_{n}(1-u_{n}),
 gdzie $ r \in \mathbb{R} $. Jest to tzw. \textit{odwzorowanie logistyczne} (zauważmy przy okazji, iż $ f $ jest nieliniową funkcją swojego argumentu). Połóżmy dodatkowo $ r \in [0,4] $. Łatwo wówczas zauważyć, że $ f([0,1]) = [0,1] $. Dodatkowo, dla $ r\in (0,1] $ punkt $ u^{*} = 0 $ jest atraktorem, zaś jego basenem atrakcji jest cały przedział $ [0,1] $, w związku z tym wszystkie trajektorie zbiegają do tego punktu, bez względu na wartość warunku początkowego $ u_{0} $, co nie stanowi interesującego nas zachowania. Załóżmy więc, że $ r>1 $. Zauważmy natychmiast, że $ u^{*} = 0 $ stanowi w oczywisty sposów punkt stały tego odwzorowania. Dodatkowo, dla $ r>1 $ pojawia się kolejny: $ u^{**} = 1-\frac{1}{r} $. Punkty takie mogą stanowić atraktor o ile 'przyciągają' punkty z pewnego swojego otoczenia, co praktycznie oznacza, iż pochodna w tym punkcie ma moduł mniejszy od jedności. Pochodna funkcji logistycznej wyraża się wzorem $ f'(u) = r(1-2u) $, w związku z czym $ u^{*} = 0 $ nie jest atraktorem ($ r>1 $), zaś $ u^{**} = 1-\frac{1}{r} $ spełnia ten warunek dla $ 1<r<3 $. Atraktor ten 'przesuwa' się wraz ze zmianą wartości parametru kontrolnego $ r $ od $ u^{**} = 0 $ do wartości $ u^{**} = \frac{2}{3} $. \newline
 Dla  $ r>3 $ punkt $ u^{**} = 1-\frac{1}{r} $ nadal jest punktem stałym, jednakże pochodna nie spełnia wspomnianego warunku i punkt ten 'odpycha' punkty z dowolnego swojego otoczenia. Pojawia się wówczas dwuelementowy cykl przyciągający, tj. dwa punktu $ u_{1}, u_{2} $ wzajemnie przekształcane na siebie, przy czym każdy punkt w ich otoczeniu po dwóch iteracjach zbliża się do takiego cyklu (oba te punkty stają się atraktorami odwzorowanie złożonego $ f(f(u)) $). Taka sytuacja jest obecna przy warunku $ 3<r<1+\sqrt{6} $. Po przekroczeniu prawej nierówności sytuacja się powtarza i powstaje atraktor czteroelementowy. Punkty z sąsiedztwa 'skaczą' po coraz to bliższych otoczeniach elementów tego atraktora, zachowując przy tym zawsze tę samą kolejność (i znów otrzymujemy pojedynczy atraktor dla złożenia $ f(f(f(f(u)))) $).\newline
 Sytuacja ta pojawia się coraz częściej (wraz ze zmianą parametru $ r $), przy czym liczba elementów atraktora podwaja się za każdym razem i zawsze stanowi on jednoelementowy atraktor złożenia funkcji $ f $ $ 2^{n} $ razy ze sobą. \newline
-Zachowanie takie jest jednak wciąż przewidywalne (w pewnym sensie). Sytuacja zmienia się dla granicznej wartości \cite{Tempczyk} $ r_{\inf} \approx 3,5699456 $. Przypadek ten charakteryzuje się cyklem o nieskończonej liczbie elementów, zaś przekroczenie tej wartości powoduje prawdziwy chaos - pojawiają się cykle o dowolnej liczbie elementów, a także odcinki, odcinki pozbawione atraktorów. Pełny diagram bifurkacji ilustruje Rysunek.
+Zachowanie takie jest jednak wciąż przewidywalne (w pewnym sensie). Sytuacja zmienia się dla granicznej wartości \cite{Tempczyk} $ r_{\inf} \approx 3,5699456 $. Przypadek ten charakteryzuje się cyklem o nieskończonej liczbie elementów, zaś przekroczenie tej wartości powoduje prawdziwy chaos - pojawiają się cykle o dowolnej liczbie elementów, a także odcinki, odcinki pozbawione atraktorów. Pełny diagram bifurkacji ilustruje Rysunek (\ref{Fig8}).
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/Feigenbaum.png} 
 	\centering
 	\caption{Diagram bifurkacji Feigenbauma}
+	\label{Fig8}
 \end{figure}
 Dla $ r=4 $ otrzymujemy jednorodny chaos - iteracje pokrywają odcinek $ [0,1] $.\newline
 Podsumowujac powyzsze rozwazania mozna stwierdzic, iż pierwsze pojawienie sie bifurkacji ($ r = 1$) pozwoliło na 'kontrolowaną' zmianę jakosciową rozwiazań rozważanego równania. Kolejne bifurkacje (poczynając od $ r = 3$) pojawiające się z coraz wiekszą czestotliwoscią doporowadziły do chaosu poprzez tzw. podwajanie chaosu (z tym też zwiazana jest etymologia słowa bifurkacja - rozgałezienie siś jakieś całości na dwie czśsci [przypis]). W ramach prac nad tym (wyjątkowo prosto wyglądającym) procesem iteracyjnym wykryto wiele prawidłowosci. Najwazniejszą z nich jest tzw. stała Feigenbauma. Wyraża ona stosunek odległosci od kolejnych punktów bifurkacji (dla $r>3$). Interesującym jest fakt, że analogiczna stała (wraz z zachowaniem sie ukladu odwzorowan) o tej samej wartości jest obecna dla innych postaci funkcji $f$ (np dla $ f(u_{n}) = rsin(u_{n})$).Jest to przesłanka, iż mechanizm ten jest w pewnym stopniu uniwersalny. Po dokładniejszym zbadaniu okazuje się, iż w istocie jest to uniwersalna stała gładkich układów dynamicznych, których (skalarna) funkcja dynamiki jest unimodalna w rozważanym przedziale określoności.
@@ -489,11 +497,12 @@ Wspomniane bifurkacje Feigenbauma stanowią klasyczny przykład dla układów dy
 \end{array}
 \end{equation}
 Jest to równanie ruchu obrotowego punktu w płaszczyźnie ($ \omega $ stanowi prędkość obrotową, $ r $ to promień, $ \phi $ kąt tworzącej z ustaloną półosią układu współrzędnych, zaś $ \lambda  $ to parametr kontrolny). Zauważmy przy okazji, że układ ten to ogólniejszy przypadek dla Przykładu 4, w którym $ \omega = 1 $ oraz $ \lambda $ = 1.\newline
-Łatwo dostrzec, że dla $ \lambda < 0 $ punkt $ (0,0) $ jest atraktorem, bez względu na warunek początkowy. Dzieje się tak, gdyż wyrażenie $ \lambda r(1-r^{2}) $ jest ujemne, a więc promień będzie zmniejszał swoją wartość, przy czym intensywność tych zmian będzie malała. W związku z tym dowolna trajektoria będzie się 'zawijać' ku środkowi układu współrzędnech - Rysunek
+Łatwo dostrzec, że dla $ \lambda < 0 $ punkt $ (0,0) $ jest atraktorem, bez względu na warunek początkowy. Dzieje się tak, gdyż wyrażenie $ \lambda r(1-r^{2}) $ jest ujemne, a więc promień będzie zmniejszał swoją wartość, przy czym intensywność tych zmian będzie malała. W związku z tym dowolna trajektoria będzie się 'zawijać' ku środkowi układu współrzędnech - Rysunek (\ref{Fig9}).
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/Hopf.png} 
 	\centering
 	\caption{Przykładowa trajektoria dla układu Hopfa}
+	\label{Fig9}
 \end{figure}
 Sytuacja w przypadku $ \lambda >0 $ generuje atraktory cykliczne w postaci okręgów o promieniach $ r = \sqrt{\lambda} $. Trajektorie odpowiadające punktom zaczynającym się na zewnątrz takiego okręgu nawijają się nań, zaś te zaczynające się wewnątrz - stopniowo się do niego zbliżają (Rysunek)
 \paragraph{Bifurkacja Henona}
@@ -529,11 +538,12 @@ Dla $ |b|>1 $ układ ten można rozwiązać rozbijając każdą iterację na trz
 	\end{array}.
 	\end{equation}
 \end{itemize}
-Oczywiście parametrem bifurkacji jest w tym przypadku $ b=1 $. Atraktor tego układu przedstawia Rysunek.
+Oczywiście parametrem bifurkacji jest w tym przypadku $ b=1 $. Atraktor tego układu przedstawia Rysunek (\ref{Fig10}).
 \begin{figure}[H]
 	\includegraphics[scale=0.4]{figures/Henon.png} 
 	\centering
 	\caption{Atraktor Henona}
+	\label{Fig10}
 \end{figure}
 \paragraph{Bifurkacja Rosslera}
 Ostatnim klasycznym przykładem będzie trójwymiarowy układ Otto Rosslera. Ma on następującą postać:
@@ -552,22 +562,24 @@ Parametry $ a,b,c \in \mathbb{R}_{+} $ warunkują zachowanie się rozwiązań. \
 \frac{dy}{dt} & = & x+ay \\
 \end{array}.
 \end{equation}
-Dla $ a \in (0,2) $ otrzymujemy ponownie spiralę, ale tym razem rozwijającą się. Dodanie ostatniego równania spowoduje 'wygięcie' się owej spirali (człon nieliniowy), przy czym będzie ono stabilne o ile $ x<c $. Wówczas wysokość jego wysokość osiąga $ z = \frac{b}{x-c} $. Dalszy wzrost współrzędnej $ x $ jest kontrolowany przez człon $ (-z) $ w pierwszym równaniu i trajektoria wygina się w drugą stronę powracając na płaszczyznę $ z=0 $. Kształt atraktora ilustruje Rysunek.
+Dla $ a \in (0,2) $ otrzymujemy ponownie spiralę, ale tym razem rozwijającą się. Dodanie ostatniego równania spowoduje 'wygięcie' się owej spirali (człon nieliniowy), przy czym będzie ono stabilne o ile $ x<c $. Wówczas wysokość jego wysokość osiąga $ z = \frac{b}{x-c} $. Dalszy wzrost współrzędnej $ x $ jest kontrolowany przez człon $ (-z) $ w pierwszym równaniu i trajektoria wygina się w drugą stronę powracając na płaszczyznę $ z=0 $. Kształt atraktora ilustruje Rysunek (\ref{Fig11}).
 \begin{figure}[H]
 	\includegraphics[scale=0.4]{figures/Rossler.png} 
 	\centering
 	\caption{Atraktor Rosslera}
+	\label{Fig11}
 \end{figure}
 Sama fizyka również dostarcza inspiracji do tworzenia modeli o nieprzewidywalnych zachowaniach. Układem chemicznym o takiej własności jest reakcja Biełousowa-Żabotyńskiego. Hydrodynamika nie jest tuaj wyjątkiem - przejścia do chaosu jest w tym przypadku na tyle popularne, iż zyskało swoją nazwę: turbulencja.
 \paragraph{Komórki Bernada}
-Ekperyment, który pozwolił odkryć to zjawisko miał za zadanie zbadać mechanizm wymiany ciepła pomiędzy warstwami wody znajdującej się w naczyniu podgrzewanym od dołu. Parametrem kontrolnym jest w tym przypadku gęstość strumienia ciepła przekazywana cieczy. Przy niewielkiej ilości ciepła w jednostce czasu wymiana ciepła w wodzie następuje na skutek wymiany pędu między jej cząsteczkami. Jest to zatem poziom mikroskopowy - następuje stopniowe podgrzewanie kolejnych warstw. Od pewnej krytycznej wartości (odpowiednik parametru bifurkacji) następuje destabilizacja znajdującej się w naczyniu cieczy. Tworzą się struktury dynamicze - wirujące przeciwlegle rolki zwane komórkami Bernada. Mechanizm wymiany ciepła zmienia się w sposób jakościowy - następuje makroskopowy ruch płynu w objętości wywołany dużymi różnicami gęstości. Mówi się wówczas o konwekcji naturalnej. Sytuację ilustruje Rysunek.
+Ekperyment, który pozwolił odkryć to zjawisko miał za zadanie zbadać mechanizm wymiany ciepła pomiędzy warstwami wody znajdującej się w naczyniu podgrzewanym od dołu. Parametrem kontrolnym jest w tym przypadku gęstość strumienia ciepła przekazywana cieczy. Przy niewielkiej ilości ciepła w jednostce czasu wymiana ciepła w wodzie następuje na skutek wymiany pędu między jej cząsteczkami. Jest to zatem poziom mikroskopowy - następuje stopniowe podgrzewanie kolejnych warstw. Od pewnej krytycznej wartości (odpowiednik parametru bifurkacji) następuje destabilizacja znajdującej się w naczyniu cieczy. Tworzą się struktury dynamicze - wirujące przeciwlegle rolki zwane komórkami Bernada. Mechanizm wymiany ciepła zmienia się w sposób jakościowy - następuje makroskopowy ruch płynu w objętości wywołany dużymi różnicami gęstości. Mówi się wówczas o konwekcji naturalnej. Sytuację ilustruje Rysunek (\ref{Fig12}).
 \begin{figure}[H]
 	\includegraphics[scale=0.6]{figures/Bernad.png} 
 	\centering
 	\caption{Schemat komórek Bernada}
+	\label{Fig12}
 \end{figure}
 Pewną analogię stanowi tu mechaniczne zjawisko zwane wyboczeniem (analogiem sił jest tutaj oczywiście różnica temperatur, zaś samo zjawisko wyboczenia reprezentowane jest przez utratę stabilności cieczy). Pewne ilościowe wnioski na ten temat Czytelnik znajdzie w klasycznej pozycji \cite{Landau}.\newline
-Model matematyczny takiego zjawiska opisywany jest poprzez układ równań Naviera-Stokesa sprzężony z równaniem opisującym wymianę ciepła. Jest on zatem bardzo skomplikowany i w celu jego rozwiązania stosuje się pewne uproszczenia. Najprostszym może być przyjęcie nieskończonej długości naczynia, co implikuje brak wymiany ciepła wzdłuż rolek konwekcyjnych - model taki stanowi podstawę innego, bardzo znanego układu, którego autorem jest Edward Lorenz. Model ten jest sztandarowym przykładem układu o skomplikowanym zachowniu, zaś jego atraktor stał się symbolem teorii chaosu (Rysunek). Znacznie więcej informacji na temat układu Lorenza wraz z analizą wrażliwości funkcji zdefiniowanej dla tego systemu zawiera Rozdział.\newline
+Model matematyczny takiego zjawiska opisywany jest poprzez układ równań Naviera-Stokesa sprzężony z równaniem opisującym wymianę ciepła. Jest on zatem bardzo skomplikowany i w celu jego rozwiązania stosuje się pewne uproszczenia. Najprostszym może być przyjęcie nieskończonej długości naczynia, co implikuje brak wymiany ciepła wzdłuż rolek konwekcyjnych - model taki stanowi podstawę innego, bardzo znanego układu, którego autorem jest Edward Lorenz. Model ten jest sztandarowym przykładem układu o skomplikowanym zachowniu, zaś jego atraktor stał się symbolem teorii chaosu (Rysunek). Znacznie więcej informacji na temat układu Lorenza wraz z analizą wrażliwości funkcji zdefiniowanej dla tego systemu zawiera Rozdział 5.\newline
 Powyższe rozważania przekonują, iż do listy cech charakteryzujących każdy układ dynamiczny można dopisać dodatkowe dwie pozycje:
 \begin{itemize}
 	\item nierozkładalność przestrzeni fazowej na dwie, dynamicznie rozłączne, niepuste podprzestrzenie,
@@ -588,11 +600,12 @@ gdzie $ A \in M^{N \bigtimes N} $ jest macierzą przekształcenia (o stałych ws
 \begin{equation}
 	\textbf{A}\textbf{v} = \lambda \textbf{v}.
 \end{equation}
-Przyjmując nomenklaturę znaną z algebry liniowej możemy mówić o takich wektorach $ \textbf{v} \in \mathbb{R}^{N} $ jako w wektorach własnych macierzy $ A $ (o ile takie wektory istnieją). Odpowiadające im skalary $ \lambda \in \mathbb{R} $ nazywają się wartościami własnymi, których wartość modułu większa od jedności oznacza, iż punkty leżące na kierunku wektora własnego oddalają się od siebie, zaś wartości te mniejsze od jedności wskazują na zbliżanie się takich punktów względem siebie. Sytuację dla przypadku dwuwymiarowego (tj. $ v = (x,y) \in \mathbb{R}^2 $, gdzie $ \lambda > 1 $) ilustruje Rysunek.
+Przyjmując nomenklaturę znaną z algebry liniowej możemy mówić o takich wektorach $ \textbf{v} \in \mathbb{R}^{N} $ jako w wektorach własnych macierzy $ A $ (o ile takie wektory istnieją). Odpowiadające im skalary $ \lambda \in \mathbb{R} $ nazywają się wartościami własnymi, których wartość modułu większa od jedności oznacza, iż punkty leżące na kierunku wektora własnego oddalają się od siebie, zaś wartości te mniejsze od jedności wskazują na zbliżanie się takich punktów względem siebie. Sytuację dla przypadku dwuwymiarowego (tj. $ v = (x,y) \in \mathbb{R}^2 $, gdzie $ \lambda > 1 $) ilustruje Rysunek (\ref{Fig13}).
 \begin{figure}[H]
 	\includegraphics[scale=0.4]{figures/Eigenvalues.png} 
 	\centering
 	\caption{Ilustracja zachowania wektorów własnych}
+	\label{Fig13}
 \end{figure}
 Oczywiście różne wektory własne mogą różnie się deformować pod wpływem przekształcenia. Mówi się zatem, że danej wartości własnej odpowiada wektor własny, przy czym takie wektory są zawsze liniowo niezależne, a zatem tworzą podprzestrzeń liniową przestrzeni stanowiącej dziedzinę rozważanego przekształcenia. W tym miejscu należy podkreślić, że wektory te w ogólności nie stanowią bazy całej przestrzeni (wymiar generowanej przez nie podprzestrzeni jest istotnie mniejszy od wymiaru całej przestrzeni) oraz wektory te nie są w   ogólności ortogonalne (taka sytuacja zachodzi, gdy przekształcenie jest samosprzężone, a więc w naszym przypadku, gdy macierz $ A $ jest symetryczna). \newline
 Informacja na temat tych charakterystycznych obiektów ma ogromną wartość. Mówi ona bowiem jak punkty znajdujące się w sąsiedztwie rozpatrywanego punktu trajektorii (wzdłuż wektorów własnych) będę się względe niego zachowywały. Jest to zatem ilościowa informacja na temat dynamiki układu, której poszukujemy! Wystarczy teraz tę sytuację uogólnić na przypadek dowolnego przekształcenia $ \textbf{f}: M_{ph} \rightarrow M_{ph}$. Zakładając na chwilę, że $ dim(M_{ph}) < \infty $ i pamiętając o regularności $ \textbf{f} $ przekonujemy się, że odpowiednikiem macierzy $ A $ jest macierz gradientu (jacobiego) funkcji $ f $ oznaczanej dalej jako $ Df $. Jest to zrozumiałe, gdyż funkcja będąca dyfeomorfizmem jest dobrze aproksymowana funkcją liniową, przy czym cecha ta ma charakter lokalny, co oczywiście stanowi przeszkodę z punktu widzenia numerycznego wyznaczania takich macierzy, gdy tych wymiarów jest dużo. Zauważmy, że i w tym przypadku otrzymujemy wektory i wartości własne takich macierzy, przy czym mają one dokładnie tą samą interpretację. Możemy zatem przyjąć następującą definicję
@@ -640,11 +653,12 @@ Kluczowym pojęciem tego rozdziału jest pseudotrajektoria.
 	\end{center} 
 	gdzie $ d $ oznacza metrykę przestrzeni metrycznej $ M_{ph} $.
 \end{defi}
-Widzimy (Rysunek), że punkty $\delta$-pseudotrajektorii są blisko punktom prawdziwej trajektorii jedynie lokalnie, tzn. przechodząc od zadanego punktu przestrzeni fazowej do jego obrazu (zgodnie z dynamiką układu), znajdziemy się $\delta$-otoczeniu punktu $\delta$-pseudoorbity. 
+Widzimy (Rysunek (\ref{Fig14})), że punkty $\delta$-pseudotrajektorii są blisko punktom prawdziwej trajektorii jedynie lokalnie, tzn. przechodząc od zadanego punktu przestrzeni fazowej do jego obrazu (zgodnie z dynamiką układu), znajdziemy się $\delta$-otoczeniu punktu $\delta$-pseudoorbity. 
 \begin{figure}[H]
 	\includegraphics[scale=0.5]{figures/pseudotrajectory.png} 
 	\centering
 	\caption{Ilustracja pseudotrajektorii dla układu punktów w płaszczyźnie.}
+	\label{Fig14}
 \end{figure}
 Istotną cechą układów dynamicznych jest globalny odpowiednik tej własności, która w literaturze nosi nazwę \textit{własności cienia} (ang. \textit{shadowing property}).
 \begin{defi}\label{shadowing_property}
@@ -1120,11 +1134,12 @@ gdzie $ \sigma, \rho, \beta $ są pewnymi stałymi. Nie zostały określone waru
 	\item $ x = y = -\sqrt{\beta(\rho - 1)}, z = \rho - 1 $,
 \end{itemize}
 Układ ten jest chaotyczny w ścisłym sensie i jest bardzo prostym modelem ruchu konwekcyjnego powietrza atmosferycznego (oryginalny układ Lorentza składał się z równań, rozważany jest skrajnie uproszczony - jest on minimalnym, w sensie ilości stopni swobody, układem, który może przejawiać chaotyczne zachowania),przy czym stała   $ \sigma $ charakteryzuje lepkość ośrodka, $ \rho $ współczynnik przewodzenia ciapła, zaś $ \beta $ wymiar charakterystyczny.\newline
-Trajektorie dla trzech wybranych parametrów $ \rho $ w przypadku $ x(0) = 1, y(0) = 0, z(0) = 28 $ przedstawia Rysunek .
+Trajektorie dla trzech wybranych parametrów $ \rho $ w przypadku $ x(0) = 1, y(0) = 0, z(0) = 28 $ przedstawia Rysunek (\ref{Fig15}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/Trajectories.png} 
 	\centering
 	\caption{Trajektorie układu Lorentza.}
+	\label{Fig15}
 \end{figure}
 \subsubsection{Wyniki symulacji numerycznej}
 Funkcja celu została zdefiniowana jako
@@ -1132,61 +1147,71 @@ Funkcja celu została zdefiniowana jako
 \langle\textbf{J}\rangle = \lim\limits_{\textit{T}\to\infty}\int_{0}^{T}zdt
 \label{lorenz_J}
 \end{equation} 
-Założone zostały wartości parametrów: $\sigma$ = 10, $\beta$ = $\frac{8}{3}$, zaś $\rho$ pozostawiono jako zmienną projektową(której zakres zmienności przebiega od 10 do 100). Rysunek przedstawia zmienność funkcji celu w rozważanym zakresie zmian $ \rho $, gdzie okres uśredniania $ T = 10 $.
+Założone zostały wartości parametrów: $\sigma$ = 10, $\beta$ = $\frac{8}{3}$, zaś $\rho$ pozostawiono jako zmienną projektową(której zakres zmienności przebiega od 10 do 100). Rysunek (\ref{Fig16}) przedstawia zmienność funkcji celu w rozważanym zakresie zmian $ \rho $, gdzie okres uśredniania $ T = 10 $.
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/OF.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=10 $)}
+	\label{Fig16}
 \end{figure}
-Należy zauważyć, że chociaż ogólny trend krzywej sugeruje stałe jej nachylenie (wartość tangensa kąta tego nachylenia jest bliska jedności), to występują lokalne fluktuacje, które są przyczyną problemów w wyznaczenia wrażliwości tej funkcji na zmianę parametrów projektowych. Wyznaczona została dla tego przypadku pochodna względem parametru $ \rho $, której wykres ilustruje Rysunek (oś rzędnych jest przedstawiona w skali logarytmicznej). Wykorzystano do tego celu metodę zaburzenia zaburzenia części urojonej zmiennej projektowej traktowanej jako liczbę zespoloną. Technika ta pozwala uzyskać pochodną z doskładnością maszynową (patrz Rozdział).
+Należy zauważyć, że chociaż ogólny trend krzywej sugeruje stałe jej nachylenie (wartość tangensa kąta tego nachylenia jest bliska jedności), to występują lokalne fluktuacje, które są przyczyną problemów w wyznaczenia wrażliwości tej funkcji na zmianę parametrów projektowych. Wyznaczona została dla tego przypadku pochodna względem parametru $ \rho $, której wykres ilustruje Rysunek (\ref{Fig17}) (oś rzędnych jest przedstawiona w skali logarytmicznej). Wykorzystano do tego celu metodę zaburzenia zaburzenia części urojonej zmiennej projektowej traktowanej jako liczbę zespoloną. Technika ta pozwala uzyskać pochodną z doskładnością maszynową (patrz Rozdział 3.1).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/OF_sens.png} 
 	\centering
 	\caption{Wrażlowość funkcji celu wyznaczona metodą zaburzenia zespolonego}
+	\label{Fig17}
 \end{figure}
-Tak wyznaczona czułość jest praktycznie nieprzydatna. Jednym ze sposobów 'wygładzenia' trendu zmian funkcji celu w zależności od zmiennej decyzyjnej jest zwiększenie okresu uśredniania (słuszność tego podejścia sugeruje założenie ergodyczności). Na Rysunkach oraz  przedstawiono rozpatrywaną funkcję w przypadkach $ T = 50 $ oraz $ T = 100 $.
+Tak wyznaczona czułość jest praktycznie nieprzydatna. Jednym ze sposobów 'wygładzenia' trendu zmian funkcji celu w zależności od zmiennej decyzyjnej jest zwiększenie okresu uśredniania (słuszność tego podejścia sugeruje założenie ergodyczności). Na Rysunkach (\ref{Fig18}) oraz (\ref{Fig19}) przedstawiono rozpatrywaną funkcję w przypadkach $ T = 50 $ oraz $ T = 100 $.
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/OF1.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=50 $)}
+	\label{Fig18}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/OF2.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=100 $)}
+	\label{Fig19}
 \end{figure}
-Zgodnie z oczekiwaniami amplituda fluktuacji maleje, jednak ich obecność nie została wyeliminowana, co w istotny sposób rzutuje na wyznaczanie poszukiwanego gradientu (Rysunki  i ).
+Zgodnie z oczekiwaniami amplituda fluktuacji maleje, jednak ich obecność nie została wyeliminowana, co w istotny sposób rzutuje na wyznaczanie poszukiwanego gradientu (Rysunki \ref{Fig20} i \ref{Fig21}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/OF1_sens.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=50 $)}
+	\label{Fig20}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/OF2_sens.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=100 $)}
+	\label{Fig21}
 \end{figure}
-Metoda trajektorii cienia została wykorzystana do wyznaczenia wrażliwości funkcji celu (przy użyciu operatora sprzężonego) dla pierwszego przypadku ($ T=10 $). Wynik ilustruje Rysunek , zaś Rysunek  pokazuje porównanie obu metod.
+Metoda trajektorii cienia została wykorzystana do wyznaczenia wrażliwości funkcji celu (przy użyciu operatora sprzężonego) dla pierwszego przypadku ($ T=10 $). Wynik ilustruje Rysunek (\ref{Fig22}) , zaś Rysunek (\ref{Fig23}) pokazuje porównanie obu metod.
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/LSS.png} 
 	\centering
 	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.)}
+	\ref{Fig22}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/LSSvsCVM.png} 
 	\centering
 	\caption{Porównanie obu metod}
+	\ref{Fig23}
 \end{figure}
-Podobna analiza została wykonana dla drugiego przypadku ($ T=50 $), a jej wyniki przedstawiają Rysunki  oraz .
+Podobna analiza została wykonana dla drugiego przypadku ($ T=50 $), a jej wyniki przedstawiają Rysunki  (\ref{Fig24}) oraz (\ref{Fig25}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/LSS1.png} 
 	\centering
 	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.)}
+	\ref{Fig24}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/LSSvsCVM1.png} 
 	\centering
 	\caption{Porównanie obu metod}
+	\ref{Fig25}
 \end{figure}
 Kod zaimplementowany w środowisku skryptowym MATLAB jest dostępny na publiczny repozytorium autora \cite{Marek1}.
 \subsection{Scenariusz II - oblicze chaosu}
@@ -1206,11 +1231,12 @@ f(v) = 4\pi(\frac{m}{2\pi kT})^{\frac{2}{3}}v^{2}exp(-\frac{\frac{1}{2}mv^{2}}{k
 gdzie przez $ v $ oznaczono prędkość cząstki, $ m $ jej masę, $ T $ temperaturę bezwzględną, oraz przez $ k $ stałą Boltzmana.
 Podstawowym założeniem prowadzącym do takiej dystrybucji prędkości wśród cząstek jest przyjęcie modelu gazu doskonałego oraz założenie równowagi termodynamicznej między układem jego otoczeniem. Należy zwrócić uwagę na znaczenie tego rozkładu - jest to gęstość prawdopodobieństwa stanowiąca miarę liczności cząstek w danym zakresie prędkości. Jak każda funkcja gęstości prawdopodobieństwa jest ona równa prawie wszędzie pochodnej dystrybuanty związanej z tym rozkładem. Wobec tego, na poziomie intuicji, można taką funkcję utożsamiać ze stosunkiem liczby cząstek mających ograniczony zakres przyjmowanych prędkości w stosunku do całkowitej ich liczby. Zauważmy, że podejście to nie opisuje każdej cząstki jako oddzielnego składnika złożonego systemu (podejście mikroskopowe). Jednakże jest ono również odmienne od dobrze znanego z obecnie najpopularniejszych metod modelowania komputerowego przepływów uśredniania w relatywnie niewielkiej (w sensie rozciągłości przestrzennej) objętości parametrów statystycznie istotnej liczby cząstek, z którego generowane są pola parametrów makroskopowych takich jak ciśnienie, temperatura czy prędkość (podejście to bazuje na założeniu ciągłości badanego ośrodka i nazywane jest podejściem makroskopowym). Głównym zamysłem Metody Siatek Boltzmanna jest symulowanie ewolucji w czasie analogicznego rozkładu (niekoniecznie dla stanów równowagowych).
 \subsubsection{Model matematyczny}
-Jako schemat połączeń węzłów siatki przyjęty został typ d2Q9 (Rysunek)
+Jako schemat połączeń węzłów siatki przyjęty został typ d2Q9 (Rysunek (\ref{Fig26}))
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/d2q9.jpg} 
 	\centering
 	\caption{Schemat połączeń węzłów siatki}
+	\label{Fig26}
 \end{figure}
 W przyjętym modelu metody siatek Boltzmanna dyskretne równanie zadające dynamikę ma następującą postać:
 \begin{equation}
@@ -1264,11 +1290,12 @@ Konkluzje są tutaj takie same – aby wyznaczyć pochodną w danym punkcie nale
 Wracając do postawionego problemu można uznać, iż dysponując odpowiednimi narzędziami możliwe jest zaimplementowanie macierzy w formie funkcji – dalsze kroki procesu optymalizacyjnego przebiegają standardowo, zgodnie z Metodą Gradientów Sprzężonych, która została wykorzystana w niniejszej pracy. Automatyczne różniczkowanie jest wykonywane za pomocą otwartego silnika TAPENADE stworzonego przez grupę INRIA Sophia-Antipolis (zob. Dokumentacja \cite{Tapenade}). Możemy już teraz przejść do analizy wyników symulacji numerycznej przedstawionych w następnym podrozdziale.
 
 \subsubsection{Wyniki symulacji}
-Kształt obszaru obliczeniowego został zilustrowany na Rysunku
+Kształt obszaru obliczeniowego został zilustrowany na Rysunku (\ref{Fig27})
 \begin{figure}[H]
 	\includegraphics[scale=1.8]{figures/geometry.png} 
 	\centering
 	\caption{Geometria obszaru obliczeniowego}
+	\label{Fig27}
 \end{figure}
 W rozważanym przypadku $ H = 2 $, $ h_{i}=h=L_{i}=1 $ oraz $ L_{c}=9 $.\newline
 Pomimo tak prostej geometrii w przepływie takim występuje szereg zjawisk o skomplikowanej naturze:
@@ -1285,17 +1312,19 @@ Jako funkcję celu przyjęty został średni spadek ciśnienia między wlotem a 
 \bar{J} = \frac{1}{T}\int_{0}^{T}(\hat{p}_{in}(t)-\hat{p}_{out}(t))dt,
 \label{J_numerical}
 \end{equation}
-gdzie $ \hat{p}_{in}(t) $ oraz $ \hat{p}_{out}(t) $ oznaczają średnie ciśnienie w chwili $ t $ na wlocie oraz wylocie, odpowiednio. Funkcja ta dla badanej geometrii w przypadku różnych prędkości $ u \in [0.05 ; 0.15]$ na wlocie została zilustrowana na Rysunku.
+gdzie $ \hat{p}_{in}(t) $ oraz $ \hat{p}_{out}(t) $ oznaczają średnie ciśnienie w chwili $ t $ na wlocie oraz wylocie, odpowiednio. Funkcja ta dla badanej geometrii w przypadku różnych prędkości $ u \in [0.05 ; 0.15]$ na wlocie została zilustrowana na Rysunku (\ref{Fig28}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/Jbar.png} 
 	\centering
 	\caption{Wartość funkcji celu w zależności od parametru kontrolnego}
+	\label{Fig28}
 \end{figure}
-Zależność ta ma kształt paraboliczny, co jest zgodne z oczekiwaniami. Uwagę tę potwierdza Rysunek, który ilustruje krzywą na tle najlepiej dopasowanej doń paraboli (oznaczoną kolorem czerwonym)
+Zależność ta ma kształt paraboliczny, co jest zgodne z oczekiwaniami. Uwagę tę potwierdza Rysunek (\ref{Fig29}), który ilustruje krzywą na tle najlepiej dopasowanej doń paraboli (oznaczoną kolorem czerwonym)
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/Jbar_parabola.png} 
 	\centering
 	\caption{Najlepiej dopasowana parabola na tle krzywej funkcji celu}
+	\label{Fig29}
 \end{figure}
 Odpowiadające im wartości wrażliwości ilustruje Rysunek.
 \begin{figure}[H]
@@ -1305,28 +1334,33 @@ Odpowiadające im wartości wrażliwości ilustruje Rysunek.
 \end{figure}
 Przebadane zostało pięć przypadków różniących się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne: w kierunku wlotu zastosowano podział na $ m=20 $ komórek, zaś w kierunku poziomym $ n=10m $.
 \paragraph{Liczba Reynoldsa: 200}
-Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio (rysunki zostały odpowiednio przeskalowane w kierunku osi pionowej dla przejrzystości poglądu).
+Rysunki (\ref{Fig31}), (\ref{Fig32}), (\ref{Fig33}) oraz (\ref{Fig34}) przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio (rysunki zostały odpowiednio przeskalowane w kierunku osi pionowej dla przejrzystości poglądu).
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_05_1.png} 
 	\caption{Mapa modułu prędkości po $ T=1000 $ kroków czasowych}
+	\label{Fig31}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_05_2.png} 
 	\caption{Mapa modułu prędkości po $ T=2000 $ kroków czasowych}
+	\label{Fig32}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_05_3.png} 
 	\caption{Mapa modułu prędkości po $ T=3000 $ kroków czasowych}
+	\label{Fig33}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_05_4.png} 
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
+	\label{Fig34}
 \end{figure}
-Dobrą charakterystyką jest średni skumulowany spadek ciśnienia (tj. średni spadek ciśnienia liczony od początku do danej chwili), którego wykres dla pierwszych $ T = 4000 $  kroków czasowych oraz dla parametru wlotowego $ u=0.05 $ przedstawia Rysunek.
+Dobrą charakterystyką jest średni skumulowany spadek ciśnienia (tj. średni spadek ciśnienia liczony od początku do danej chwili), którego wykres dla pierwszych $ T = 4000 $  kroków czasowych oraz dla parametru wlotowego $ u=0.05 $ przedstawia Rysunek (\ref{Fig35}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/results/CumulatedPressureDrop200.png} 
 	\centering
 	\caption{Średni skumulowany spadek ciśnienia}
+	\label{Fig35}
 \end{figure}
 Wspomnijmy przy okazji, iż ergodyczność układu oznacza w tym przypadku, że taki średni skumulowany spadek ciśnienia będzie asymptotycznie dążył do tej samej wartości niezależnie od początkowego pola funkcji rozkładu, które w tej pracy inicjalizowane są poprzez rozkład równowagowy.\newline
 Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $, a także błąd względny $ \epsilon = \frac{|grad\bar{J}-grad_{LSS}\bar{J}|}{grad\bar{J}}$ mają wartości
@@ -1339,28 +1373,33 @@ grad_{LSS}\bar{J} &=& 5.23 \\
 \label{result200}
 \end{equation}
 \paragraph{Liczba Reynoldsa: 300}
-Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
+Rysunki (\ref{Fig36}), (\ref{Fig37}), (\ref{Fig38}) oraz (\ref{Fig39}) przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_075_1.png} 
 	\caption{Mapa modułu prędkości po $ T=1000 $ kroków czasowych}
+	\label{Fig36}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_075_2.png} 
 	\caption{Mapa modułu prędkości po $ T=2000 $ kroków czasowych}
+	\label{Fig37}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_075_3.png} 
 	\caption{Mapa modułu prędkości po $ T=3000 $ kroków czasowych}
+	\label{Fig38}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_075_4.png} 
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
+	\label{Fig39}
 \end{figure}
-Średni skumulowany spadek ciśnienia ilustruje Rysunek.
+Średni skumulowany spadek ciśnienia ilustruje Rysunek (\ref{Fig40}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/results/CumulatedPressureDrop300.png} 
 	\centering
 	\caption{Średni skumulowany spadek ciśnienia}
+	\label{Fig40}
 \end{figure}
 Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $, a także średni błąd względny $ \epsilon $ mają wartości
 \begin{equation}
@@ -1372,28 +1411,33 @@ grad_{LSS}\bar{J} &=& 5.63 \\
 \label{results300}
 \end{equation}
 \paragraph{Liczba Reynoldsa: 400}
-Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
+Rysunki (\ref{Fig41}), (\ref{Fig42}), (\ref{Fig43}) oraz (\ref{Fig44}) przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_10_1.png} 
 	\caption{Mapa modułu prędkości po $ T=1000 $ kroków czasowych}
+	\label{Fig41}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_10_2.png} 
 	\caption{Mapa modułu prędkości po $ T=2000 $ kroków czasowych}
+	\label{Fig42}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_10_3.png} 
 	\caption{Mapa modułu prędkości po $ T=3000 $ kroków czasowych}
+	\label{Fig43}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_10_4.png} 
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
+	\label{Fig44}
 \end{figure}
-Średni skumulowany spadek ciśnienia ilustruje Rysunek.
+Średni skumulowany spadek ciśnienia ilustruje Rysunek (\ref{Fig45}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/results/CumulatedPressureDrop400.png} 
 	\centering
 	\caption{Średni skumulowany spadek ciśnienia}
+	\label{Fig45}
 \end{figure}
 Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $, a także średni błąd względny $ \epsilon $ mają wartości
 \begin{equation}
@@ -1405,28 +1449,33 @@ grad_{LSS}\bar{J} &=& 6.12 \\
 \label{result400}
 \end{equation}
 \paragraph{Liczba Reynoldsa: 500}
-Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
+Rysunki (\ref{Fig46}), (\ref{Fig47}), (\ref{Fig48}) oraz (\ref{Fig49}) przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_125_1.png} 
 	\caption{Mapa modułu prędkości po $ T=1000 $ kroków czasowych}
+	\label{Fig46}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_125_2.png} 
 	\caption{Mapa modułu prędkości po $ T=2000 $ kroków czasowych}
+	\label{Fig47}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_125_3.png} 
 	\caption{Mapa modułu prędkości po $ T=3000 $ kroków czasowych}
+	\label{Fig48}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_125_4.png} 
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
+	\label{Fig49}
 \end{figure}
-Średni skumulowany spadek ciśnienia ilustruje Rysunek.
+Średni skumulowany spadek ciśnienia ilustruje Rysunek (\ref{Fig50}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/results/CumulatedPressureDrop500.png} 
 	\centering
 	\caption{Średni skumulowany spadek ciśnienia}
+	\label{Fig50}
 \end{figure}
 Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $, a także średni błąd względny $ \epsilon $ mają wartości
 \begin{equation}
@@ -1438,28 +1487,33 @@ grad_{LSS}\bar{J} &=& 6.74 \\
 \label{results500}
 \end{equation} 
 \paragraph{Liczba Reynoldsa: 600}
-Rysunki przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
+Rysunki (\ref{Fig51}), (\ref{Fig52}), (\ref{Fig53}) oraz (\ref{Fig54}) przedstawiają mapy modułu prędkości po 1000, 2000, 3000 oraz 4000 kroków czasowych, odpowiednio 
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_15_1.png} 
 	\caption{Mapa modułu prędkości po $ T=1000 $ kroków czasowych}
+	\label{Fig51}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_15_2.png} 
 	\caption{Mapa modułu prędkości po $ T=2000 $ kroków czasowych}
+	\label{Fig52}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_15_3.png} 
 	\caption{Mapa modułu prędkości po $ T=3000 $ kroków czasowych}
+	\label{Fig53}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.3]{figures/LBM/u0_15_4.png} 
 	\caption{Mapa modułu prędkości po $ T=4000 $ kroków czasowych}
+	\label{Fig54}
 \end{figure}
-Średni skumulowany spadek ciśnienia ilustruje Rysunek.
+Średni skumulowany spadek ciśnienia ilustruje Rysunek (\ref{Fig55}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/results/CumulatedPressureDrop600.png} 
 	\centering
 	\caption{Średni skumulowany spadek ciśnienia}
+	\label{Fig55}
 \end{figure}
 Wrażliwość wyznaczona poprzez długoookresową symulację $ grad\bar{J} $ oraz ta, wyznaczona z użyciem Metody Trajektorii Cienia $ grad_{LSS}\bar{J} $, a także błąd względny $ \epsilon $ mają wartości
 \begin{equation}
@@ -1483,11 +1537,12 @@ Dokładność wyników podsumowuje  poniższa tabela.
 Błąd względny rośnie wraz ze wzrostem liczby Reynoldsa. Obserwacja taka może być uzasadniona tym, że nieliniowości zaczynają dominować dynamikę zachowania rozwiązań i w związku z tym rośnie liczba niestabilnych modów Lyapunova. Rysunek ilustruje wykres błędu względnego w funkcji liczby Reynoldsa.
 Charakter paraboliczny wskazuje potencjalne problemy dla bardzo dużych liczb Reynoldsa. W takich przypadkach konieczne byłoby zastosowanie dłuższych okresów symulacji (poprzedni scenariusz sugeruje, iż taki zabieg ma działanie regularyzujące). \newline
 Zauważmy też, że wrażlowości wyznaczone omawianą metodą niedoszacowują wartości referencyjnych. Taki stan rzeczy może być spowodowany skończonym czasem symulacji. Pamiętajmy, że wyznaczona trajektoria cienia pozostaje w bliskim sąsiedztwie trajektorii bazowej, jednakże nie ma gwarancji, że jest ona przez cały okres w tej samej odległości. Dysponujemy jedynie ograniczeniem górnym, które w konkretnych przypadkach może wpływać na dokładność uzyskanych wyników. \newline
-Zauważmy też, że wyniki tworzą silnie liniowy trend. Najlepiej dopasowana prosta pokazana na tle wyników (Rysunek) ilustruję tę uwagę.
+Zauważmy też, że wyniki tworzą silnie liniowy trend. Najlepiej dopasowana prosta pokazana na tle wyników (Rysunek (\ref{Fig56})) ilustruję tę uwagę.
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/linear_results.png} 
 	\centering
 	\caption{Najlepiej dopasowana prosta}
+	\label{Fig56}
 \end{figure}
 Wartość współczynnika korelacji Pearsona, zdefiniowanego następująco:
 \begin{equation}
