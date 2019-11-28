@@ -183,7 +183,7 @@ W tym momencie poczynione zostaną uwagi o charakterze technicznym, które pozos
 	\item Funkcję określoną na przestrzeni nieskończenie wymiarowej określa się często mianem operatora. W tej pracy konwencja ta nie będzie obowiązywała, aby nie zaciemniać istoty rzeczy.
 	\item Poprzez rozmaitość różniczkową $ M $ generowaną na pewnej przestrzeni Hilberta $ H $ rozumie się przestrzeń topologiczną Hausdorffa, w której każdy punkt ma otoczenie dyfeomorfincze z pewnym zbiorem otwartym w $ H$ (w przypadku skończenie wymiarowym każdy punkt ma otoczenie dyfeomorficzne z pewną kulą).
 	\item Metryka Riemanna jest w ogólności pojęciem bardzo abstrakcyjnym. Jej precyzyjna definicja wymaga pojęcia kowariantnego pola tensorowego, którego wprowadzanie pozostaje poza zakresem tej pracy. W związku z tym przedstawiona zostanie intuicja stojąca za tym pojęciem odsyłając zainteresowanego Czytelnika do literatury \cite{Blackmore}, \cite{Maurin2}.
-	\item Pełne dookreślenie układu dynamicznego wymaga zdefiniowania niezmienniczej względem homeomorfizmu $ \textbf{f} $ miary. Oczywiście 'zwykła' miara Lebesgue'a nie jest odpowiednia ze względu na brak niezmienniczości (w większości przypadków objętości, pod wpływem dynamiki, redukują się do tworów niżej wymiarowych). W związku z czym wprowadzona została miara SRB (nazwa pochodzi od nazwisk jej twórców: Sinai, Ruelle, Bowen). Miara ta konieczna jest jedynie do zdefiniowania właśności układu zwaną ergodycznością, która zostanie wytłumaczona na gruncie intuicji, wobec czego formalna defnicja miary SRB nie zostanie sformułowana. Można ją znnaleść na przykład w pracy \cite{Ruelle1}.
+	\item Pełne dookreślenie układu dynamicznego wymaga zdefiniowania niezmienniczej względem homeomorfizmu $ \textbf{f} $ miary. Oczywiście 'zwykła' miara Lebesgue'a nie jest odpowiednia ze względu na brak niezmienniczości (w większości przypadków objętości, pod wpływem dynamiki, redukują się do tworów niżej wymiarowych). W związku z czym wprowadzona została miara SRB (nazwa pochodzi od nazwisk jej twórców: Sinai, Ruelle, Bowen). Miara ta konieczna jest jedynie do zdefiniowania właśności układu zwaną ergodycznością, która zostanie wytłumaczona na gruncie intuicji, wobec czego formalna defnicja miary SRB nie zostanie sformułowana. Można ją znnaleść na przykład w pracy \cite{Ruelle1}. W pracy tej przyjmuje ona oznaczenie $\mu$
 \end{itemize}
 Równanie (\ref{dyn_eq}) można interpretować jako ewolucję w czasie wielkości wektorowej, na przykład pola prędkości przy zadanych warunkach brzegowych, które w ogólności zależą od czasu, współrzędnych przestrzennych oraz od wektora zmiennych decyzyjnych:
 \begin{equation}
@@ -231,7 +231,7 @@ Jednym z dwóch najważniejszych założeń o rozpatrywanych układach dynamiczn
 		\item $ \| D\textbf{f}^{\ -i}x_{u}\|_{M} \leq c\lambda^{i} \| x_{u}\|_{M}$ dla dowolnych $ x_{u} \in E^{u} $ oraz $ 0 < i \in \mathbb{N} $.
 	\end{itemize}
 \end{defi}
-Układ dynamiczny, którego przestrzeń fazowa ma strukturę hiperboliczną będzie nazywany układem hiperbolicznym. Ostatnie dwa warunki w Definicji grupują wektory przestrzeni stycznej ze względu na jakościowe zachowanie ich norm wraz z rozwojem układu. Jak się przekonamy w późniejszych rozdziałach jest to niezbędne założenie warunkujące użyteczność różnych metod regularyzacji pozwalających na wyznaczanie wrażliwości w rozważanych układach. \newline
+Układ dynamiczny, którego przestrzeń fazowa ma strukturę hiperboliczną będzie nazywany układem hiperbolicznym. Ostatnie dwa warunki w Definicji \ref{hyperbolic_set} grupują wektory przestrzeni stycznej ze względu na jakościowe zachowanie ich norm wraz z rozwojem układu. Jak się przekonamy w późniejszych rozdziałach jest to niezbędne założenie warunkujące użyteczność różnych metod regularyzacji pozwalających na wyznaczanie wrażliwości w rozważanych układach. \newline
 Drugie, równie istotne założenie dotyczy pośrednio funkcji, której gradient jest poszukiwany. Istotnymi z punktu widzenia techniki pozostają długookresowe wartości średnie, tj. funkcje postaci
 \begin{equation}
 \bar{J}(u;s) = \lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(u;s)dt,
@@ -316,6 +316,7 @@ Taka definicja stabilności jest szeroko stosowana w wielu zastosowaniach techni
 Zazwyczaj oczywiście nie dysponujemy rozwiązaniami. Z tego powodu konieczne są inne techniki służące jakościowemu badaniu równań. Jednym z takich pomysłów jest zdefiniowanie specjalnej funkcji związanej z nazwiskiem Lyapunowa.
 \newline
 \begin{defi}
+	\label{Lyapnuv_function}
 	Funkcją Lyapunova dla układu postaci (\ref{dyn_eq}) nazywamy dyfeomorfizm $ V: M_{ph} \rightarrow \mathbb{R} $, który spełnia warunki:
 	\begin{itemize}
 		\item $\forall x \in M_{ph} V(x) \geq 0$,
@@ -323,7 +324,7 @@ Zazwyczaj oczywiście nie dysponujemy rozwiązaniami. Z tego powodu konieczne s�
 		\item dla dowolnego rozwiązania $ u(t) $ zachodzi $ \frac{d}{dt}V(u(t)) \leq 0 $
 	\end{itemize}
 \end{defi}
-Zauważmy, że nie trzeba dysponować rozwiązaniem, gdy znaleziona zostanie odpowiadająca mu funkcja Lyapunowa (co zazwyczaj jest zadaniem dużo łatwiejszym). Ostatni warunek  Definicji mówi, że funkcja Lyapunowa na krzywych całkowych jest nierosnąca. W związku z tym prawdziwe jest następujące twierdzenie.
+Zauważmy, że nie trzeba dysponować rozwiązaniem, gdy znaleziona zostanie odpowiadająca mu funkcja Lyapunowa (co zazwyczaj jest zadaniem dużo łatwiejszym). Ostatni warunek  Definicji \ref{Lyapnuv_function} mówi, że funkcja Lyapunowa na krzywych całkowych jest nierosnąca. W związku z tym prawdziwe jest następujące twierdzenie.
 \begin{tw}
 	Niech dany będzie układ postaci (\ref{dyn_eq}) i niech funkcja prawych stron będzie dyfeomorfizmem. Ponadto niech $ 0 \in M_{ph} $ i $ \textbf{f}(0) = 0 $. Jeśli dla takiego układu istnieje funkcja Lyapunowa, to rozwiązanie $ \textbf{u}(t) \equiv 0 $ jest stabilne. Ponadto jeśli $ \frac{d}{dt}V(u(t)) < 0 $ dla $ u \in M_{ph} - \{0\} $, to jest ono asymptotycznie stabilne.
 \end{tw}
@@ -424,7 +425,7 @@ Chaos deterministyczny wyróżniają (nieformalnie ujmując) trzy cechy układu:
 	\item nieliniowość,
 	\item wrażliwość na warunki początkowe.
 \end{itemize} 
-Pierwsza z nich dotyczy istnienia i jednoznaczności rozwiązania, zaś druga struktury równań zadających dynamikę (suma rozwiązań w ogólności nie musi być rozwiązaniem). Ostatnia cecha dotyczy zachowania się trajektorii wraz z upływem czasu - norma ich różnicy pozostaje nieograniczona pomimo zbliżonych warunków początkowych. Innymi słowy: ustaliwszy uprzednio warunek początkowy, trajektorie wychodzące z punktów z jego dowolnego otoczenia z czasem pozostają odległe od trajektorii rozpoczynającej się w tymże punkcie\footnote{Mówiąc bardziej precyzyjnie - cecha ta zachodzi dla $ \mu $-prawie wszystkich punktów z otoczenia, gdzie definicja miary $ \mu $ podana zostanie później.}. Wrażliwość układu dynamicznego równie silnie przejawia się w stosunku do zmiany parametrów funkcji  $ \textbf{f}:M_{ph} \mapsto M_{ph}  $ przy ustalonym warunku początkowym. Występują istotne różnice pomiędzy wspomniamymi wrażliwościami, które mają bezpośrednie konsekwencje w analizie układu - zagadnienie to zostanie poruszone przy okazji omawiania \textit{Metody Trajektorii Cienia}. Dodatkowo, często wspomina się o długookresowym, aperiodycznym zachowaniu rozwiązań w kontekście chaosu. \newline
+Pierwsza z nich dotyczy istnienia i jednoznaczności rozwiązania, zaś druga struktury równań zadających dynamikę (suma rozwiązań w ogólności nie musi być rozwiązaniem). Ostatnia cecha dotyczy zachowania się trajektorii wraz z upływem czasu - norma ich różnicy pozostaje nieograniczona pomimo zbliżonych warunków początkowych. Innymi słowy: ustaliwszy uprzednio warunek początkowy, trajektorie wychodzące z punktów z jego dowolnego otoczenia z czasem pozostają odległe od trajektorii rozpoczynającej się w tymże punkcie\footnote{Mówiąc bardziej precyzyjnie - cecha ta zachodzi dla $ \mu $-prawie wszystkich punktów z otoczenia.}. Wrażliwość układu dynamicznego równie silnie przejawia się w stosunku do zmiany parametrów funkcji  $ \textbf{f}:M_{ph} \mapsto M_{ph}  $ przy ustalonym warunku początkowym. Występują istotne różnice pomiędzy wspomniamymi wrażliwościami, które mają bezpośrednie konsekwencje w analizie układu - zagadnienie to zostanie poruszone przy okazji omawiania \textit{Metody Trajektorii Cienia}. Dodatkowo, często wspomina się o długookresowym, aperiodycznym zachowaniu rozwiązań w kontekście chaosu. \newline
 Z powyższych ustaleń można dojść do wniosku, że o takim układzie niemalże nic konkretnego nie można powiedzieć. Należy pamiętać o tym, że z punktu widzenia metod numerycznych zawsze istnieją ograniczenia (precyzja maszynowa, błędy zaokrągleń, itp.), co wobec ostatniej z wyżej wspomnianych cech również nie poprawia sytuacji. W matematyce oraz w naukach przyrodniczych, w sytuacjach podobnych do zainstniałej, dobrym pomysłem jest próba znalezienie niezmienników - stałych elementów w rozważanych systemach. Okazuje się, że dla układów dynamicznych pomocnym jest zdefiniowanie niezmienniczego ze względu na dynamikę zbioru zwanego atraktorem.
 \begin{defi}
 	Zbiór $\Lambda \subset M_{ph}$ nazywamy atraktorem układu (\ref{dyn_eq}), jeżeli:
@@ -678,7 +679,7 @@ Niech dany będzie układ dynamiczny postaci (\ref{dyn_eq_discr}) i niech będą
 Dysponując już odpowiednią nomenklaturą oraz szerokim arsenałem technik możemy przyjrzeć się metodom poświęconym analizie czułości oraz dotrzeć do sedna postawionego problemu. 
 \newpage
 \section{Wybrane metody optymalizacji lokalnej stosowane w technice}
-Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent (???) oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice [].
+Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice.
 \subsection{Metoda różnic skończonych}
 Metoda ta jest rozwinięciem intuicji stojących za wyznaczaniem pochodnej funkcji. Granicę ilorazu różnicowego przybliża się poprzez tzw. \textit{schematy różnicowe}, które wymagają wyznaczenia wybranej funkcji w kilku punktach. Schematy te mają przykładowe postaci (do końca pracy pochodna poszukiwanej funkcji oznaczana będzie symbolem $ J $, zaś jej parametr symbolem $ s $):
 \begin{equation}
@@ -786,7 +787,7 @@ d(\textbf{u}(t,s'),\textbf{u}(t,s)) < M \thickspace \thickspace \forall t\in(0,\
 \label{uniform_bound}
 \end{equation}
 dla pewnej stałej $ M \in \mathbb{R}_{+} $. Wówczas rozważane przejście graniczne (\ref{limits_commutation}) byłoby w istocie prawdziwe. W konsekwecji prawa strona nie 'wybuchałaby' wraz z rozwojem układu, jak to ma zazwyczaj miejsce w przypadku dowolnego wyboru trajektorii zaburzonej.
-Jak już zostało wspomniane, jako pierwsi zjawisko to zauważyli autorzy w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) i zaproponowali metodę regularyzacji bazującą na uśrednianiu dostatecznej liczby trajektorii (jednocześnie stanowi ona pierwszy przykład z rodziny metod wykorzystujących zespół trajektorii) \cite{Lea2}. Formalne uzasadnienie poprawności tego podejścia stanowią prace \cite{Ruelle1} . Metody takie są jednak numerycznie kosztowne, co pokazują prace \cite{Chandramoorthy}. Należy przy tym wspomnieć, że wymiar zagadnienia może być zredukowany koncentrując się jedynie na niestabilnych wektorach kowiariantnych Lyapunowa (wkład do średniej pochodzący od modów stabilnych jest wyznaczany poprzez klasyczne metody analizy wrażliwości). Jest to tak zwany algorytm S3 (ang. Space Split Sensitivity Analysis algorithm) i jest opisany wraz z analizą kosztowności tego podejścia w stosunkowo nowych pracach[]. Niniejsza praca koncentruje się na metodach, które wykorzystują jedną (generyczną) trajektorię, co od razu wyznacza kres górny wymiaru zagadnienia.\newline 
+Jak już zostało wspomniane, jako pierwsi zjawisko to zauważyli autorzy w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) i zaproponowali metodę regularyzacji bazującą na uśrednianiu dostatecznej liczby trajektorii (jednocześnie stanowi ona pierwszy przykład z rodziny metod wykorzystujących zespół trajektorii) \cite{Lea2}. Formalne uzasadnienie poprawności tego podejścia stanowią prace \cite{Ruelle1} . Metody takie są jednak numerycznie kosztowne, co pokazują prace \cite{Chandramoorthy}. Należy przy tym wspomnieć, że wymiar zagadnienia może być zredukowany koncentrując się jedynie na niestabilnych wektorach kowiariantnych Lyapunowa (wkład do średniej pochodzący od modów stabilnych jest wyznaczany poprzez klasyczne metody analizy wrażliwości). Jest to tak zwany algorytm S3 (ang. Space Split Sensitivity Analysis algorithm) i jest opisany wraz z analizą kosztowności tego podejścia w stosunkowo nowych pracach \cite{Chandramoorthy2},\cite{Chandramoorthy3}. Niniejsza praca koncentruje się na metodach, które wykorzystują jedną (generyczną) trajektorię, co od razu wyznacza kres górny wymiaru zagadnienia.\newline 
 Podstawową ideą Metody Trajektorii Cienia jest regularyzacja poprzez odpowiedni wybór trajektorii zaburzonej przy innym warunku początkowym, tak aby zachodzło (\ref{uniform_bound}). Postępowanie takie jest usprawiedliwione na mocy założenia ergodyczności (Rozdział). Głównym narzędziem jest przy tym operator cienia, którego własności zostaną przedstawione w następnych sekcjach. Skutkiem jego działania będzie uzyskanie trajektorii bliskej wyjściowej dla dowolnego czasu, co pozwoli uzyskać równość w (\ref{J_derivative2}). \newline 
 Do końca pracy przyjmujemy założenia z Rozdziału. W szczególności te dotyczące ergodyczności oraz hiperboliczności układu (\ref{dyn_eq}), jak i regularności funkcji $ \textbf{f}: M_{ph} \rightarrow M_{ph}$. 
 \subsection{Metoda Operatora Cienia}
@@ -904,7 +905,7 @@ Problem w takim sformułowaniu jest oczywiście dobrze postawiony (powołując s
 \end{equation}  
 Taka konstrukcja pozwala na kontrolę tempa występowania konkretnych punktów w przestrzeni fazowej co w konsekwencji pozwala zachować odpowiednio małą odległość od trajektorii referencyjnej w odpowiadających sobie chwilach. \newline
 Funkcja taka odpowiedni 'przyspiesza' lub 'spowalnia' rozwiązanie w wybranych chwilach wzdłuż trajektorii. Oczywiście w początkowej chwili musi zachodzić $ \tau(t=0) = 0 $. Interesująca jest zatem jej pochodna. W szczególnym przypadku braku jej wpływu, tj. gdy $ \tau(t) = id $ mamy $ \frac{d\tau(t)}{dt} = 1$ dla każdego $ t \in [0,T] $. Wprowadźmy oznaczenie $ \eta(t) = \frac{\tau(t)}{dt}-1 $. Poprzednie spostrzeżenia wskazują, że 'przyspieszanie' rozwiązania następuje przy $ \eta(t) > 0$, zaś 'hamowanie' dla  $ \eta(t) < 0$, w związku z czym funkcję $ \eta(t) $ nazywamy \textit{dylatacją czasu}.\newline
-Wyjątkowo prosta jej interpretacja zachodzi dla układów z czasem dyskretnym, a więc i dla realizacji numerycznych równań zwyczajnych. Sprowadza się ona bowiem do powszechie stosowanej techniki adaptacyjnego kroku czasowego. Podsumowanie jej wpływu ilustruje Rysunek.
+Wyjątkowo prosta jej interpretacja zachodzi dla układów z czasem dyskretnym, a więc i dla realizacji numerycznych równań zwyczajnych. Sprowadza się ona bowiem do powszechie stosowanej techniki adaptacyjnego kroku czasowego.
 Wprowadzając taką funkcję modyfikujemy postać funkcjonału (\ref{LSS_v1}). Otrzymujemy
 \begin{equation}
 L(\textbf{u}_{shadow}) = \inf_{\textbf{u},\tau}\frac{1}{T}\int_{0}^{T}(d^{2}(\textbf{u}(\tau(t)),\textbf{u}_r(t)) + \alpha^{2}\eta^{2}(t))dt,
@@ -1191,27 +1192,27 @@ Metoda trajektorii cienia została wykorzystana do wyznaczenia wrażliwości fun
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/LSS.png} 
 	\centering
-	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.)}
-	\ref{Fig22}
+	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.}
+	\label{Fig22}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/LSSvsCVM.png} 
 	\centering
 	\caption{Porównanie obu metod}
-	\ref{Fig23}
+	\label{Fig23}
 \end{figure}
 Podobna analiza została wykonana dla drugiego przypadku ($ T=50 $), a jej wyniki przedstawiają Rysunki  (\ref{Fig24}) oraz (\ref{Fig25}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/LSS1.png} 
 	\centering
-	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.)}
-	\ref{Fig24}
+	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.}
+	\label{Fig24}
 \end{figure}
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/LSSvsCVM1.png} 
 	\centering
 	\caption{Porównanie obu metod}
-	\ref{Fig25}
+	\label{Fig25}
 \end{figure}
 Kod zaimplementowany w środowisku skryptowym MATLAB jest dostępny na publiczny repozytorium autora \cite{Marek1}.
 \subsection{Scenariusz II - oblicze chaosu}
@@ -1325,12 +1326,6 @@ Zależność ta ma kształt paraboliczny, co jest zgodne z oczekiwaniami. Uwagę
 	\centering
 	\caption{Najlepiej dopasowana parabola na tle krzywej funkcji celu}
 	\label{Fig29}
-\end{figure}
-Odpowiadające im wartości wrażliwości ilustruje Rysunek.
-\begin{figure}[H]
-	\includegraphics[scale=0.7]{figures/Jbar_parabola.png} 
-	\centering
-	\caption{Najlepiej dopasowana parabola na tle krzywej funkcji celu}
 \end{figure}
 Przebadane zostało pięć przypadków różniących się liczbą Reynoldsa (modułem prędkości wlotowej). Rozmiary siatki pozostawały niezmienne: w kierunku wlotu zastosowano podział na $ m=20 $ komórek, zaś w kierunku poziomym $ n=10m $.
 \paragraph{Liczba Reynoldsa: 200}
@@ -1528,16 +1523,16 @@ Kod zaimplementowany w języku C++ jest dostępny na publiczny repozytorium auto
 \newpage
 \section{Dyskusja wyników oraz wnioski}
 \subsection{Scenariusz pierwszy}
-Wyniki symulacji dla układu Lorenza (1963) są zgodne z oczekiwaną wrażliwością funkcji celu. Zauważmy w tym miejscu, że dla przebadanych okresów symulacji (Rysunki) wyznaczona w sposób bezpośredni wrażliwość pozostaje równie bezużyteczna (Rysunki). Można stąd wysunąć wniosek, iż nawet jeżeli funkcja celu wizualnie wygląda na ‘wygładzoną’, ostatecznym weryfikatorem przydatności powinna być zawsze wyznaczona numerycznie wraliwość. \newline
-Rysunki ilustrują, że takowa liczona względem trajektorii cienia jest bardzo stabilna. Dodatkowo zauważmy, iż przebadany został dość obszerny zakres parametrów projektowych. 
+Wyniki symulacji dla układu Lorenza (1963) są zgodne z oczekiwaną wrażliwością funkcji celu. Zauważmy w tym miejscu, że dla przebadanych okresów symulacji wyznaczona w sposób bezpośredni wrażliwość pozostaje równie bezużyteczna (Rysunki (\ref{Fig17}), (\ref{Fig20}), (\ref{Fig21}), (\ref{Fig23}), (\ref{Fig25})). Można stąd wysunąć wniosek, iż nawet jeżeli funkcja celu wizualnie wygląda na ‘wygładzoną’, ostatecznym weryfikatorem przydatności powinna być zawsze wyznaczona numerycznie wraliwość. \newline
+Rysunki (\ref{Fig22})-(\ref{Fig25}) ilustrują, że takowa liczona względem trajektorii cienia jest bardzo stabilna. Dodatkowo zauważmy, iż przebadany został dość obszerny zakres parametrów projektowych. Sugeruje to dużą stabilność metody. 
 \subsection{Scenariusz drugi}
 Na początku zauważmy, że w każdym z przebadanych przypadków przyjęte założenie ergodyczności ma uzasadnienie (dostarczone wyniki nie dają podstaw, aby to założenie odrzucić) – skumulowane spadki ciśnień dążą bowiem asymptotycznie do stałych wartości (Rysunki).  Jest tak nawet pomimo różnych liczb Reynoldsa oraz wynikających z nich jakościowych zmian rozwiązań ilustrowanych poprzez mapy modułów prędkości (Rysunki). \newline
-Funkcja celu (\ref{J_numerical}) dla średniego w czasie spadku ciśnienia ma character paraboliczny, co jest zgodne z danymi literaturowymi (na przykład []). Stanowi to wskazówkę, iż w odpowiadających analizowanym równaniom Boltzmanna równaniach Naviera-Stokesa człon nieliniowy nie mógłby zostać zlinearyzowany bez wprowadzania istotnych błędów. \newline
+Funkcja celu (\ref{J_numerical}) dla średniego w czasie spadku ciśnienia ma character paraboliczny, co jest zgodne z danymi literaturowymi. Stanowi to wskazówkę, iż w odpowiadających analizowanym równaniom Boltzmanna równaniach Naviera-Stokesa człon nieliniowy nie mógłby zostać zlinearyzowany bez wprowadzania istotnych błędów. \newline
 Dokładność wyników podsumowuje  poniższa tabela.
 Błąd względny rośnie wraz ze wzrostem liczby Reynoldsa. Obserwacja taka może być uzasadniona tym, że nieliniowości zaczynają dominować dynamikę zachowania rozwiązań i w związku z tym rośnie liczba niestabilnych modów Lyapunova. Rysunek ilustruje wykres błędu względnego w funkcji liczby Reynoldsa.
 Charakter paraboliczny wskazuje potencjalne problemy dla bardzo dużych liczb Reynoldsa. W takich przypadkach konieczne byłoby zastosowanie dłuższych okresów symulacji (poprzedni scenariusz sugeruje, iż taki zabieg ma działanie regularyzujące). \newline
 Zauważmy też, że wrażlowości wyznaczone omawianą metodą niedoszacowują wartości referencyjnych. Taki stan rzeczy może być spowodowany skończonym czasem symulacji. Pamiętajmy, że wyznaczona trajektoria cienia pozostaje w bliskim sąsiedztwie trajektorii bazowej, jednakże nie ma gwarancji, że jest ona przez cały okres w tej samej odległości. Dysponujemy jedynie ograniczeniem górnym, które w konkretnych przypadkach może wpływać na dokładność uzyskanych wyników. \newline
-Zauważmy też, że wyniki tworzą silnie liniowy trend. Najlepiej dopasowana prosta pokazana na tle wyników (Rysunek (\ref{Fig56})) ilustruję tę uwagę.
+Spostrzegamy na koniec, że wyniki tworzą silnie liniowy trend. Najlepiej dopasowana prosta pokazana na tle wyników (Rysunek (\ref{Fig56})) ilustruję tę uwagę.
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/linear_results.png} 
 	\centering
@@ -1561,7 +1556,7 @@ Oprócz wspomnianych zalet Metoda Trajektorii Cienia (jak każda inna) posiada w
 \begin{itemize}
 	\item Metoda jest trudna do zastosowania w gotowych kodach obliczeniowych ze względu na konieczność zróżniczkowania kodu (w przeciwnym przypadku zajętość pamięci jest nieakceptowalnie wysoka).
 	\item Pomimo istotnego ograniczenia wymaganej pamięci operacyjnej wciąż mogą pojawić się problemy dla naprawdę dużych zagadnień. Nadal bowiem konieczne jest przechowywanie całej trajektorii układu.
-	\item Innym problemem wspomnianym na przykład w pracach \cite{Chandramoorthy2}, \cite{Chandramoorthy3} jest wybór trajektorii, która jest niereprezentatywna ze względu na zaburzenie. Kłopot tkwi w tym, że wszystkie wspomniane własności (patrz Rozdział 2) zachodzą w sensie odpowiedniej miary, tj. nie zachodzą na zbiorach, których ta miara jest zerowa. Na przykład wspomniane juz w Rozdziale 2. trajektorie okresowe charakteryzują się takimi własnościami. Wybierając taką trajektorię nie mamy gwarancji regularnego jej zachowania. W pracy [] odnaleziono przykłady, w których taki zbiór (miary zero) jest gęsty w całej przestrzeni, co zwiększa szansę na wybór niereprezentatywnej trajektorii.
+	\item Innym problemem wspomnianym na przykład w pracach \cite{Chandramoorthy2}, \cite{Chandramoorthy3} jest wybór trajektorii, która jest niereprezentatywna ze względu na zaburzenie. Kłopot tkwi w tym, że wszystkie wspomniane własności (patrz Rozdział 2) zachodzą w sensie odpowiedniej miary, tj. nie zachodzą na zbiorach, których ta miara jest zerowa. Na przykład wspomniane juz w Rozdziale 2. trajektorie okresowe charakteryzują się takimi własnościami. Wybierając taką trajektorię nie mamy gwarancji regularnego jej zachowania. W pracy \cite{Grebogi} odnaleziono przykłady, w których taki zbiór (miary zero) jest gęsty w całej przestrzeni, co zwiększa szansę na wybór niereprezentatywnej trajektorii.
 \end{itemize}
 Wszystkie powyższe mankamenty wymagają dodatkowych badań. Obiecującym rozwiązaniem może okazać się na przykład podejście hybrydowe. Polega ono na połączeniu Metody Trajektorii Cienia z klasą metod opartych na uśrednianiu w przestrzeni całkowej. Przykład takiego algorytmu, który w istocie bazuje na rozbiciu przestrzeni fazowej – S3 (ang. Space Split Sensitivity algorithm) zaprezentowany jest w pracach \cite{Chandramoorthy2} oraz \cite{Chandramoorthy3}.
 	  
@@ -1632,6 +1627,10 @@ Wydawnictwo: Zysk i S-ka, 2018.
 \bibitem{Golub} Golub G. H., Loan C. V. F.,
 \emph{Matrix Computations},
 The Johns Hopkins Univ. Press, Baltimore, 1996.
+
+\bibitem{Grebogi} Grebogi C., Ott E., Yorke J. A.,   
+\emph{Unstable periodic orbits and the dimensions of multifractal chaotic attractors},
+Phys. Rev. A 37, 1711, 1988.
 
 \bibitem{Tapenade} Hascoet L., Pascual V.,
 \emph{TAPENADE 2.1 user’s guide},
