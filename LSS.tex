@@ -1,10 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\documentclass[12pt,a4paper,oneside]{book}
-\documentclass[12pt]{article}
+\documentclass[12pt, twoside]{book}
 \usepackage[polish]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage{polski}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand\headrulewidth{0pt}
+\fancyhead{}
+\fancyfoot{}
+\fancyfoot[RO]{\thepage}
+\fancyfoot[LE]{\thepage}
 
 % \usepackage[polish,english]{babel}
 % \usepackage{polish}
@@ -43,7 +51,6 @@
 \usepackage{tikz}
 \usepackage{engord}
 
-
 \usetikzlibrary{%
   arrows,%
   shapes,%
@@ -55,6 +62,7 @@
   shadows%
 }
 
+%\setlength{\textfloatsep}{10pt plus 1.0pt minus 2.0pt}
 
 \setlength{\topmargin}{-5 mm}
 \setlength{\textheight}{225 mm}
@@ -122,6 +130,7 @@
 \newtheorem{tw}{Twierdzenie}
 \newtheorem{lem}{Lemat Cienia}
 
+
 \begin{document}
 
 
@@ -145,16 +154,16 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Wprowadzenie}
-\subsection{Ogólna charakterystyka}
+\chapter{Wprowadzenie}
+\section{Ogólna charakterystyka}
 Istotę niniejszej pracy stanowi efektywna implementacja metody wyznaczania wrażliwości dla pewnej klasy funkcji celu stanowiących długookresowe wartości średnie w przypadku układów dynamicznych, których rozwiązania przejawiają skomplikowane zachowania. Analiza taka jest niezbędna w wielu praktycznych zastosowaniach, takich jak optymalizacja kształtu elementów maszyn i urządzeń cieplno-przepływowych \cite{Jameson}, sterowanie z przesuwnym horyzontem czasowym (predykcyjne) \cite{Bewley1}\cite{Bewley2}, adaptacja siatek obliczeniowych \cite{Venditti}, szacowanie błędów i niepewności \cite{Cavaglieri}, asymilacja danych związana z prognozami pogody \cite{Thepaut}. Mimo że praca ta skupia się głównie na zastosowaniach związanych z mechaniką płynów, przedstawione algorytmy mogą być pomocne do rozwiązywania szerszej klasy problemów związanych z układami dynamicznymi.\newline 
 W ostatnich latach powstało kilka prac sugerujących sposób rozwiązania postawionego problemu, jednakże wspólną ich cechą jest wysoki koszt numeryczny. W niniejszej pracy wykorzystuje się podstawowe ich idee - w szczególności zastosowana została Metoda Trajektorii Cienia (ang. \textit{Least Squares Shadowing}) w formie wariacyjnej. Całość została zaimplementowana w języku skryptowym \textit{MATLAB} oraz w języku wysokiego poziomu: \textit{C++}. Nowość stanowi sposób dyskretyzacji równań mechaniki płynów - zastosowana została Metoda Siatkowa Boltzmanna.
-\subsection{Tło literaturowe badanego problemu}
+\section{Tło literaturowe badanego problemu}
 Opracowane do tej pory klasyczne metody estymacji czułości bazujące na wyznaczaniu gradientu funkcji celu pozostają nieskuteczne wobec istotnych z punktu widzenia techniki układów niestacjonarnych, których dynamika (silnie nieliniowa) przekłada się na praktycznie nieprzewidywalne zachowanie. Mówi się wówczas o układach chaotycznych (patrz Rozdział 2). Świetną pozycję opisującą historię odkryć takich układów, związane z nimi problemy oraz pierwsze próby ich matematycznego opisu stanowi książka \cite{Gleick}. Trudności polegające na załamaniu się klasycznych metod wyznaczania wrażliwości zotały po raz pierwszy zauważone w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) stanowiącego skrajnie uproszczony model termicznej konwekcji naturalnej w atmosferze. Ci sami autorzy w pracy \cite{Lea2} zaproponowali sposób regularyzacji poprzez uśrednianie całkowe w przestrzeni fazowej dla skal czasowych zdeterminowanych poprzez największą wartość wykładników Lyapunowa. Uzasadnienie takiego postępowania stanowi pozycja \cite{Ruelle1}, w której autor dowodzi poprawności sformułowania problemu (tj. pokazuje, że poszukiwana pochodna istnieje i jest ograniczona przy pewnych ogólnych założeniach) oraz podaje \textit{explicite} jej wzór. Podejście takie bez znaczących modyfikacji jest niepraktyczne ze względu na koszt numeryczny, co zostało pokazane w pracy \cite{Chandramoorthy}.\newline
 Innym podejściem jest próba rozwiązania równań Fokkera-Plancka odnoszących się do funckji gęstości prawdopodobieństwa zdefiniowanej na przestrzeni fazowej ujęte w pracy \cite{Thuburn}. Kontynuację tego podejścia można znaleść w pracy \cite{Blonigan1}. Dużym problemem jest regularność wspomniaej funkcji rozkładu - uzyskuje się ją poprzez dodanie sztucznego członu do równań wprowadzając tym samym błędy rozwiązań. Podobna procedura wykorzystuje Twierdzenie o Dyssypacji Fluktuacji \cite{Abramov}, jednakże zmaga się ona z analogicznymi problemami.\newline
 Pomysł Metody Trajektorii Cienia, stanowiącej główny obiekt zainteresowań w ramach niniejszej pracy, narodził się w ramach zdefiniowania Operatora Cienia w pracy \cite{Qiqi1}, w której autor rozwiązuje postawiony problem poprzez dekompozycję przestrzeni fazowej na wektory kowariantne Lyapunova. Takie rozwiązanie jest kosztowne w przypadku obecności wielu dodatnich wykładników Lyapunova, co jest cechą charakterystyczną układów chaotycznych. Pierwszą pracą, w której wspomniana metoda została formalnie zdefiniowana jest \cite{Qiqi3}. Analizę zbieżności zregularyzowanego w ten sposób rozwiązania ilustruje \cite{Qiqi2}. Przykład jej zastosowania w ramach równań Kuramoto-Shivashinsky zawiera praca \cite{Blonigan3}. Wyznaczenie wrażliwości dla dwuwymiarowego układu przepływowego zdyskretyzowanego równaniami RANS zawiera \cite{Blonigan2}. \newline
 Uproszczona wersja Metody Trajektorii Cienia po raz pierwszy pojawiła się w artykule \cite{Chater}, w której rolę funkcji odpowiadającej za dylatację czasu (zob. Rozdział 4) pełni z góry określona funkcja okienka, stanowiąca odpowiednio regularne jądro całkowe o zwartym nośniku. 
-\subsection{Układ pracy}
+\section{Układ pracy}
 Rozdział 2 zawiera przegląd definicji oraz niezbędnych faktów dotyczących teorii układów dynamicznych i chaosu deterministycznego wykorzystywanych w dalszych rozdziałach. W Rozdziale 3 przedstawiono wybrane metody klasyczne wyznaczania gradientu funkcji celu, na których bazują algorytmy optymalizacji lokalnej stosowane w technice.  Rozdział 4 prezentuje metodę najmniejszych kwadratów dla trajektorii cienia (ang. \textit{Least Squares Shadowing}, oznaczana dalej również jako LSS). W rozdziale 5 zestawiono wyniki dla dwóch przypadków:
 \begin{itemize}
 	\item układu Lorenza (1963),
@@ -162,9 +171,9 @@ Rozdział 2 zawiera przegląd definicji oraz niezbędnych faktów dotyczących t
 \end{itemize}
 Rozdział 6 przedstawia omówienie wyników, a także konkluzje
 \newpage
-\section{Elementy teorii gładkich układów dynamicznych}
+\chapter{Elementy teorii gładkich układów dynamicznych}
 Dla zrozumienia problemów związanych ze stabilnością układów ewoluujących w czasie konieczne jest zapoznanie się z nomenklaturą obowiązującą w matematycznym opisie takich układów. W rozdziale tym przedstawione zostały podstawowe definicje i fakty dotyczące zagadnień stabilności równań różniczkowych zwyczajnych oraz chaosu deterministycznego. Na wstępnie należy zaznaczyć, że nie należy mylić tego pojęcia z terminem chaotyczności przywołanym na wstępie pracy, który oznacza skomplikowane zachowanie rozwiązań i w ogólności nie musi zależeć od wartości wykładników Lyapunowa stanowiących formalne kryterium chaotyczności w sensie układów dynamicznych. Mimo że w tej pracy przedstawiona została między innymi metoda analizy wrażliwości na przykładzie układu Lorentza, który w istocie jest chaotyczny (dodatnie wykładniki Lyapunowa), celem zainteresowań będzie szersza klasa problemów, o których (w większości) nie ma informacji związanych z ich przynależnością do tej klasy problemów (w szczególności nie jest udowodniona chaotyczność układu równań Naviera-Stokesa). Zaproponowana metoda jest jednak dogodna do dużej klasy układów przejawiających skomplikowane zachowania, które w dalszej części pracy określa się mianem chaotycznych.\newline
-\subsection{Pojęcia podstawowe}
+\section{Pojęcia podstawowe}
 Niech $ M $ oznacza rozmaitość różniczkową z metryką Riemanna oznaczaną symbolem $ d $. W dalszej części pracy (w przypadku braku konfliktu oznaczeń) przetrzeń metryczna $ (M,d) $ będzie oznaczana przez $ M $. Niech dany będzie homeomorfizm $  \textbf{f}: M \mapsto M$.
 Załóżmy również, że dany jest układ autonomicznych równań różniczkowych zwyczajnych postaci
 \begin{equation}
@@ -249,9 +258,9 @@ Niech dany będzie układ dynamiczny $  \textbf{f}: M_{ph} \mapsto M_{ph}$ z nie
 $ T^{-1}(A) = A  \implies \mu(A)=0$ lub $\mu(M_{ph}-A)=0$.
 \end{defi} 
 Zauważmy, że wobec założenia dotyczącego różniczkowalności $  \textbf{f}: M_{ph} \mapsto M_{ph}$ przeciwobraz dowolnego zbioru mierzalnego można podmienić na obraz tegoż zbioru. A więc przekształcenie ergodyczne to takie, dla którego jedynymi zbiorami niezmienniczymi są te pełnej miary lub zbiory miary zero. \newline
-Formalna definicja ergodyczności wydawać się może abstrakcyjna, niemniej wprowadzenie tego pojęcia wynikało pierwotnie z potrzeb fizyki, a dokładnie z mechaniki statystycznej i ma ono praktyczną interpretację. Załóżmy bowiem, że chcielibyśmy wyznaczyć temperaturę gazu w danym pomieszczeniu. Patrząc na to z eksperymentalnego punktu widzenia nie ma w tym nic nadzwyczajnego - wystarczy w dowolnym miejscu dokonać pomiaru za pomocą termometru. Należy przy tym odczekać odpowiednią ilość czasu związaną z termiczną bezwładnością przyrządu. Na ten oczywisty fakt można spojrzeć z punktu widzenia układów dynamicznych - temperatura jest miarą średniej energii kinetycznej ruchu postępowego cząstek gazu w pomieszczeniu (przyjmujemy tutaj model gazu doskonałego jako dobre przybliżenie). Pomiar za pomocą termometru mierzy energie kinetyczne cząstek, których wartości różnią się. Stąd, aby pomiar był poprawny, należy zapewnić odpowiednio długi okres uśredniania. Dodatkowo należy zwrócić uwagę, że nie ma znaczenia w którym miejscu tego pomiaru dokonamy (gaz jest w równowadze termodynamicznej). Mimo, że z mikroskopowego punktu widzenia w każdej chwili cząstki poruszają się chaotycznie ich średnia wartość pewnych wielkości (w tym przypadku energii kinetycznej) nie zmienia się. Analizując to zadanie, ale tym razem na drodze teorii napotyka się pewien problem. Rozwiązanie równań dynamiki dla tak złożonego układu jest zbyt kosztowne w sensie czasu obliczeń. Z mechaniki statystycznej wiadomo jednakże, że istnieje w stanie równowagi funkcja rozkładu prędkości cząstek (rozkład Maxwella-Boltzmanna). Jest to funkcja gęstości prawdopodobieństwa i dzięki niej można bez większych problemów (tj. całkując po przestrzeni fazowej) wyznaczyć poszukiwaną średnią wartość energii kinetycznej przypadającej na cząstke a w konsekwencji temperaturę gazu. Kryje się za tym jednak pewna subtelność - wykorzystane zostało uśrednianie po przestrzeni fazowej (po wszystkich możliwych prędkościach z wagami odpowiadającymi rozkładowi  Maxwella-Boltzmanna). Jest to abstrakcyjny zabieg, który można sobie wyobrazić jako mierzenie parametrów jednej cząstki 'rozmazanej' przez funkcję rozkładu po wszystkich możliwych jej stanach. W tym momencie dochodzimy do istoty problemu: kiedy można powiedzieć, że losowo wybrana cząsta jest reprezentatywna w tym sensie, że (po odpowiednio długim czasie) wartość średnia mierzonej dla niej wielkości będzie odpowiadała wartości oczekiwanej tej samej wielkości dla zespołu cząstek ? Kierując się intuicją można dojść do wniosku, że owa cząstka z pewnością winna przyjmować każdą z możliwych wartości prędkości z odpowiednią częstością dyktowaną rozkładem. Innymi słowy: powinna ona przejść przez (prawie) każdy punkt przestrzeni fazowej, przy czym okres 'przebywania' w różnych jej obszarach nie może być jednorodny. Aby to mogło zajść układ powinien wykazywać brak stałych tendencji, a więc przejawiać własności chaotyczne, w powszechnym tego słowa znaczeniu. Jako pierwszy do takiego wniosku doszedł sam Boltzmann, który opisał to słowami: "Duża nieregularność ruchu cieplnego i zmienność sił wewnętrznych działających na ciało stwarza duże prawdopodobieństwo, że atmowy w ruchu cieplnym mogą przyjmować wszystkie wartości położeń i pędów zgodnie z ustaloną energią wewnętrzną ciała" \cite{Tempczyk}. Wniosek taki nie jest ścisły, ale jest bardzo bliski prawdy. Okazuje się bowiem, że warunkiem koniecznym i dostatecznym ergodyczności układu jest brak możliwości podzielenia przestrzeni fazowej na dwa podzbiory o niezerowych miarach, niezmienniczych względem dynamiki układu (jest to nieformalne sformułowanie słynnych twierdzeń ergodycznych autorstwa George'a Birkhoffa). Stąd (i z definicji ergodyczności) można już dojść do wniosku, że brak takich obszarów przestrzeni fazowej wymusza pokrywanie przez $ \mu $-prawie każdą trajektorię całej przestrzeni fazowej (nie wszystkie, bo mogą bowiem istnieć orbity cyckliczne, o których będzie mowa w następnym rozdziale). Co więcej funkcja rozkładu statystycznego takich układów jest ustalona i niezmienna względem czasu, a więc średnie długookresowe istnieją i są (przynajmniej w przejściu granicznym) sobie równe.  \newline 
-Wobec powyższego rozumowania można dojść do wniosku, że własność ta implikuje istotną cechę rozpatrywanych układów: długookresowe wartości średnie są niezależne od warunków początkowych (uściślając: są one takie same dla prawie wszystkich warunków początkowych) i ich wartość można równoważnie uzyskać poprzez uśrednianie po przestrzeni fazowej układu (względem miary probabilistycznej, która w takich układach jest niezmiennicza). Jak się później przekonamy (Rozdział) całkowanie w przestrzeni możliwych stanów układu ma działanie regularyzujące. 
-\subsection{Stabilność rozwiązań}
+Formalna definicja ergodyczności wydawać się może abstrakcyjna, niemniej wprowadzenie tego pojęcia wynikało pierwotnie z potrzeb fizyki, a dokładnie z mechaniki statystycznej i ma ono praktyczną interpretację. Załóżmy bowiem, że chcielibyśmy wyznaczyć temperaturę gazu w danym pomieszczeniu. Patrząc na to z eksperymentalnego punktu widzenia nie ma w tym nic nadzwyczajnego - wystarczy w dowolnym miejscu dokonać pomiaru za pomocą termometru. Należy przy tym odczekać odpowiednią ilość czasu związaną z termiczną bezwładnością przyrządu. Na ten oczywisty fakt można spojrzeć z punktu widzenia układów dynamicznych - temperatura jest miarą średniej energii kinetycznej ruchu postępowego cząstek gazu w pomieszczeniu (przyjmujemy tutaj model gazu doskonałego jako dobre przybliżenie). Pomiar za pomocą termometru mierzy energie kinetyczne cząstek, których wartości różnią się. Stąd, aby pomiar był poprawny, należy zapewnić odpowiednio długi okres uśredniania. Dodatkowo należy zwrócić uwagę, że nie ma znaczenia w którym miejscu tego pomiaru dokonamy (gaz jest w równowadze termodynamicznej). Mimo, że z mikroskopowego punktu widzenia w każdej chwili cząstki poruszają się chaotycznie ich średnia wartość pewnych wielkości (w tym przypadku energii kinetycznej) nie zmienia się. Analizując to zadanie, ale tym razem na drodze teorii napotyka się pewien problem. Rozwiązanie równań dynamiki dla tak złożonego układu jest zbyt kosztowne w sensie czasu obliczeń. Z mechaniki statystycznej wiadomo jednakże, że istnieje w stanie równowagi funkcja rozkładu prędkości cząstek (rozkład Maxwella-Boltzmanna). Jest to funkcja gęstości prawdopodobieństwa i dzięki niej można bez większych problemów (tj. całkując po przestrzeni fazowej) wyznaczyć poszukiwaną średnią wartość energii kinetycznej przypadającej na cząstke a w konsekwencji temperaturę gazu. Kryje się za tym jednak pewna subtelność - wykorzystane zostało uśrednianie po przestrzeni fazowej (po wszystkich możliwych prędkościach z wagami odpowiadającymi rozkładowi  Maxwella-Boltzmanna). Jest to abstrakcyjny zabieg, który można sobie wyobrazić jako mierzenie parametrów jednej cząstki 'rozmazanej' przez funkcję rozkładu po wszystkich możliwych jej stanach. W tym momencie dochodzimy do istoty problemu: kiedy można powiedzieć, że losowo wybrana cząsta jest reprezentatywna w tym sensie, że (po odpowiednio długim czasie) wartość średnia mierzonej dla niej wielkości będzie odpowiadała wartości oczekiwanej tej samej wielkości dla zespołu cząstek ? Kierując się intuicją można dojść do wniosku, że owa cząstka z pewnością winna przyjmować każdą z możliwych wartości prędkości z odpowiednią częstością dyktowaną rozkładem. Innymi słowy: powinna ona przejść przez (prawie) każdy punkt przestrzeni fazowej, przy czym okres 'przebywania' w różnych jej obszarach nie może być jednorodny. Aby to mogło zajść układ powinien wykazywać brak stałych tendencji, a więc przejawiać własności chaotyczne, w powszechnym tego słowa znaczeniu. Jako pierwszy do takiego wniosku doszedł sam Boltzmann, który opisał to słowami: "Duża nieregularność ruchu cieplnego i zmienność sił wewnętrznych działających na ciało stwarza duże prawdopodobieństwo, że atomy w ruchu cieplnym mogą przyjmować wszystkie wartości położeń i pędów zgodnie z ustaloną energią wewnętrzną ciała" \cite{Tempczyk}. Wniosek taki nie jest ścisły, ale jest bardzo bliski prawdy. Okazuje się bowiem, że warunkiem koniecznym i dostatecznym ergodyczności układu jest brak możliwości podzielenia przestrzeni fazowej na dwa podzbiory o niezerowych miarach, niezmienniczych względem dynamiki układu (jest to nieformalne sformułowanie słynnych twierdzeń ergodycznych autorstwa George'a Birkhoffa). Stąd (i z definicji ergodyczności) można już dojść do wniosku, że brak takich obszarów przestrzeni fazowej wymusza pokrywanie przez $ \mu $-prawie każdą trajektorię całej przestrzeni fazowej (nie wszystkie, bo mogą bowiem istnieć orbity cyckliczne, o których będzie mowa w następnym rozdziale). Co więcej funkcja rozkładu statystycznego takich układów jest ustalona i niezmienna względem czasu, a więc średnie długookresowe istnieją i są (przynajmniej w przejściu granicznym) sobie równe.  \newline 
+Wobec powyższego rozumowania można dojść do wniosku, że własność ta implikuje istotną cechę rozpatrywanych układów: długookresowe wartości średnie są niezależne od warunków początkowych (uściślając: są one takie same dla prawie wszystkich warunków początkowych) i ich wartość można równoważnie uzyskać poprzez uśrednianie po przestrzeni fazowej układu (względem miary probabilistycznej, która w takich układach jest niezmiennicza). Jak się później przekonamy (Rozdział 4) całkowanie w przestrzeni możliwych stanów układu ma działanie regularyzujące. 
+\section{Stabilność rozwiązań}
 Zagadnienie stabilności związane jest z odpowiedzią na pytanie jak zmieni się globalny przebieg rozwiązania pod wpływem małych (w odpowiednim sensie) perturbacji warunków początkowych lub funkcji określającej dynamikę układu, który jest zidentyfikowany poprzez (wektorowe) równanie różniczkowe zwyczajne.
 \begin{defi}\label{crit_points}
 	Punkt $ \textbf{u}_{c} \in M_{ph}$ nazywamy położeniem równowagi równania (\ref{dyn_eq}), o ile jest to punkt krytyczny odwzorowania $ \textbf{f} $, tzn. $ \textbf{f}(u_{c}) = 0 $.
@@ -301,15 +310,15 @@ Dla lepszego zrozumienia problemu oraz wytyczenia kierunku dalszych rozważań p
 		\caption{Portret fazowy układu z Przykładu 1}
 		\label{Fig4}
 	\end{figure}
-	Dla dowolnego punktu $ x_{0} \in (-1,1) $ odpowiadająca mu wartość funkcji $ f(x) = x^2-1 $ jest ujemna, wobec czego pochodna rozwiązania jest ujemna i w 'następnym kroku czasowym' będzie miało ono niższą wartość. Zostało to przedstawione za pomocą strzałki o grocie skierowanym w lewą stronę. Analogiczne rozumowanie pozwala dojść do wniosku, że dla $ x_{0} \in (-\infty,-1) \bigcup (1,\infty)$ rozwiązanie będzie zwiększało swoją wartość wraz z upływem czasu, co ilustrują strzałki skierowane w prawą stronę. Oczywiście dla  $ x_{0} = -1 $ lub $ x_{0} = 1 $ rozwiązanie nie będzie się zmieniało, ponieważ są to punkty równowagi. Na koniec zauważmy, że niewielka perturbacja pierwszego z tych punktów 'sprowadzi' rozwiązanie (po pewnym czasie) do warunku początkowego, podczas gdy dowolna zmiana drugiego punktu powoduje rozbieżność rozwiązania. Wobec tego punkty równowagi można podzielić na (lokalnie) stabilne ($ x_{0} = -1 $) i niestabilne ($ x_{0} = 1 $). Formalna definicja tych pojęć podana zostanie później w tym rozdziale.
+	Dla dowolnego punktu $ x_{0} \in (-1,1) $ odpowiadająca mu wartość funkcji $ f(x) = x^2-1 $ jest ujemna, wobec czego pochodna rozwiązania jest ujemna i w 'następnym kroku czasowym' będzie miało ono niższą wartość. Zostało to przedstawione za pomocą strzałki o grocie skierowanym w lewą stronę. Analogiczne rozumowanie pozwala dojść do wniosku, że dla $ x_{0} \in (-\infty,-1) \bigcup (1,\infty)$ rozwiązanie będzie zwiększało swoją wartość wraz z upływem czasu, co ilustrują strzałki skierowane w prawą stronę. Oczywiście dla  $ x_{0} = -1 $ lub $ x_{0} = 1 $ rozwiązanie nie będzie się zmieniało, ponieważ są to punkty równowagi. Na koniec zauważmy, że niewielka perturbacja pierwszego z tych punktów 'sprowadzi' rozwiązanie (po pewnym czasie) do warunku początkowego, podczas gdy dowolna zmiana drugiego punktu powoduje rozbieżność rozwiązania. Wobec tego punkty równowagi można podzielić na (lokalnie) stabilne ($ x_{0} = -1 $) i niestabilne ($ x_{0} = 1 $).
 \end{przyklad}
 Powyższy przykład sugeruje następującą definicję.
 \begin{defi}\label{stable_point}
 	Niech $ \bar{\textbf{u}} \in M_{ph} $ będzie rozwiązaniem układu (\ref{dyn_eq}). Powiemy, że jest ono stabilne w sensie Lyapunowa o ile $\forall \epsilon>0 \  \exists t_{0} \geq 0 \  \exists \eta>0 \  \forall t>t_{0}$ zachodzi implikacja:\newline
 \centerline {$ 	\|\bar{\textbf{u}}(t_{0}) - \textbf{u}(t_{0}) \|_{M}  \leq \eta \  \Rightarrow \ \|\bar{\textbf{u}}(t) - \textbf{u}(t) \|_{M}  \leq \epsilon$,}
-gdzie symbolem $ \textbf{u} $ oznaczono dowolne rozwiązanie układu (\ref{dyn_eq}).\newline
+gdzie symbolem $ \textbf{u} $ oznaczono dowolne rozwiązanie układu (\ref{dyn_eq}), a symbolem $ \|.\|_{M}$ oznaczono normę w $ M $ indukowaną przez metrykę $ d $.\newline
 Ponadto jeśli \newline
-\centerline{$ \lim\limits_{t \rightarrow \infty}\|\bar{\textbf{u}}(t) - \textbf{u}(t) \|_{X} = 0$,}
+\centerline{$ \lim\limits_{t \rightarrow \infty}\|\bar{\textbf{u}}(t) - \textbf{u}(t) \|_{M} = 0$,}
 to rozwiązanie $ \bar{\textbf{u}} \in M_{ph} $ nazywamy asymptotycznie stabilnym.
 \end{defi}
 Taka definicja stabilności jest szeroko stosowana w wielu zastosowaniach technicznym. Dobrym przykładem mogą być układy automatycznej regulacji, w których praktyczne kryteria (takie jak kryterium Rutha lub Hurwitza) wyprowadza się bazując na stabilności określonej w powyższym sensie.\newline
@@ -317,7 +326,7 @@ Zazwyczaj oczywiście nie dysponujemy rozwiązaniami. Z tego powodu konieczne s�
 \newline
 \begin{defi}
 	\label{Lyapnuv_function}
-	Funkcją Lyapunova dla układu postaci (\ref{dyn_eq}) nazywamy dyfeomorfizm $ V: M_{ph} \rightarrow \mathbb{R} $, który spełnia warunki:
+	Funkcją Lyapunova dla układu postaci (\ref{dyn_eq}) nazywamy dyfeomorfizm $ V:\thickspace\thickspace M_{ph} \rightarrow \mathbb{R} $, który spełnia warunki:
 	\begin{itemize}
 		\item $\forall x \in M_{ph} V(x) \geq 0$,
 		\item $ V(u) = 0 $ wtedy i tylko wtedy, gdy $ u $ jest punktem równowagi,
@@ -333,7 +342,7 @@ Powyższe uwagi sugerują pewien sposób postrzegania funkcji Lyapunowa. Niech d
 \begin{equation}
 f(u) = -\frac{dV}{du}.
 \end{equation}
-Trajktując $ u $ jako zmiennej niezależnej $ t $ mamy:
+Trajktując $ u $ jako funkcję zmiennej niezależnej $ t $ mamy:
 \begin{equation}
 \frac{dV}{dt} = \frac{dV}{du}\frac{du}{dt}.
 \end{equation}
@@ -354,7 +363,7 @@ Fakt, że tak zdefiniowane funkcje są różniczkowalne wynika z gładkiej zale�
 	Trajektorią (orbitą) punktu $ u_{s} $ nazywa się obraz przekształcenia $ g^t(u_{s}) $ dla $t\in(-\infty;\infty)  $.
 \end{defi}
 Trajektorię można postrzegać jako ewaluację rozwiązania w konkretnej chwili, traktując przy tym warunek początkowy jako zmienną niezależną. W związku z tym, gdy $ u_{s} $ jest punktem równowagi, to jego orbita jest stała $ g^t(u_{s}) \equiv u_{s}. $\newline
-Przeliśmy od analizy krzywych całkowych jako funkcji czasu do trajektorii układu, które od czasu nie zależą i w naturalny sposób można je zilustrować w przestrzeni fazowej. Jednocześnie mają one wiele wspólnego z rozwiązaniami. Zauważmy najpierw, że sam potok $ (M_{ph},g^t) $ ma strukturę grupy abelowej z działaniem
+Przeszliśmy tym sposobem od analizy krzywych całkowych jako funkcji czasu do trajektorii układu, które od czasu nie zależą i w naturalny sposób można je zilustrować w przestrzeni fazowej. Jednocześnie mają one wiele wspólnego z rozwiązaniami. Zauważmy najpierw, że sam potok $ (M_{ph},g^t) $ ma strukturę grupy abelowej z działaniem
 \begin{equation}
 g^{t+s} = g^tg^s.
 \end{equation}
@@ -417,8 +426,8 @@ Z przykładu tego można łatwo uogólnić następujący wniosek: w przypadku je
 	\end{figure}
 \end{przyklad}
 Z powyższych przykładów łatwo można dojść do wniosku, że analiza trajektorii w przestrzeni fazowej jest dużo łatwiejsza niż badanie nieskończonej (być może nieprzeliczalnej) liczby rozwiązań danego układu. Dysponując już odpowiednim aparatem pojęciowym możemy przejść do analitycznego ujęcia zjawiska chaosu.
-\subsection{Chaos deterministyczny}
-Do tej pory przedstawione zostały pewne ogólne sposoby badania stabilności układów dynamicznych. Obecnie przechodzimy do analizy równań, których rozwiązania (chociaż nadal są wyznaczone w sposób jednoznaczny) mają bardzo skomplikowane portrety fazowe, które w praktyce istotnie ograniczają możliwość przewidywania długookresowych zachowań tych rozwiązań. Należy zauważyć, że do tej pory takie układy nie były rozważane, gdyż dotychczas prezentowane były systemy o co najwyżej dwuwymiarowej przestrzeni fazowej, zaś wspomniana cecha ujawnia się gdy liczba wymiarów jest nie mniejsza niż trzy. Dodatkowy wymiar przestrzeni fazowej umożliwia pojawienie się trajektorii o kształtach tak skomplikowanych, że klasyczne metody geometrii pozostają wobec nich bezsilnie. Stanowią one istotną wskazówkę, iż mamy do czynienia z chaosem (choć nie jest to reguła). \newline
+\section{Chaos deterministyczny}
+Do tej pory przedstawione zostały pewne ogólne sposoby badania stabilności układów dynamicznych. Obecnie przechodzimy do analizy równań, których rozwiązania (chociaż nadal są wyznaczone w sposób jednoznaczny) mają bardzo skomplikowane portrety fazowe, które w praktyce istotnie ograniczają możliwość przewidywania długookresowych zachowań tych rozwiązań. Należy zauważyć, że do tej pory takie układy nie były rozważane, gdyż dotychczas prezentowane były systemy o co najwyżej dwuwymiarowej przestrzeni fazowej, zaś wspomniana cecha ujawnia się gdy liczba wymiarów jest nie mniejsza niż trzy. Dodatkowy wymiar przestrzeni fazowej umożliwia pojawienie się trajektorii o kształtach tak skomplikowanych, że klasyczne metody geometrii pozostają wobec nich bezsilnie. Stanowią one istotną wskazówkę, iż mamy do czynienia z chaosem. \newline
 Chaos deterministyczny wyróżniają (nieformalnie ujmując) trzy cechy układu:
 \begin{itemize}
 	\item determinizm,
@@ -438,7 +447,7 @@ Z powyższych ustaleń można dojść do wniosku, że o takim układzie niemalż
 	\end{itemize}  
 \end{defi}
 Zgodnie z powyższą definicją można przyjąć, iż atraktor 'przyciąga' trajektorie zaczynające się z konkretynych punktów przestrzeni fazowej. Zbiór takich warunków początkowych dla danego atraktora nazywa się jego \textit{basenem atrakcji}. Pojęcia te są ze sobą blisko związane i dlatego w dalszej części pracy uwaga zostanie skupiona głównie na tym pierwszym. \newline
-Patrząc na dotychczas omówione przkłady można dojść do wniosku, że różne proste postaci atraktorów już się pojawiały (patrz). Różnorodność ich geometrii była jednak mocno ograniczona (punkt lub też pewna regularna krzywa). Jedną z najbardziej zaskakujących cech teorii chaosu jest praktyczny brak ograniczeń na topologiczną złożoność atraktorów (pomimo warunków regularności nałożonych na równanie opisujące dynammikę !). Skomplikowany portret fazowy atraktora nie jest też wyjątkiem ani nawet sytuacją rzadką, a raczej regułą. W pewnym sensie można powiedzieć, że jest to warunek chaotyczności układu (sprecyzujemy to stwierdzenie w dalszej części tego paragrafu). Szukając cech wspólnych takich atraktorów można odnaleść w literaturze dwa terminy stosowane zamiennie: atraktor dziwny oraz fraktal. Ten drugi w geometrii nazywany jest obiektem o 'ułamkowym' wymiarze, który jest samopodobny w każdej skali. Należy tutaj zaznaczyć, że nie ma jednej, powszechnie przyjętej definicji fraktala. Aby jednak nakreślić pewne intuicje możemy przyjąć, iż fraktal stanowi zbiór, którego wymiar Hausdorffa jest istotnie większy od jego wymiaru geometrycznego. Pojęcia te celowo nie zostają uściślone odsyłając zainteresowanego czytelnika do literatury \cite{Tempczyk}, \cite{Kudrewicz}. Zamiast tego w dalszej części zwizualizowane zostaną popularne fraktale wywodzące się z układów chaotycznych. Zanim jednak to nastąpi potrzebna konieczne jest wprowadzenie jeszcze jednego pojęcia.
+Patrząc na dotychczas omówione przkłady można dojść do wniosku, że różne proste postaci atraktorów już się pojawiały. Różnorodność ich geometrii była jednak mocno ograniczona (punkt lub też pewna regularna krzywa). Jedną z najbardziej zaskakujących cech teorii chaosu jest praktyczny brak ograniczeń na topologiczną złożoność atraktorów (pomimo warunków regularności nałożonych na równanie opisujące dynamikę !). Skomplikowany portret fazowy atraktora nie jest też wyjątkiem ani nawet sytuacją rzadką, a raczej regułą. W pewnym sensie można powiedzieć, że jest to warunek chaotyczności układu (sprecyzujemy to stwierdzenie w dalszej części tego paragrafu). Szukając cech wspólnych takich atraktorów można odnaleść w literaturze dwa terminy stosowane zamiennie: atraktor dziwny oraz fraktal. Ten drugi w geometrii nazywany jest obiektem o 'ułamkowym' wymiarze, który jest samopodobny w każdej skali. Należy tutaj zaznaczyć, że nie ma jednej, powszechnie przyjętej definicji fraktala. Aby jednak nakreślić pewne intuicje możemy przyjąć, iż fraktal stanowi zbiór, którego wymiar Hausdorffa jest istotnie większy od jego wymiaru geometrycznego. Pojęcia te celowo nie zostają uściślone odsyłając zainteresowanego czytelnika do literatury \cite{Tempczyk}, \cite{Kudrewicz}. Zamiast tego w dalszej części zwizualizowane zostaną popularne fraktale wywodzące się z układów chaotycznych. Zanim jednak to nastąpi potrzebna konieczne jest wprowadzenie jeszcze jednego pojęcia.
 \begin{defi}
 	Bifurkacją układu dynamicznego (\ref{dyn_eq}) nazywamy jakościową zmianę zachowania jego rozwiązań. Parametr $ s_{0} \in \mathbb{R}^{n} $, dla którego następuje taka zmiana nazywany jest parametrem bifurkacji. 
 \end{defi}
@@ -451,17 +460,17 @@ Patrząc na dotychczas omówione przkłady można dojść do wniosku, że różn
 	\begin{equation}
 	x(0) = x_{0},
 	\end{equation}
-	gdzie $ a \in \mathbb{R} $. Zauważmy, że kształt krzywej obrazującej funkcję prawej strony pozostaje niezmienny - zmieniają się jedynie punkty przecięcia z osiami współrzędnych. Dla $ a > 0 $ sytuacja odpowiada Rysunkowi (z dokładnością do miejsc zerowych). Odpowiadające portrety dla $ a = 0 $ oraz $ a = -1 $ przedstawione zostały na Rysunkach (\ref{Fig6}) oraz (\ref{Fig7}), odpowiednio.
+	gdzie $ a \in \mathbb{R} $. Zauważmy, że kształt krzywej obrazującej funkcję prawej strony pozostaje niezmienny - zmieniają się jedynie punkty przecięcia z osiami współrzędnych. Dla $ a > 0 $ sytuacja odpowiada Rysunkowi (2.4) (z dokładnością do miejsc zerowych). Odpowiadające portrety dla $ a = 0 $ oraz $ a = -1 $ przedstawione zostały na Rysunkach (\ref{Fig6}) oraz (\ref{Fig7}), odpowiednio.
 	\begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/example5a.png} 
 	\centering
-	\caption{Portret fazowy układu z Przykładu 5 dla a=0}
+	\caption{Portret fazowy układu z Przykładu 4 dla a=0}
 	\label{Fig6}
 	\end{figure}
 	\begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/example5b.png} 
 	\centering
-	\caption{Portret fazowy układu z Przykładu 5 dla $ a<0 $}
+	\caption{Portret fazowy układu z Przykładu 4 dla $ a<0 $}
 	\label{Fig7}
 	\end{figure}
 Zauważmy co stało się z punktami stabilnymi (w świetle nowo wprowadzonej nomenklatury możemy nazwać je również atraktorami, chociaż pojęcie to zarezerwowane jest dla bardziej skomplikowanych geometrycznie zbiorów). Wraz ze zmniejszaniem się parametru $ a $ punkty stabilne zbiegały do zera z różnych stron, aż w granicznym przypadku $ a=0 $ scaliły się w jednym miejscu. Należy zwrócić uwagę, że taki nazywany jest punktem częściowo stabilnym (przyciąga punkty ze swojego lewostronnego otoczenia i odpycha te z prawej strony, co symbolizują strzałki o zgodnie skierowanych grotach). Dalsze zmniejszanie parametru powoduje zanik punktów stabilnych - rozwiązanie z dowolnym warunkiem początkowym pozostaje niestabilne w sensie Lyapunowa. 
@@ -488,7 +497,7 @@ Zachowanie takie jest jednak wciąż przewidywalne (w pewnym sensie). Sytuacja z
 	\label{Fig8}
 \end{figure}
 Dla $ r=4 $ otrzymujemy jednorodny chaos - iteracje pokrywają odcinek $ [0,1] $.\newline
-Podsumowujac powyzsze rozwazania mozna stwierdzic, iż pierwsze pojawienie sie bifurkacji ($ r = 1$) pozwoliło na 'kontrolowaną' zmianę jakosciową rozwiazań rozważanego równania. Kolejne bifurkacje (poczynając od $ r = 3$) pojawiające się z coraz wiekszą czestotliwoscią doporowadziły do chaosu poprzez tzw. podwajanie chaosu (z tym też zwiazana jest etymologia słowa bifurkacja - rozgałezienie siś jakieś całości na dwie czśsci [przypis]). W ramach prac nad tym (wyjątkowo prosto wyglądającym) procesem iteracyjnym wykryto wiele prawidłowosci. Najwazniejszą z nich jest tzw. stała Feigenbauma. Wyraża ona stosunek odległosci od kolejnych punktów bifurkacji (dla $r>3$). Interesującym jest fakt, że analogiczna stała (wraz z zachowaniem sie ukladu odwzorowan) o tej samej wartości jest obecna dla innych postaci funkcji $f$ (np dla $ f(u_{n}) = rsin(u_{n})$).Jest to przesłanka, iż mechanizm ten jest w pewnym stopniu uniwersalny. Po dokładniejszym zbadaniu okazuje się, iż w istocie jest to uniwersalna stała gładkich układów dynamicznych, których (skalarna) funkcja dynamiki jest unimodalna w rozważanym przedziale określoności.
+Podsumowując powyższe rozważania można stwierdzić, iż pierwsze pojawienie się bifurkacji ($ r = 1$) pozwoliło na 'kontrolowaną' zmianę jakościową rozwiązań rozważanego równania. Kolejne bifurkacje (poczynając od $ r = 3$) pojawiające się z coraz wiekszą częstotliwością doporowadziły do chaosu poprzez tzw. podwajanie okresu (z tym też związana jest etymologia słowa bifurkacja - rozgałęzienie się jakieś całości na dwie części). W ramach prac nad tym (wyjątkowo prosto wyglądającym) procesem iteracyjnym wykryto wiele prawidłowości. Najważniejszą z nich jest tzw. stała Feigenbauma. Wyraża ona stosunek odległości od kolejnych punktów bifurkacji (dla $r>3$). Interesującym jest fakt, że analogiczna stała (wraz z zachowaniem się układu odwzorowań) o tej samej wartości jest obecna dla innych postaci funkcji $f$ (na przykład dla $ f(u_{n}) = rsin(u_{n})$). Jest to przesłanka, iż mechanizm ten jest w pewnym stopniu uniwersalny. Po dokładniejszym zbadaniu okazuje się, iż w istocie jest to uniwersalna stała gładkich układów dynamicznych, których (skalarna) funkcja dynamiki jest unimodalna w rozważanym przedziale określoności.
 \paragraph{Bifurkacja Hopfa}
 Wspomniane bifurkacje Feigenbauma stanowią klasyczny przykład dla układów dyskretnych. W przypadku systemów ciągłych taki sztandarowy układ ma postać
 \begin{equation}
@@ -505,7 +514,7 @@ Jest to równanie ruchu obrotowego punktu w płaszczyźnie ($ \omega $ stanowi p
 	\caption{Przykładowa trajektoria dla układu Hopfa}
 	\label{Fig9}
 \end{figure}
-Sytuacja w przypadku $ \lambda >0 $ generuje atraktory cykliczne w postaci okręgów o promieniach $ r = \sqrt{\lambda} $. Trajektorie odpowiadające punktom zaczynającym się na zewnątrz takiego okręgu nawijają się nań, zaś te zaczynające się wewnątrz - stopniowo się do niego zbliżają (Rysunek)
+Sytuacja w przypadku $ \lambda >0 $ generuje atraktory cykliczne w postaci okręgów o promieniach $ r = \sqrt{\lambda} $. Trajektorie odpowiadające punktom zaczynającym się na zewnątrz takiego okręgu nawijają się nań, zaś te zaczynające się wewnątrz - stopniowo się do niego zbliżają (Rysunek (2.5))
 \paragraph{Bifurkacja Henona}
 Kolejnym dwuwymiarowym układem posiadającym atraktor fraktalnej natury jest model Henona opisany równaniami dyskretnymi:
 \begin{equation}
@@ -570,7 +579,7 @@ Dla $ a \in (0,2) $ otrzymujemy ponownie spiralę, ale tym razem rozwijającą s
 	\caption{Atraktor Rosslera}
 	\label{Fig11}
 \end{figure}
-Sama fizyka również dostarcza inspiracji do tworzenia modeli o nieprzewidywalnych zachowaniach. Układem chemicznym o takiej własności jest reakcja Biełousowa-Żabotyńskiego. Hydrodynamika nie jest tuaj wyjątkiem - przejścia do chaosu jest w tym przypadku na tyle popularne, iż zyskało swoją nazwę: turbulencja.
+Sama fizyka również dostarcza inspiracji do tworzenia modeli o nieprzewidywalnych zachowaniach. Układem chemicznym o takiej własności jest reakcja Biełousowa-Żabotyńskiego. Hydrodynamika nie jest tuaj wyjątkiem - przejście do chaosu jest w tym przypadku na tyle popularne, iż zyskało swoją nazwę: turbulencja.
 \paragraph{Komórki Bernada}
 Ekperyment, który pozwolił odkryć to zjawisko miał za zadanie zbadać mechanizm wymiany ciepła pomiędzy warstwami wody znajdującej się w naczyniu podgrzewanym od dołu. Parametrem kontrolnym jest w tym przypadku gęstość strumienia ciepła przekazywana cieczy. Przy niewielkiej ilości ciepła w jednostce czasu wymiana ciepła w wodzie następuje na skutek wymiany pędu między jej cząsteczkami. Jest to zatem poziom mikroskopowy - następuje stopniowe podgrzewanie kolejnych warstw. Od pewnej krytycznej wartości (odpowiednik parametru bifurkacji) następuje destabilizacja znajdującej się w naczyniu cieczy. Tworzą się struktury dynamicze - wirujące przeciwlegle rolki zwane komórkami Bernada. Mechanizm wymiany ciepła zmienia się w sposób jakościowy - następuje makroskopowy ruch płynu w objętości wywołany dużymi różnicami gęstości. Mówi się wówczas o konwekcji naturalnej. Sytuację ilustruje Rysunek (\ref{Fig12}).
 \begin{figure}[H]
@@ -580,7 +589,7 @@ Ekperyment, który pozwolił odkryć to zjawisko miał za zadanie zbadać mechan
 	\label{Fig12}
 \end{figure}
 Pewną analogię stanowi tu mechaniczne zjawisko zwane wyboczeniem (analogiem sił jest tutaj oczywiście różnica temperatur, zaś samo zjawisko wyboczenia reprezentowane jest przez utratę stabilności cieczy). Pewne ilościowe wnioski na ten temat Czytelnik znajdzie w klasycznej pozycji \cite{Landau}.\newline
-Model matematyczny takiego zjawiska opisywany jest poprzez układ równań Naviera-Stokesa sprzężony z równaniem opisującym wymianę ciepła. Jest on zatem bardzo skomplikowany i w celu jego rozwiązania stosuje się pewne uproszczenia. Najprostszym może być przyjęcie nieskończonej długości naczynia, co implikuje brak wymiany ciepła wzdłuż rolek konwekcyjnych - model taki stanowi podstawę innego, bardzo znanego układu, którego autorem jest Edward Lorenz. Model ten jest sztandarowym przykładem układu o skomplikowanym zachowniu, zaś jego atraktor stał się symbolem teorii chaosu (Rysunek). Znacznie więcej informacji na temat układu Lorenza wraz z analizą wrażliwości funkcji zdefiniowanej dla tego systemu zawiera Rozdział 5.\newline
+Model matematyczny takiego zjawiska opisywany jest poprzez układ równań Naviera-Stokesa sprzężony z równaniem opisującym wymianę ciepła. Jest on zatem bardzo skomplikowany i w celu jego rozwiązania stosuje się pewne uproszczenia. Najprostszym może być przyjęcie nieskończonej długości naczynia, co implikuje brak wymiany ciepła wzdłuż rolek konwekcyjnych - model taki stanowi podstawę innego, bardzo znanego układu, którego autorem jest Edward Lorenz. Model ten jest sztandarowym przykładem układu o skomplikowanym zachowniu, zaś jego atraktor stał się symbolem teorii chaosu (Rozdział 5). Znacznie więcej informacji na temat układu Lorenza wraz z analizą wrażliwości funkcji zdefiniowanej dla tego systemu zawiera Rozdział 5.\newline
 Powyższe rozważania przekonują, iż do listy cech charakteryzujących każdy układ dynamiczny można dopisać dodatkowe dwie pozycje:
 \begin{itemize}
 	\item nierozkładalność przestrzeni fazowej na dwie, dynamicznie rozłączne, niepuste podprzestrzenie,
@@ -619,10 +628,10 @@ Możemy już teraz zdefiniować formalnie układ przejawiający zachowania chaot
 	Układ dynamiczny postaci (\ref{dyn_eq}) nazywamy chaotycznym, gdy posiada przynajmniej jeden dodatni wykładnik Lyapunova.
 \end{defi}
 Definicja taka nie jest przyjęta za jedyną słuszną. Wiele innych można znaleść w bogatej encyklopedii poświeconej zjawisku chaosu \cite{Encyclopedie}. Niemniej dla celów pragmatycznych jest ona najbardziej dogodna.\newline
-Można by sądzić, że odpowiadające omawianym wartościom własnym wektory własne nazywamy wektorami (kowariantnymi) Lyapunova, jednak nie jest prawda. Wyznaczenie wektorów własnnych macierzy gradientu wymaga jedynie informacji o lokalnej dynamice, podczas gdy wspomniane wektory Lyapunova zależą od macierzy gradientu we wszystkich chwilach. \newline
+Można by sądzić, że odpowiadające omawianym wartościom własnym wektory własne nazywamy wektorami (kowariantnymi) Lyapunova, jednak nie jest to prawda. Wyznaczenie wektorów własnnych macierzy gradientu wymaga jedynie informacji o lokalnej dynamice, podczas gdy wspomniane wektory Lyapunova zależą od macierzy gradientu we wszystkich chwilach. \newline
 W następnym podrozdziale przedstawione zostanie narzędzie, które wyróżni klasę układów strukturalnie stabilnych.
-\subsection{Lemat cienia}
-Na koniec tego rozdziału wprowadzimy lemat, który w pewnym sensie gwarantuje, iż przedstawiona w dalszyej części pracy metoda jest deterministyczna \footnote{Mówiąc nieco ściślej - trajektoria cienia zawsze istnieje przy przyjmowanych założeniach, ale nie zawsze jest ona reprezentatywna, o czym będzie mowa w późniejszych rozdziałach}. Wprowadźmy najpierw kilka pojęć pomocniczych. Skupimy się przy nich na układach dyskretnych, co 
+\section{Lemat cienia}
+Na koniec tego rozdziału wprowadzimy lemat, który w pewnym sensie gwarantuje, iż przedstawiona w dalszej części pracy metoda jest deterministyczna \footnote{Mówiąc nieco ściślej - trajektoria cienia zawsze istnieje przy przyjmowanych założeniach, ale nie zawsze jest ona reprezentatywna, o czym będzie mowa w późniejszych rozdziałach}. Wprowadźmy najpierw kilka pojęć pomocniczych. Skupimy się przy nich na układach dyskretnych. 
 \begin{defi}\label{trajectory_discrete}
 	Trajektorią (orbitą) dynamicznego układu (\ref{discrete_dyn_eq}) z czasem dyskretnym nazywamy zbiór
 	\begin{center}
@@ -641,7 +650,7 @@ Oczywiście nic nie stoi na przeszkodzie, aby wprowadzić trajektorię dla zbior
 	O(U,f) = \{f^k(U): k \in \mathbb{Z}\},
 \end{equation}
 gdzie $ U \subset M_{ph} $. Pozwala to na badanie lokalnej dynamiki. \newline
-Kluczowym pojęciem tego rozdziału jest pseudotrajektoria.
+Kluczowym pojęciem tego podrozdziału jest pseudotrajektoria.
 \begin{defi}\label{pseudotrajectory}
 	Niech $\delta \in \mathbb{R}_{+}$
 	$\delta$-pseudotrajektorią ($ \delta $-pseudoorbitą) dynamicznego układu (\ref{discrete_dyn_eq}) z czasem dyskretnym nazywamy zbiór
@@ -678,9 +687,9 @@ Niech dany będzie układ dynamiczny postaci (\ref{dyn_eq_discr}) i niech będą
 \end{lem}
 Dysponując już odpowiednią nomenklaturą oraz szerokim arsenałem technik możemy przyjrzeć się metodom poświęconym analizie czułości oraz dotrzeć do sedna postawionego problemu. 
 \newpage
-\section{Wybrane metody optymalizacji lokalnej stosowane w technice}
-Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacpwania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice.
-\subsection{Metoda różnic skończonych}
+\chapter{Wybrane metody optymalizacji lokalnej stosowane w technice}
+Rezultatem analizy wrażliwości jest oszacowanie gradientu funkcji celu w wybranym punktcie przestrzeni parametrów. Zdecydowana większość metod optymalizacji lokalnej w istotcie bazuje na tak wyznaczonym gradiencie, wobec czego dokładność jego szacowania jest krytycznym momentem procesu optymalizacyjnego. W dalszej części tego rozdziału zaprezentowane zostały trzy klasyczne metody, z których pierwsza, metoda różnic skończonych, jest dogodna do wyznaczania pochodnych względnie prostych funkcji oraz szacowania błędów dwóch następnych: metody Tangent oraz metody operatora sprzężonego, które znajdują liczne zastosowania w technice.
+\section{Metoda różnic skończonych}
 Metoda ta jest rozwinięciem intuicji stojących za wyznaczaniem pochodnej funkcji. Granicę ilorazu różnicowego przybliża się poprzez tzw. \textit{schematy różnicowe}, które wymagają wyznaczenia wybranej funkcji w kilku punktach. Schematy te mają przykładowe postaci (do końca pracy pochodna poszukiwanej funkcji oznaczana będzie symbolem $ J $, zaś jej parametr symbolem $ s $):
 \begin{equation}
 \frac{dJ}{ds}(s_{0}) \approx \frac{J(s_{0}+\Delta s) - J(s_{0})}{\Delta s},
@@ -689,7 +698,7 @@ Metoda ta jest rozwinięciem intuicji stojących za wyznaczaniem pochodnej funkc
 \frac{dJ}{ds}(s_{0}) \approx \frac{J(s_{0}) - J(s_{0}-\Delta s)}{\Delta s},
 \end{equation} 
 \begin{equation}
-\frac{dJ}{ds}(s_{0}) \approx \frac{J(s_{0}+\Delta s) - J(s_{0}-\Delta s)}{\Delta s},
+\frac{dJ}{ds}(s_{0}) \approx \frac{J(s_{0}+\Delta s) - J(s_{0}-\Delta s)}{2\Delta s},
 \end{equation}
 którym odpowiadają odpowiednio: schemat różnicowy przedni, wsteczny oraz centralny. \newline
 Metoda ta jest bardzo prosta w implementacji i dość łatwo pozwala kontrolować dokładność wyznaczanej pochodnej poprzez dobór odpowiednio małego przyrostu $ \Delta s  $. Należy zauważyć, że dla odpowiednio małej wartości takiego przyrostu błąd arytmetyki zmiennoprzecinkowej istotnie rzutuje na dokładności wyniku. Nietrywialnym rozszerzeniem tej metody jest zastosowanie przyrostu jako liczby czysto urojonej. Dalsze postępowanie jest analogiczne do wyżej wspomnianych, przy czym operacje wykonywane są zgodnie z arytmetyką liczb zespolonych. Ostateczny wzór przyjmuje postać:
@@ -697,7 +706,7 @@ Metoda ta jest bardzo prosta w implementacji i dość łatwo pozwala kontrolowa�
 \frac{dJ}{ds}(s_{0}) \approx \frac{Im[J(s_{0}+i\epsilon)]}{\epsilon},
 \end{equation}
 gdzie $ Im $ oznacza część zespoloną, zaś $\epsilon$ jest liczbą rzeczywistą. Zabieg ten pozwala na separację badanego punktu przestrzeni parametrów oraz zaburzenia na dwa niezależne obiekty numeryczne, dzięki czemu problem błędów zaokrągleń zostaje wyeliminowany. Dokładność szacowanej pochodnej pozostaje ograniczona jedynie precyzją maszynową.
-\subsection{Metoda Tangent}
+\section{Metoda Tangent}
 Idea tej metody polage na śledzeniu wrażliwości rozwiązania układu (\ref{dyn_eq}) w zależności od wektora parametrów projektowych. Zakładając odpowiednią regularność rozwiązania i funkcji $ f $ można formalnie zróżniczkować to równanie względem wektora $ s $. W wyniku otrzymujemy nowe równanie:
 \begin{equation}
 \frac{d{\textbf{v}}}{d{t}} = \frac{\partial{\textbf{f}}}{\partial{\textbf{u}}}\textbf{v} + \frac{\partial{\textbf{f}}}{\partial{\textbf{s}}}
@@ -719,7 +728,7 @@ przy czym milcząco założono, iż prawdziwa jest równość
 \end{equation}
 W następnym Rozdziale okaże się, iż stosowalność takiego założenia jest mocno ograniczona. Jest to główna przyczyna załamania się klasycznych metod optymalizacji lokalnej dla układów o nieprzewidywalnym zachowaniu rozwiązań. \newline
 Postać wzoru (\ref{J_tangent}) sugreuje potencjalne źródło problemów - rozwiązanie równania (\ref{tangent}) jest numerycznie czasochłonne. Człon $ v = \frac{\partial{\textbf{u}}}{\partial{\textbf{s}}} $ to człon, którego wyznaczenie w przypadku wielowymiarowego wektora $ s \in \mathbb{R}^n $ jest niezwykle czasochłonne (por. Metoda różnic skończonych). Wobec tego metoda ta może się sprawdzić w praktyce, gdy wektor parametrów projektowych ma niski wymiar.
-\subsection{Metoda Operatora Sprzężonego}
+\section{Metoda Operatora Sprzężonego}
 Naszym celem jest znalezienie gradientu funkcji postaci (\ref{J_bar}). Zauważamy, że funkcja podcałkowa zależy od rozwiązania układu (\ref{dyn_eq}), które z kolei zależy od wektora parametrów projektowych. W praktyce oprócz takiej zagnieżdżonej zależności funkcjia celu zależy \textit{explcite} od wektora zmiennych decyzyjnych
 \begin{equation}
 J = J(\textbf{u}(t,\textbf{s})),\textbf{s}),
@@ -736,7 +745,7 @@ Wobec powyższych rozważań chcemy przekształcić to wyrażenie, tak aby móc 
 \begin{equation}\langle \textbf{J} \rangle = \frac{1}{T}\int_{0}^{T}\textbf{J}(\textbf{u}(t,\textbf{s}))dt + \int_{0}^{T}(\textbf{w}(t)(\frac{d\textbf{u}}{dt} -  \textbf{f}(\textbf{u},\textbf{s})))dt.
 \label{eq9}
 \end{equation}
-Ostatni składnik po prawej stronie ma zerową wartość na mocy (\ref{dyn_eq}). Własność ta jest prawdziwa dla dowolnego mnożnika Lagragne'a, w związku z czym otrzymujemy otrzymujemy. Niech zatem
+Ostatni składnik po prawej stronie ma zerową wartość na mocy (\ref{dyn_eq}). Własność ta jest prawdziwa dla dowolnego mnożnika Lagragne'a. Niech zatem
 \begin{equation}
 -\frac{\partial{\textbf{w}}}{\partial{t}} = (\frac{\partial{\textbf{f}}}{\partial{\textbf{u}}})^{T}\textbf{w} +(\frac{\partial{J}}{\partial{\textbf{u}}})^{T} 
 \label{lagrange_mult}
@@ -753,8 +762,8 @@ W reprezentacji dyskretnej wyrażenia ma to postać:
 gdzie \textit{N} oznacza liczbę kroków dyskretyzacji czasowej, zaś $ \triangle t $ krok czasowy. \newline
 Oczywiście pochodna $ \frac{\partial \textbf{f}}{\partial s} $ nie stanowi dużego problemu. Podkreślamy tutaj, że chwilowa wartość funcji zadającej dynamikę ma postać $ \textbf{f} = \textbf{f}(\textbf{u}, s)$ , w związku z czym pochodna cząstkowa wzięta jest względem drugiej zmiennej traktowanej jako niezależna. Mówiąc nieco kolokwialnie: pochodna ta 'nie widzi' zależności zagnieżdżonej $ \textbf{u} = \textbf{u}(t,s) $. 
 \newpage
-\section{Metoda Trajektorii Cienia}
-\subsection{Wstęp}
+\chapter{Metoda Trajektorii Cienia}
+\section{Wstęp}
 Z praktycznego punktu widzenia obiektem zainteresowania pozostają wartości średnie wielkości chwilowych, w których okres uśredniania jest stosunkowo długi, tj. funkcje postaci (\ref{J_bar}). W rozdziale tym będziemy poszukiwali czułości tak zdefiniowanych funkcji względem parametru $ s \in \mathbb{R} $ (zakładamy przy tym, że parametr projektowy jest skalarem, aby nie komplikować istoty problemu niepotrzebnymi rachunkami - rozszerzenie na przypadek wektorowy nie jest trudne). Konkretnie: poszukujemy wartości wyrażenia:
 \begin{equation}
 \frac{d\bar{J}}{ds} = \lim\limits_{\delta s \rightarrow 0}\frac{1}{\delta s}(\lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(\textbf{u}(t,s + \delta s))dt - \lim\limits_{T \rightarrow \infty}\frac{1}{T}\int_{0}^{T}J(\textbf{u}(t,s))dt).
@@ -768,9 +777,8 @@ Fizyczne przykłady takich wielkości to między innymi:
 	\item średnia siła nośna działająca na łopatkę turbiny.
 \end{itemize}
 
-Istnienie takich długookresowych średnich całkowych związane jest z założeniem ergodyczności (podobnie jak ich niezależność od warunków początkowych), jednakże ich różniczkowalność nie jest oczywista. Głębokie rezultaty poczynione przez D. Ruelle'a przekonują (\cite{Ruelle1}, \cite{Ruelle2}), że dla klasy układów zwanych 'quasi-hiperbolicznymi' takie wartości są nie tylko dobrze określone, ale również wyrażają się formułą:
-
-Do systemów o takiej charakterystyce zalicza się z pewnością układ Lorenza. Istnieją ponadto przesłanki, że duża część istotnych z inżynierskiego punktu widzenia przypadków przepływów również wykazuje cechę 'quasi-hiperboliczności' \cite{Qiqi1} (również heurystyczne obserwacje bazujące na eksperymentach oraz symulacjach numerycznych pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki), wobec czego z teoretycznego punktu widzenia nie ma przeszkód w wyznaczaniu czułości tak zdefiniowanych funkcji. Jednakże zlinearyzowane równania używane do tego celu (niezależnie od wybranej metody, których przegląd zawiera Rozdział ) skutkują w wynikach o bardzo niskiej jakości. Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział). Innymi słowy: 
+Istnienie takich długookresowych średnich całkowych związane jest z założeniem ergodyczności (podobnie jak ich niezależność od warunków początkowych), jednakże ich różniczkowalność nie jest oczywista. Głębokie rezultaty poczynione przez D. Ruelle'a przekonują (\cite{Ruelle1}, \cite{Ruelle2}), że dla klasy układów zwanych 'quasi-hiperbolicznymi' takie wartości są dobrze określone.\newline
+Do systemów o takiej charakterystyce zalicza się z pewnością układ Lorenza. Istnieją ponadto przesłanki, że duża część istotnych z inżynierskiego punktu widzenia przypadków przepływów również wykazuje cechę 'quasi-hiperboliczności' \cite{Qiqi1} (również heurystyczne obserwacje bazujące na eksperymentach oraz symulacjach numerycznych pokazują, że takie wielkości statystyczne zmieniają się stosunkowo niewiele wraz z perturbacją dynamiki), wobec czego z teoretycznego punktu widzenia nie ma przeszkód w wyznaczaniu czułości tak zdefiniowanych funkcji. Jednakże zlinearyzowane równania używane do tego celu (niezależnie od wybranej metody, których przegląd zawiera Rozdział 3) skutkują w wynikach o bardzo niskiej jakości. Przyczyną załamania się klasycznych metod analizy wrażliwości w przypadku układów chaotycznych jest ich duża wrażliwość na niewielkie zaburzenia dynamiki układu, która przejawia się w rozbieżności rozwiązań wraz z upływem czasu (tempo tej rozbieżności determinowane jest przez wykładniki Lyapunowa, zaś jej kierunek przez wektory kowariantne Lyapunowa - patrz Rozdział 2). Innymi słowy: 
 \begin{equation}
 \frac{d\bar{J}}{ds} 
 \neq \lim\limits_{\textit{T}\to\infty}\frac{d}{d\textbf{s}}\frac{1}{T}\int_{0}^{T}J(s)dt.
@@ -788,9 +796,9 @@ d(\textbf{u}(t,s'),\textbf{u}(t,s)) < M \thickspace \thickspace \forall t\in(0,\
 \end{equation}
 dla pewnej stałej $ M \in \mathbb{R}_{+} $. Wówczas rozważane przejście graniczne (\ref{limits_commutation}) byłoby w istocie prawdziwe. W konsekwecji prawa strona nie 'wybuchałaby' wraz z rozwojem układu, jak to ma zazwyczaj miejsce w przypadku dowolnego wyboru trajektorii zaburzonej.
 Jak już zostało wspomniane, jako pierwsi zjawisko to zauważyli autorzy w pracy \cite{Lea1} przy badaniu układu Lorenza (1963) i zaproponowali metodę regularyzacji bazującą na uśrednianiu dostatecznej liczby trajektorii (jednocześnie stanowi ona pierwszy przykład z rodziny metod wykorzystujących zespół trajektorii) \cite{Lea2}. Formalne uzasadnienie poprawności tego podejścia stanowią prace \cite{Ruelle1} . Metody takie są jednak numerycznie kosztowne, co pokazują prace \cite{Chandramoorthy}. Należy przy tym wspomnieć, że wymiar zagadnienia może być zredukowany koncentrując się jedynie na niestabilnych wektorach kowiariantnych Lyapunowa (wkład do średniej pochodzący od modów stabilnych jest wyznaczany poprzez klasyczne metody analizy wrażliwości). Jest to tak zwany algorytm S3 (ang. Space Split Sensitivity Analysis algorithm) i jest opisany wraz z analizą kosztowności tego podejścia w stosunkowo nowych pracach \cite{Chandramoorthy2},\cite{Chandramoorthy3}. Niniejsza praca koncentruje się na metodach, które wykorzystują jedną (generyczną) trajektorię, co od razu wyznacza kres górny wymiaru zagadnienia.\newline 
-Podstawową ideą Metody Trajektorii Cienia jest regularyzacja poprzez odpowiedni wybór trajektorii zaburzonej przy innym warunku początkowym, tak aby zachodzło (\ref{uniform_bound}). Postępowanie takie jest usprawiedliwione na mocy założenia ergodyczności (Rozdział). Głównym narzędziem jest przy tym operator cienia, którego własności zostaną przedstawione w następnych sekcjach. Skutkiem jego działania będzie uzyskanie trajektorii bliskej wyjściowej dla dowolnego czasu, co pozwoli uzyskać równość w (\ref{J_derivative2}). \newline 
-Do końca pracy przyjmujemy założenia z Rozdziału. W szczególności te dotyczące ergodyczności oraz hiperboliczności układu (\ref{dyn_eq}), jak i regularności funkcji $ \textbf{f}: M_{ph} \rightarrow M_{ph}$. 
-\subsection{Metoda Operatora Cienia}
+Podstawową ideą Metody Trajektorii Cienia jest regularyzacja poprzez odpowiedni wybór trajektorii zaburzonej przy innym warunku początkowym, tak aby zachodzło (\ref{uniform_bound}). Postępowanie takie jest usprawiedliwione na mocy założenia ergodyczności (Rozdział 2). Głównym narzędziem jest przy tym operator cienia, którego własności zostaną przedstawione w następnych sekcjach. Skutkiem jego działania będzie uzyskanie trajektorii bliskej wyjściowej dla dowolnego czasu, co pozwoli uzyskać równość w (\ref{J_derivative2}). \newline 
+Do końca pracy przyjmujemy założenia z Rozdziału 2. W szczególności te dotyczące ergodyczności oraz hiperboliczności układu (\ref{dyn_eq}), jak i regularności funkcji $ \textbf{f}: M_{ph} \rightarrow M_{ph}$. 
+\section{Metoda Operatora Cienia}
 Przypuśćmy, że dana jest trajektoria pewnego układu dynamicznego postaci (\ref{dyn_eq}), którą zapiszemy w postaci
 \begin{equation}
 \textbf{u}(t) = \textbf{u}_t,
@@ -801,7 +809,7 @@ gdzie $ \forall t \in \mathbb{R}_{+} \ \textbf{u}_t \in M_{ph}$. Wprowadźmy zab
 \textbf{u'}(t) = \textbf{u'}_t = \textbf{u}_t + \epsilon \delta \textbf{u}_{t}.
 \label{trajectory_pert}
 \end{equation}
-Zauważmy, że z przyjętych na początku tego Rozdziału założeń wynika, że tak zdefiniowana trajektoria odpowiada układowi postaci
+Zauważmy, że z przyjętych na początku tego rozdziału założeń wynika, że tak zdefiniowana trajektoria odpowiada układowi postaci
 \begin{equation}
 \frac{d}{dt}\textbf{u'}(t) = \textbf{f}(u) + \epsilon \frac{\partial \delta \textbf{u}}{\partial \textbf{u}}\textbf{f}(u) = \textbf{f}(u') - \epsilon \frac{\partial \textbf{u}}{\partial \textbf{u}}\delta\textbf{u}(\textbf{u'}) + \epsilon \frac{\partial \delta \textbf{u}}{\partial \textbf{u}}\textbf{f}(u') + O(\epsilon^2),
 \label{u_perturb}
@@ -816,7 +824,7 @@ gdzie perturbacja dyfeomorfizmu $ \delta \textbf{f}: M \rightarrow M $ wyraża s
 \delta \textbf{f}(\textbf{u}) = -\frac{\partial  \textbf{f}}{\partial \textbf{u}} \delta \textbf{u}(\textbf{u}) +   \frac{d \delta \textbf{u}}{dt} = S_{f} \delta \textbf{u}(\textbf{u}).
 \label{funct_pert}
 \end{equation}
-Wprowadzony powyżej liniowy operator $ S_{f}: \delta \textbf{u} \mapsto \delta \textbf{f} $ nazywamy \textit{operatorem cienia}.\newline
+Wprowadzony powyżej liniowy operator $ S_{f}: \delta \textbf{u} \mapsto \delta \textbf{f} $ nazywamy \textit{operatorem cienia}.(łamiemy tutaj konwencję nazewnictwa przyjętą w Rozdziale 2 ze względu na nazwę własną).\newline
 Tak zdefiniowany operator jest dobrze określony (\cite{Qiqi1}), tj. w sposób jednoznaczny definiuje gładkie zaburzenie $ \delta \textbf{f}: M \rightarrow M $ odpowiadające gładkiej perturbacji wyjściowej trajektorii (\ref{trajectory}). Innymi słowy: zaburzona trajektoria (\ref{trajectory_pert}) spełnia jednoznacznie zaburzony układ (\ref{dyn_eq_pert}).Pewną komplikację stanowi fakt, że z punktu widzenia wyznaczania wrażliwości (\ref{J_derivative}) istotna jest operacja odwrotna. Perturbacja parametru projektowego $ s $ powoduje zmianę dynamiki $ \delta\textbf{f}(s) $, dla której poszukiwana jest perturbacja wyjściowej trajektorii $ \delta \textbf{u}(\delta \textbf{f}(s))  = S^{-1}(\delta \textbf{f}(s))$ (pamiętając przy tym, że musi być ona 'dostatecznie mała'). Mając opracowaną procedurę wyznaczania odwrotności tego operatora mamy:
 \begin{equation}
 \lim\limits_{T\to\infty}\lim\limits_{s'\to s}(\frac{1}{T}\int_{0}^{T}\frac{J(\textbf{u}(t,s'))-J(\textbf{u}(t,s))}{s'-s}dt) = \lim\limits_{T\to\infty} \int_{0}^{T} {\frac{\partial{J}}{\partial{\textbf{u}}}\delta \textbf{u}(\delta \textbf{f}(s))}dt.
@@ -884,13 +892,13 @@ ma tę samą wartość na mocy wspomnianego założenia. Oczywiście w ogólnoś
 \begin{equation}
 \lim\limits_{T\rightarrow \infty}\int_{0}^{T}a^{f}_{n_{0}}(u)dt + \eta(t) = 0,
 \end{equation}
-co daje związake na $ \eta(t) $. Wówczas możemy wyznaczyć
+co daje związek na $ \eta(t) $. Wówczas możemy wyznaczyć
 \begin{equation}
 \delta u = S^{-1}_{f}(\delta f + \eta f).
 \label{shadow_operator_8}
 \end{equation}
 Pozostaje się zastanowić czy dla dowolnej trajektorii rozważanego układu istnieje gładkie zaburzenie o którym mowa w początkowym założeniu tego rozdziału (tzn. takie, które pozostaje jednostajnie blisko (\ref{uniform_bound})). Twierdzącą odpowiedź uzyskujemy powołując się na Lemat Cienia, co w konsekwencji daje deterministyczny algorytm obliczania wrażliwości funkcji postaci (\ref{J_bar}).
-\subsection{Metoda Trajektorii Cienia} 
+\section{Metoda Trajektorii Cienia} 
 Sposób wyznaczania gradientu funkcji w układach dynamicznych oparty o odwracanie operatora cienia jest numerycznie kosztowny ze względu na konieczność obliczenia spektrum Lyapunova. \newline
 W sytuacjach podobnych do zaistniałej dobrym pomysłem jest próba przeformułowania problemu. Inspirację mogą stanowić techniki rozwiązywania równań różniczkowych cząstkowych. Wykorzystuję się w nich podejście wariacyjne, zarówno w ujęciu numerycznym (na tym oparta jest Metoda Elementów Skończonych) jak i analitycznym (dowodzi się istnienia słabych rozwiązań, które to spełniają pewne wariacyjne równości całkowe, a następnie podnosi się ich regularność wykorzystując topologię przestrzeni w jakiej są one zdefiniowane). Wspomniane już zostało, że aby w (\ref{limits_commutation}) zachodziła równość musimy zapewnić spełnienie warunku (\ref{uniform_bound}). Chcemy zatem znaleść trajektorię pozostającą blisko trajektorii wyjściowej w dowolnej chwili. Formułując to spostrzeżenei w języku optymalizacji - chcemy zminimalizować normę odległości pomiędzy dwiema trajektoriami (generyczną oraz tą, której poszukujemy) w przestrzeni fazowej. Poszukujemy zatem funkcji $ \textbf{u}_s: [0,T] \rightarrow M_{ph} $ takiej, że
 \begin{equation}
@@ -898,13 +906,13 @@ L'(\textbf{u}_{shadow}) = \inf_{\textbf{u}}\frac{1}{T}\int_{0}^{T}d^{2}(\textbf{
 \label{LSS_v1}
 \end{equation}
 gdzie przez $ d(,) $ oznaczono metrykę w przestrzeni fazowej $ M_{ph} $, zaś $ \textbf{u}_r $ jest rozwiązaniem równania (\ref{dyn_eq}), czyli stanowi trajektorię referencyjną. Winni jesteśmy ponadto narzucić warunki na (\ref{LSS_v1}) w celu dookreślenia postawionego problemu. Wiemy, iż poszukiwana funkcja $ \textbf{u}_s: [0,T] \rightarrow M_{ph} $ powinna spełniać równanie (\ref{dyn_eq}) dla odpowiednio sperturbowanego parametru $ s \in \mathbb{R}^{n} $. Raz jeszcze zaznaczamy, że nie ma konieczności, aby warunek początkowy był taki sam jak dla trajektorii referencyjnej.\newline
-Problem w takim sformułowaniu jest oczywiście dobrze postawiony (powołując się na ponownie na Lemat Cienia wnioskujemy, że zbiór trajektorii, dla których wartość funkcjonału (\ref{LSS_v1}) jest skończona jest niepusty). Pozostaje zauważyć, że rozumowanie dotyczące dodatkowej funkcji spełniającej rolę swobodnego parametru $ \eta: [0,T] \rightarrow \mathbb{R} $ pozostaje słuszne dokładnie z tych samych powodów co poprzednio. Aby możliwe było jej zaimplementowanie do wariacyjnego sformułowania konieczne jest zrozumienie wpływu tej funkacji na dynamikę układu. W poprzednim rozdziale została ona wprowadzona jako techniczny parametr odpowiednio rozszerzający przeciwobraz operatora cienia tak aby dla dowolnego gładkiego zaburzenia dynamiki możliwe było znalezienie zaburzenia trajektorii. Samej dynamiki oczywiście nie możemy zmieniać, ale jej tempo już tak. Pomysł polega na tym, aby manipulować chwilami występowania punktów w przestrzeni fazowej zachowując ich kolejność. W konsekwencji obraz trajektorii nie zmienia się, jednak funkcja będąca rozwiązaniem będzie już inna. Można to zrobić poprzez transformację dziedziny. W tym celu wprowadźmy funkcję $ \tau \in C^{1}([0,T]) $, tj. funkcję różniczkowalną w sposób ciągły transformującą przedział $ [0,T] $ w siebie w sposób wzajemnie jednoznaczny. Otrzymane złożenie $ \textbf{u}(\tau(t)) $ spełnia:
+Problem w takim sformułowaniu jest oczywiście dobrze postawiony (powołując się ponownie na Lemat Cienia wnioskujemy, że zbiór trajektorii, dla których wartość funkcjonału (\ref{LSS_v1}) jest skończona jest niepusty). Pozostaje zauważyć, że rozumowanie dotyczące dodatkowej funkcji spełniającej rolę swobodnego parametru $ \eta: [0,T] \rightarrow \mathbb{R} $ pozostaje słuszne dokładnie z tych samych powodów co poprzednio. Aby możliwe było jej zaimplementowanie do wariacyjnego sformułowania konieczne jest zrozumienie wpływu tej funkacji na dynamikę układu. W poprzednim rozdziale została ona wprowadzona jako techniczny parametr odpowiednio rozszerzający przeciwobraz operatora cienia tak aby dla dowolnego gładkiego zaburzenia dynamiki możliwe było znalezienie zaburzenia trajektorii. Samej dynamiki oczywiście nie możemy zmieniać, ale jej tempo już tak. Pomysł polega na tym, aby manipulować chwilami występowania punktów w przestrzeni fazowej zachowując ich kolejność. W konsekwencji obraz trajektorii nie zmienia się, jednak funkcja będąca rozwiązaniem będzie już inna. Można to zrobić poprzez transformację dziedziny. W tym celu wprowadźmy funkcję $ \tau \in C^{1}([0,T]) $, tj. funkcję różniczkowalną w sposób ciągły transformującą przedział $ [0,T] $ w siebie w sposób wzajemnie jednoznaczny. Otrzymane złożenie $ \textbf{u}(\tau(t)) $ spełnia:
 \begin{equation}
 \frac{d\textbf{u}(\tau (t))}{dt} = \textbf{f}(\textbf{u}(\tau(t)), s).
 \label{LSS_v2}
 \end{equation}  
 Taka konstrukcja pozwala na kontrolę tempa występowania konkretnych punktów w przestrzeni fazowej co w konsekwencji pozwala zachować odpowiednio małą odległość od trajektorii referencyjnej w odpowiadających sobie chwilach. \newline
-Funkcja taka odpowiedni 'przyspiesza' lub 'spowalnia' rozwiązanie w wybranych chwilach wzdłuż trajektorii. Oczywiście w początkowej chwili musi zachodzić $ \tau(t=0) = 0 $. Interesująca jest zatem jej pochodna. W szczególnym przypadku braku jej wpływu, tj. gdy $ \tau(t) = id $ mamy $ \frac{d\tau(t)}{dt} = 1$ dla każdego $ t \in [0,T] $. Wprowadźmy oznaczenie $ \eta(t) = \frac{\tau(t)}{dt}-1 $. Poprzednie spostrzeżenia wskazują, że 'przyspieszanie' rozwiązania następuje przy $ \eta(t) > 0$, zaś 'hamowanie' dla  $ \eta(t) < 0$, w związku z czym funkcję $ \eta(t) $ nazywamy \textit{dylatacją czasu}.\newline
+Funkcja taka odpowiednio 'przyspiesza' lub 'spowalnia' rozwiązanie w wybranych chwilach wzdłuż trajektorii. Oczywiście w początkowej chwili musi zachodzić $ \tau(t=0) = 0 $. Interesująca jest zatem jej pochodna. W szczególnym przypadku braku jej wpływu, tj. gdy $ \tau(t) = id $ mamy $ \frac{d\tau(t)}{dt} = 1$ dla każdego $ t \in [0,T] $. Wprowadźmy oznaczenie $ \eta(t) = \frac{\tau(t)}{dt}-1 $. Poprzednie spostrzeżenia wskazują, że 'przyspieszanie' rozwiązania następuje przy $ \eta(t) > 0$, zaś 'hamowanie' dla  $ \eta(t) < 0$, w związku z czym funkcję $ \eta(t) $ nazywamy \textit{dylatacją czasu}.\newline
 Wyjątkowo prosta jej interpretacja zachodzi dla układów z czasem dyskretnym, a więc i dla realizacji numerycznych równań zwyczajnych. Sprowadza się ona bowiem do powszechie stosowanej techniki adaptacyjnego kroku czasowego.
 Wprowadzając taką funkcję modyfikujemy postać funkcjonału (\ref{LSS_v1}). Otrzymujemy
 \begin{equation}
@@ -918,9 +926,9 @@ Wartość funkcji celu można wyznaczyć ze wzoru przybliżonego:
 \label{LSS_v4}
 \end{equation}
 Oczywiście skończony okres uśredniania $ T $ powinien być odpowiednio długi, aby oddać asymptotyczne zachowanie rozważanego układu. \newline
-Dysponując taką trajektorią oraz funkcją celu dla niej określoną jesteśmy w stanie wyznaczyć poszukiwaną wrażliwość. Można to zrobić za pomocą dowolnej z metod opisanych w Rozdziale. Jest to możliwe, gdyż znaleziona w opisany sposób trajektoria pozostaje w odpowiednio bliskim sąsiedztwie trajektorii referencyjnej przez cały okres uśredniania i w konsekwencji otrzymujemy równość w (\ref{limits_commutation}).
+Dysponując taką trajektorią oraz funkcją celu dla niej określoną jesteśmy w stanie wyznaczyć poszukiwaną wrażliwość. Można to zrobić za pomocą dowolnej z metod opisanych w Rozdziale 3. Jest to możliwe, gdyż znaleziona w opisany sposób trajektoria pozostaje w odpowiednio bliskim sąsiedztwie trajektorii referencyjnej przez cały okres uśredniania i w konsekwencji otrzymujemy równość w (\ref{limits_commutation}).
 \paragraph{Zdyskretyzowane równania Metody Trajektorii Cienia}
-Za pomocą równanie (\ref{tangent}) otrzymujemy formułę wyrażającą poszukiwaną wrażliwość:
+Za pomocą równania (\ref{tangent}) otrzymujemy formułę wyrażającą poszukiwaną wrażliwość:
 \begin{equation}
 \frac{d\langle\textbf{J}\rangle}{d\textbf{s}} \approx \frac{\int_{0}^{T}(\frac{\partial \textbf{J}}{\partial u}v+\frac{\partial \textbf{J}}{\partial s}+\eta(\textbf{J}-\bar{J}))dt}{T}, 
 \label{LSS_v5}
@@ -1054,7 +1062,7 @@ oraz
 \textbf{B}\textbf{B}^{T}(i,i+1) = \textbf{B}\textbf{B}^{T}(i+1,i) = G_{i}E_{i+1}^{T},
 \label{LSS_v17}
 \end{equation}
-gdzie para indeksów oznacza macierz kwadratową, której wymiar jest równy wymiarowi punktu przestrzeni fazowej (w kontekście numerycznej mechaniki płynów jest on proporcjonalny do wymiarów siatki obliczeniowej). Pozostałe bloki to macierze zerowe. Wspomnijmy, iż używając bezpośrednich metod rozwiązywania takiego układu, koszt numeryczny jest rzędu O($ mn^{3} $) (przypominamy, iż przez $ m $ oznaczono liczbę kroków czasowych, zaś $ n $ to wymiar punktu przestrzeni fazowej). W związku z tym, dla odpowiednio gęstej dyskretyzacji obszaru obliczeniowego lepszym wyborem są metody iteracyjne. Powrócimy do tematu wydajności różnych metod numerycznych w rozważanej klasie przypadków w Rozdziale. \newline
+gdzie para indeksów oznacza macierz kwadratową, której wymiar jest równy wymiarowi punktu przestrzeni fazowej (w kontekście numerycznej mechaniki płynów jest on proporcjonalny do wymiarów siatki obliczeniowej). Pozostałe bloki to macierze zerowe. Wspomnijmy, iż używając bezpośrednich metod rozwiązywania takiego układu, koszt numeryczny jest rzędu O($ mn^{3} $) (przypominamy, iż przez $ m $ oznaczono liczbę kroków czasowych, zaś $ n $ to wymiar punktu przestrzeni fazowej). W związku z tym, dla odpowiednio gęstej dyskretyzacji obszaru obliczeniowego lepszym wyborem są metody iteracyjne. Powrócimy do tematu wydajności różnych metod numerycznych w rozważanej klasie przypadków w Rozdziale 5. \newline
 Następnie z (\ref{LSS_v9}) dostajemy
 \begin{equation}
 \begin{array}{rcl}
@@ -1073,13 +1081,13 @@ gdzie
 \tilde{J}_{i} = \frac{J(u_{i-\frac{1}{2}},s)+J(u_{i+\frac{1}{2}},s)}{2} - \frac{1}{m}\sum_{i=0}^{m-1}J(u_{i+\frac{1}{2}},s) \thickspace \thickspace \thickspace 1\leq i < m.
 \label{LSS_v20}
 \end{equation}
-Z powyższych wzorów wnioskujemy, iż postać równania Tangent w Metodzie Trajektorii Cienia zawiera dodatkowy człon związany z dylatacją czasu w stosunku do (\ref{J_tangent}). Jest to jednak jedynie techniczny parametr regularyzujący, a cała idea tkwi w odpowiednim rozwiązaniu $ \{v_{i}\}_{i=1,...,m} $, który nazywamy \textit{kierunkiem cienia}.
-W Rozdziale zostąło wspomniane, iż w celu wyznaczenia gradientu funkcji celu posługujemy się techniką mnożników Lagrange'a. Wprzypadku minimalizacji funkcjonału (\ref{LSS_v3}) z ograniczeniem w postaci (\ref{LSS_v2}) odpowoienia funkcja ma postać:
+Z powyższych wzorów wnioskujemy, iż postać równania Tangent w Metodzie Trajektorii Cienia zawiera dodatkowy człon związany z dylatacją czasu w stosunku do (\ref{J_tangent}). Jest to jednak jedynie techniczny parametr regularyzujący, a cała idea tkwi w odpowiednim rozwiązaniu $ \{v_{i}\}_{i=1,...,m} $, który nazywamy \textit{kierunkiem cienia}.\newline
+W Rozdziale 3 zostało wspomniane, iż w celu wyznaczenia gradientu funkcji celu za pomocą operatora sprzężonego posługujemy się techniką mnożników Lagrange'a. Wprzypadku minimalizacji funkcjonału (\ref{LSS_v3}) z ograniczeniem w postaci (\ref{LSS_v2}) odpowiednia funkcja ma postać:
 \begin{equation}
 \Lambda = \int_{0}^{T}(v^{T}v + \alpha^{2}\eta^{2}+2w^{T} + 2w^{T}(\frac{dv}{dt}-\frac{\partial{f}}{\partial{u}}v-\frac{\partial{f}}{\partial{s}}-\eta f)),
 \label{LSS_v21}
 \end{equation}
-gdzie przez $ w = w(t) $ oznaczono wspomniane mnożniki. Rozumowanie przedstawione w Rozdziale prowadzi do układu
+gdzie przez $ w = w(t) $ oznaczono wspomniane mnożniki. Rozumowanie przedstawione w Rozdziale 3 prowadzi do układu
 \begin{equation}
 \begin{cases}
 	\frac{dv}{dt}-\frac{\partial{f}}{\partial{u}}v-\frac{\partial{f}}{\partial{s}}-\eta f = 0 \\
@@ -1111,14 +1119,14 @@ Wobec powyższego komplementacja Shura ma postać
 gdzie oie strony wyrażają się wzorami (\ref{LSS_v14}), (\ref{LSS_v16}) oraz (\ref{LSS_v17}). \newline
 Zauważmy na koniec, iż obie metody charakteryzuje ta sama macierz główna układu.
 \newpage
-\section{Implementacja metody LSS}
+\chapter{Implementacja metody LSS}
 W niniejszym rozdziale przedstawione zostały wyniki symulacji numerycznej dla dwóch scenariuszy:
 \begin{itemize}
 	\item Scenariusz I - układ Lorentza (1963)
-	\item Scenariusz II - 
+	\item Scenariusz II - dwuwymiarowe zagadnienie przepływowe
 \end{itemize}
-\subsection{Scenariusz I - konceptualne preliminarium}
-\subsubsection{Model matematyczny}
+\section{Scenariusz I - konceptualne preliminarium}
+\subsection{Model matematyczny}
 Zastosujemy teraz opisaną metodę trajektorii cienia w analizie wrażliwości za pomocą zagadnienia sprzężonego dla układu Lorentza, tj. układu chaotycznego opisywanego autonomicznym układem nieliniowych równań różniczkowych zwyczajnych postaci:
 \begin{equation}
 \begin{cases} 
@@ -1134,7 +1142,7 @@ gdzie $ \sigma, \rho, \beta $ są pewnymi stałymi. Nie zostały określone waru
 	\item $ x = y = \sqrt{\beta(\rho - 1)}, z = \rho - 1 $,
 	\item $ x = y = -\sqrt{\beta(\rho - 1)}, z = \rho - 1 $,
 \end{itemize}
-Układ ten jest chaotyczny w ścisłym sensie i jest bardzo prostym modelem ruchu konwekcyjnego powietrza atmosferycznego (oryginalny układ Lorentza składał się z równań, rozważany jest skrajnie uproszczony - jest on minimalnym, w sensie ilości stopni swobody, układem, który może przejawiać chaotyczne zachowania),przy czym stała   $ \sigma $ charakteryzuje lepkość ośrodka, $ \rho $ współczynnik przewodzenia ciapła, zaś $ \beta $ wymiar charakterystyczny.\newline
+Układ ten jest chaotyczny w ścisłym sensie i jest bardzo prostym modelem ruchu konwekcyjnego powietrza atmosferycznego (oryginalny układ Lorentza składał się z większej liczby równań, rozważany jest skrajnie uproszczony - jest on minimalnym, w sensie ilości stopni swobody, układem, który może przejawiać chaotyczne zachowania),przy czym stała   $ \sigma $ charakteryzuje lepkość ośrodka, $ \rho $ współczynnik przewodzenia ciapła, zaś $ \beta $ wymiar charakterystyczny.\newline
 Trajektorie dla trzech wybranych parametrów $ \rho $ w przypadku $ x(0) = 1, y(0) = 0, z(0) = 28 $ przedstawia Rysunek (\ref{Fig15}).
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/Trajectories.png} 
@@ -1142,96 +1150,96 @@ Trajektorie dla trzech wybranych parametrów $ \rho $ w przypadku $ x(0) = 1, y(
 	\caption{Trajektorie układu Lorentza.}
 	\label{Fig15}
 \end{figure}
-\subsubsection{Wyniki symulacji numerycznej}
+\subsection{Wyniki symulacji numerycznej}
 Funkcja celu została zdefiniowana jako
 \begin{equation}
 \langle\textbf{J}\rangle = \lim\limits_{\textit{T}\to\infty}\int_{0}^{T}zdt
 \label{lorenz_J}
 \end{equation} 
 Założone zostały wartości parametrów: $\sigma$ = 10, $\beta$ = $\frac{8}{3}$, zaś $\rho$ pozostawiono jako zmienną projektową(której zakres zmienności przebiega od 10 do 100). Rysunek (\ref{Fig16}) przedstawia zmienność funkcji celu w rozważanym zakresie zmian $ \rho $, gdzie okres uśredniania $ T = 10 $.
-\begin{figure}[H]
+\begin{figure}[hp]
 	\includegraphics[scale=0.7]{figures/OF.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=10 $)}
 	\label{Fig16}
 \end{figure}
 Należy zauważyć, że chociaż ogólny trend krzywej sugeruje stałe jej nachylenie (wartość tangensa kąta tego nachylenia jest bliska jedności), to występują lokalne fluktuacje, które są przyczyną problemów w wyznaczenia wrażliwości tej funkcji na zmianę parametrów projektowych. Wyznaczona została dla tego przypadku pochodna względem parametru $ \rho $, której wykres ilustruje Rysunek (\ref{Fig17}) (oś rzędnych jest przedstawiona w skali logarytmicznej). Wykorzystano do tego celu metodę zaburzenia zaburzenia części urojonej zmiennej projektowej traktowanej jako liczbę zespoloną. Technika ta pozwala uzyskać pochodną z doskładnością maszynową (patrz Rozdział 3.1).
-\begin{figure}[H]
+\begin{figure}[hp]
 	\includegraphics[scale=0.7]{figures/OF_sens.png} 
 	\centering
 	\caption{Wrażlowość funkcji celu wyznaczona metodą zaburzenia zespolonego}
 	\label{Fig17}
 \end{figure}
 Tak wyznaczona czułość jest praktycznie nieprzydatna. Jednym ze sposobów 'wygładzenia' trendu zmian funkcji celu w zależności od zmiennej decyzyjnej jest zwiększenie okresu uśredniania (słuszność tego podejścia sugeruje założenie ergodyczności). Na Rysunkach (\ref{Fig18}) oraz (\ref{Fig19}) przedstawiono rozpatrywaną funkcję w przypadkach $ T = 50 $ oraz $ T = 100 $.
-\begin{figure}[H]
+\begin{figure}[hp]
 	\includegraphics[scale=0.7]{figures/OF1.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=50 $)}
 	\label{Fig18}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[hp]
 	\includegraphics[scale=0.7]{figures/OF2.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=100 $)}
 	\label{Fig19}
 \end{figure}
 Zgodnie z oczekiwaniami amplituda fluktuacji maleje, jednak ich obecność nie została wyeliminowana, co w istotny sposób rzutuje na wyznaczanie poszukiwanego gradientu (Rysunki \ref{Fig20} i \ref{Fig21}).
-\begin{figure}[H]
+\begin{figure}[hp]
 	\includegraphics[scale=0.7]{figures/OF1_sens.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=50 $)}
 	\label{Fig20}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[hp]
 	\includegraphics[scale=0.7]{figures/OF2_sens.png} 
 	\centering
 	\caption{Zmienność funkcji celu w zależności od zmiennej decyzyjnej ($ T=100 $)}
 	\label{Fig21}
 \end{figure}
 Metoda trajektorii cienia została wykorzystana do wyznaczenia wrażliwości funkcji celu (przy użyciu operatora sprzężonego) dla pierwszego przypadku ($ T=10 $). Wynik ilustruje Rysunek (\ref{Fig22}) , zaś Rysunek (\ref{Fig23}) pokazuje porównanie obu metod.
-\begin{figure}[H]
+\begin{figure}[hp]
 	\includegraphics[scale=0.7]{figures/LSS.png} 
 	\centering
 	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.}
 	\label{Fig22}
 \end{figure}
-\begin{figure}[H]
+\begin{figure}[hp]
 	\includegraphics[scale=0.7]{figures/LSSvsCVM.png} 
 	\centering
 	\caption{Porównanie obu metod}
 	\label{Fig23}
 \end{figure}
-Podobna analiza została wykonana dla drugiego przypadku ($ T=50 $), a jej wyniki przedstawiają Rysunki  (\ref{Fig24}) oraz (\ref{Fig25}).
-\begin{figure}[H]
+Podobna analiza została wykonana dla drugiego przypadku ($ T=50 $), a jej wyniki przedstawiają Rysunki (\ref{Fig24}) oraz (\ref{Fig25}).
+\begin{figure}[hp]
 	\includegraphics[scale=0.7]{figures/LSS1.png} 
 	\centering
 	\caption{Czułość funkcji celu wyznaczona metodą trajektorii cienia.}
 	\label{Fig24}
 \end{figure}
-\begin{figure}[H]
-	\includegraphics[scale=0.7]{figures/LSSvsCVM1.png} 
+\begin{figure}[hp]
+	\includegraphics[scale=0.7]{figures/LSSvsCVM1.png}
 	\centering
 	\caption{Porównanie obu metod}
 	\label{Fig25}
 \end{figure}
 Kod zaimplementowany w środowisku skryptowym MATLAB jest dostępny na publiczny repozytorium autora \cite{Marek1}.
-\subsection{Scenariusz II - oblicze chaosu}
-\subsubsection{Słowo wstępne}
-Jak zostało zaznaczone na wstępie, głównym celem niniejszej pracy jest analiza wrażliwości wybranej funkcji celu dla zagadnienia przepływowego modelowanego równaniem Boltzmanna. Konkretniej: chcemy zastosować Metodę Trajektorii Cienia do zagadnienia rozwiązywanego Metodą Siatek Boltzmanna (ang. \textit{Lattice Boltzmann Method}). Istnieje cały szereg zalet nautry numerycznej, które pokrótce zostaną przedstawione w następnym podrozdziale. Jednak już w tym momencie należy wmienić obszary praktycznych zastosować, które wykorzystują wspomnianą metodę. Są to między innymi (\cite{Espinoza}) obliczenia związane z
+\section{Scenariusz II - oblicze chaosu}
+\subsection{Słowo wstępne}
+Jak zostało zaznaczone na wstępie, głównym celem niniejszej pracy jest analiza wrażliwości wybranej funkcji celu dla zagadnienia przepływowego modelowanego równaniem Boltzmanna. Konkretniej: chcemy zastosować Metodę Trajektorii Cienia do zagadnienia rozwiązywanego Metodą Siatek Boltzmanna (ang. \textit{Lattice Boltzmann Method}). Istnieje cały szereg zalet nautry numerycznej, które pokrótce zostaną przedstawione w następnym podrozdziale. Jednak już w tym momencie należy wmienić obszary praktycznych zastosowań, które wykorzystują wspomnianą metodę. Są to między innymi (\cite{Espinoza}) obliczenia związane z
 \begin{itemize}
 	\item ośrodkami porowatymi (na przykład filtracja gleby)
 	\item ogniowami paliwowymi
 \end{itemize}
-W poprzednim Rozdziale została przedstawiona metoda LSS w sposób generyczny. Obecnie należy dopasować jej schemat w celu regularyzacji równań opisujących dynamikę rozważanego przepływu. W momencie pisania tej pracy autor nie spotkał się z żadną istniejącą implementacją tej metody dla zdyskretyzowanych równań Boltzmanna - znane są jedynie aplikacje dla solverów bazujących na równaniach Naviera-Stokesa. Należy przy tym dodatkowo zaznaczyć, że wszystkie one oparte są o przechowywanie powstałej macierzy układu równań w pamięci. W dalszej części pracy ukazane zostaną wady takiego podejścia (w szczególności, zajętość pamięci operacyjnej w takich przypadkach całkowicie niweluje, zdaniem autora, jakiekolwiek szanse na ich użycie w praktycznych zastosowaniach - nawet dla układów dwuwymiarowych korzystających z modeli turbulencji klasy RANS). Praca owa skupia się na podejściu, w którym macierz układu trajktuje się w sposób 'abstrakcyjny' - jako funktor, którego argumentami są wektory wejściowe, zaś wyjście stanowi iloczyn macierzy i wektorów wejściowych.
-Do opisu implementacji Metody Trajektorii Cienia konieczna jest znajomośc równań wykorzystywanych w Metodzie Siatek Boltzmanna, dlatego też w dalszej części pracy skrótowo opisane zostały podstawowe jej założenia i płynące z nich wnioski w postaci gotowych formuł. Następnie zaprezentowane zostanły wyniki obliczeń dla przykładowego zagadnienia, w którym następuje oderwanie strugi na skutek skokowej zmiany geometrii. Zbadana zostanie przy tym czułość średniego spadku ciśnienia w długim horyzoncie czasowym w stosunku do modułu prędkości zadanej na wlocie do obszaru obliczeniowego.
-\subsubsection{Metoda Siatek Boltzmanna}
+W poprzednim rozdziale została przedstawiona metoda LSS w sposób generyczny. Obecnie należy dopasować jej schemat w celu regularyzacji równań opisujących dynamikę rozważanego przepływu. W momencie pisania tej pracy autor nie spotkał się z żadną istniejącą implementacją tej metody dla zdyskretyzowanych równań Boltzmanna - znane są jedynie aplikacje dla solverów bazujących na równaniach Naviera-Stokesa. Należy przy tym dodatkowo zaznaczyć, że wszystkie one oparte są o przechowywanie powstałej macierzy układu równań w pamięci. W dalszej części pracy ukazane zostaną wady takiego podejścia (w szczególności, zajętość pamięci operacyjnej w takich przypadkach całkowicie niweluje, zdaniem autora, jakiekolwiek szanse na ich użycie w praktycznych zastosowaniach - nawet dla układów dwuwymiarowych korzystających z modeli turbulencji klasy RANS). Praca owa skupia się na podejściu, w którym macierz układu traktuje się w sposób 'abstrakcyjny' - jako funktor, którego argumentami są wektory wejściowe, zaś wyjście stanowi iloczyn macierzy i wektorów wejściowych.
+Do opisu implementacji Metody Trajektorii Cienia konieczna jest znajomość równań wykorzystywanych w Metodzie Siatek Boltzmanna, dlatego też w dalszej części pracy skrótowo opisane zostały podstawowe jej założenia i płynące z nich wnioski w postaci gotowych formuł. Następnie zaprezentowane zostanły wyniki obliczeń dla przykładowego zagadnienia, w którym następuje oderwanie strugi na skutek skokowej zmiany geometrii. Zbadana zostanie przy tym czułość średniego spadku ciśnienia w długim horyzoncie czasowym w stosunku do modułu prędkości zadanej na wlocie do obszaru obliczeniowego.
+\subsection{Metoda Siatek Boltzmanna}
 Jak już zostało nieformalnie wspomniane (przy okazji omawiania pojęcia ergodyczności) w mechanice statystycznej definiuje się rokład prawdopodobieństwa związany z nazwiskami Boltzmanna oraz Maxwella. Ma on następującą postać 
 \begin{equation}
 f(v) = 4\pi(\frac{m}{2\pi kT})^{\frac{2}{3}}v^{2}exp(-\frac{\frac{1}{2}mv^{2}}{kT}),
 \end{equation}
 gdzie przez $ v $ oznaczono prędkość cząstki, $ m $ jej masę, $ T $ temperaturę bezwzględną, oraz przez $ k $ stałą Boltzmana.
 Podstawowym założeniem prowadzącym do takiej dystrybucji prędkości wśród cząstek jest przyjęcie modelu gazu doskonałego oraz założenie równowagi termodynamicznej między układem jego otoczeniem. Należy zwrócić uwagę na znaczenie tego rozkładu - jest to gęstość prawdopodobieństwa stanowiąca miarę liczności cząstek w danym zakresie prędkości. Jak każda funkcja gęstości prawdopodobieństwa jest ona równa prawie wszędzie pochodnej dystrybuanty związanej z tym rozkładem. Wobec tego, na poziomie intuicji, można taką funkcję utożsamiać ze stosunkiem liczby cząstek mających ograniczony zakres przyjmowanych prędkości w stosunku do całkowitej ich liczby. Zauważmy, że podejście to nie opisuje każdej cząstki jako oddzielnego składnika złożonego systemu (podejście mikroskopowe). Jednakże jest ono również odmienne od dobrze znanego z obecnie najpopularniejszych metod modelowania komputerowego przepływów uśredniania w relatywnie niewielkiej (w sensie rozciągłości przestrzennej) objętości parametrów statystycznie istotnej liczby cząstek, z którego generowane są pola parametrów makroskopowych takich jak ciśnienie, temperatura czy prędkość (podejście to bazuje na założeniu ciągłości badanego ośrodka i nazywane jest podejściem makroskopowym). Głównym zamysłem Metody Siatek Boltzmanna jest symulowanie ewolucji w czasie analogicznego rozkładu (niekoniecznie dla stanów równowagowych).
-\subsubsection{Model matematyczny}
+\subsection{Model matematyczny}
 Jako schemat połączeń węzłów siatki przyjęty został typ d2Q9 (Rysunek (\ref{Fig26}))
 \begin{figure}[H]
 	\includegraphics[scale=0.7]{figures/d2q9.jpg} 
@@ -1270,7 +1278,7 @@ Dodatkowo, gdy na cząsteczki działa zewnętrzna siła $F$, to makroskopowa pr�
 U(x,t) = u(x,t) + \frac{1}{2}\frac{F(x,t)}{\rho(x,t)}.
 \end{equation}
 Dynamika w podejściu tej metody modelowana jest zatem dwustopniowo: pierwszy etap stanowi kolizja (reprezentowana operatorem kolizji), drugi zaś stanowi propagację funkcji rozkładu zgodnie z dyskretnymi kierunkami wybranych wektorów prędkości. W pracy operator kolizji jest aproksymowany dobrze rozpoznanym modelem BGK. Należy zwrócić uwagę, iż rozkład równowagowy jest wielomianowym przybliżeniem rozkładu Maxwella-Boltzmanna.\newline
-\subsubsection{Aspekty numeryczne}
+\subsection{Aspekty numeryczne}
 Zanim przejdziemy do omówienia wyników należy chwilę poświęcić na aspekty implementacyjne, gdyż dla zagadnień wielowymiarowych odgrywają one kluczową rolę. W typowych przypadkach przepływów mogą nawet zadecydować o możliwości wykorzystania danej metody.\newline
 W Rozdziale 4.3.1 wspomniane zostało, iż zarówno Metoda Tangent jak i Metoda Operatora Sprzężonego charakteryzują się tą samą macierzą główną dla układu KKT. Macierz ta ma strukturę opisaną wzorami (\ref{LSS_v16}) oraz (\ref{LSS_v17}). Zauważmy, że macierze $E_{i}, G_{i}$ są rzadkie (większość elementów ma zerową wartość), zaś $ f_{i} $ reprezentują wektory, które jednakże w ogólności nie są rzadkie. Ma to swoje poważne konsekwencje w odniesieniu do bloków diagonalny (bloki pod- i naddiagonalne opisane równaniami (\ref{LSS_v17}) są macierzami rzadkimi jako iloczn takich macierzy) - iloczyn $ f_{i}f_{i}^{T} $ jest  pełną macierzą kwadratową (przypominamy, że jej wymiar to wymiar zagadnienia $ m $). Bloków takich jest tyle ile jest kroków czasowych symulacji $ n $. W związku z tym, chcąc przechowywać macierz układu (w obydwu metodach) w pamięci, dostajemy dolne ograniczenie na ilość liczb zmiennopozycyjnych. Stosując notację \textit{dużego O} otrzymujemy
 \begin{equation}
@@ -1284,13 +1292,13 @@ N = O(k^{2d+1}),
 \end{equation}
 gdzie $ d = 2, 3$ oznacza ilość wymiarów geometrycznych. Dla uproszczenia przyjęliśmy, że każdy węzeł siatki obliczeniowej przechowuje jedną liczbę, co nie jest prawdą zarówno w przypadku zdyskretyzowanych równań Naviera-Stokesa jak i równań Boltzmanna.\newline Przyjmując dalej, iż liczba zmiennopozycyjna na typowej architekturze sprzętowej zajmuje $ 4 $ bajty oraz zakładając $ k=100 $ (co w przypadku dwuwymiarowym implikuje jedyne $ 10 000 $ węzłów) otrzymujemy szacunkową wartość $ N \approx 4\cdot 10^{10}$ bajtów, co oznacza, iż rozwiązując stosunkowo małe, dwuwymiarowe zagadnienie przepływowe (nieustalone) potrzebne jest ponad $ 36 $ GB pamięci. Dla symulacji trójwymiarowej sytacja jeszcze bardziej się komplikuje (tzw. \textit{klątwa wymiarowości}).\newline
 Powyższe szacunki pokazują, iż konieczna jest specjalna technika rozwiązywania układu, którego macierz opisywana jest równaniami (\ref{LSS_v16}) oraz (\ref{LSS_v17}). Wspomnieliśmy już, że jest to macierz symetryczna i dodatnio określona, więc jedną z pierwszych metod, która przychodzi na myśl jest Metoda Gradientów Sprzężonych (jako bardzo intuicyjna i stosunkowo prosta w implementacji). Wobec wspomnianej regularności macierzy jest ona w tym przypadku tożsama z popularną metodą \textit{GMRES} (ang. \textit{Generalized Minimal Residual}). Z założenia więc nie jest nam potrzebna macierz układu, a jedynie jej działanie na dowolny wektor zgodny z jej wymiarem. Potrzebujemy zatem funktora reprezentującego tę macierz (technika przynależąca do klasy metod tzw. \textit{matrix-free}).\newline
-Podejście takie wymaga prostych reguł wyznaczania współczynników takiej macierzy. W tym momencie pojawia się główny problem: zgodnie z definicjami macierzy $ E_{i}, G_{i} $, a także wektorów $ f_{i} $ zawierają one różnego rodzaju pochodne (patrz \ref{LSS_v10}). Ze względu na wymiary zagadnienia, a także na dokładność wyznaczanie ich w sposób numeryczny jest niesatysfakcjonujące. Ze względu na iteracyjny charakter układów dynamicznych różniczkowanie symboliczne również nie stanowi rozwiązania.\newline Pomysł polega na zastosowaniu automatycznego rózniczkowania, techniki stanowiącej niejako połączenie wspomnianych dwóch podejść. Bazuje ona na tzw. liczbach dualnych. Ich koncepcja, a także zastosowanie jest zbliżone do wyznaczania pochodnej za pomocą metod różnic skończonych w wariancie z zespolonym zaburzeniem (zob. Rozdział 3.1). Liczba dualna jest bowiem reprezentowana przez parę liczb rzeczywistych $ (a,b) \in  $, co możemy zapisać jako $a + b\epsilon$, gdzie odpowiednik jednostki urojonej, $\epsilon$ (tzw. nilpotent), utożsamiamy z zaburzeniem. Twór ten można sobie wyobrazić jako niezerowy obiekt, taki, że $\epsilon^{2} = 0$ (a więc i $\epsilon^{k} = 0 $ dla $k > 2$). Własność ta jest odwzorowaniem faktu, iż po podzieleniu przez nilpotent oraz przejściu granicznym $ \epsilon \rightarrow 0^{+}$ otrzymujemy zerową wartość o ile $ \epsilon $ był w potędze większej od jedności. Widzimy tu analogię do wspomnianego wariantu metody różnic skończonych – speracja zaburzenia od punktu bieżącego na niezależne twory numeryczne, co w praktyce oznacza brak ograniczeń spowodowanych błędami zaokrągleń. \newline
-Mając tak zdefiniowane liczby dualne można bez trudnu sprawdzić, iż dla wielomianu $ P \in $ zachodzi $ P(a + b\epsilon) = P(a) + bP’(a)\epsilon$, a więc  $ P(a + \epsilon) = P(a) + P’(a)\epsilon$.  W ogólności funkcje, które mają taką własność określane są mianem przestępnych. Aby więc policzyć pochodną funkcji przestępnej, wystarczy zbudować graf obliczeń (tak jak ma to miejsce w przypadku różniczkowania symbolicznego) z zaimplementowaną arytmetyką liczb dualnych, dzięki czemu ‘za jednym zamachem’ otrzymujemy wartość funkcji w rozważanym punkcie oraz jej pochodną tamże (arytmetyka symboliczna na grafie odpowiadającym funkcji jest dużo prostsza od generowania nowego grafu odpowiadającego jej pochodnej). \newline
-Metoda ta posiada podobną przypadłość do Metody Tangent – jest wrażliwa na funkcje o wielowymiarowej dziedzinie. Dla każdej zmiennej niezależnej trzeba bowiem ‘przejść’ po grafie aby wyznaczyć pochodną względem tej zmiennej (wartość samej funkcji jest redundantnie wyznaczana za każdym takim przejściem).  Również tutaj istnieje podobne rozwiązanie – analog Metody Operatora Sprzężonego (w swojej istocie jest to dokładnie to samo, tj. zadziałanie operatorem na rozważane przekształcenie) i nazywa się odwrotnym różniczkowaniem automatycznym.\newline
-Konkluzje są tutaj takie same – aby wyznaczyć pochodną w danym punkcie należy wyznaczyć wartość funkcji w tym punkcie, tj. przejście po grafie obliczeniowy w jego naturalnym kierunku, a następnie przejście w drugą stronę. Interesujące jest, iż mechanizm taki jest bardzo popularny w technikach uczenia maszynowego. W szczególności głębokie sieci neuronowe bazują na optymalizacji lokalnej, w której gradient wyznaczany jest wspomnianą metodą – jest to popularny algorytm wstecznej propagacji błędów (ang. Backpropagation algorithm). Co więcej techniki automatycznego różniczkowania wstecznego są stosowane w popularnych bibliotekach związanych z wspomnianym tematem (jako dobry przykład wystarczy wspomnieć otwartą bibliotekę TensorFlow autorstwa Google Brain Team). \newline
+Podejście takie wymaga prostych reguł wyznaczania współczynników takiej macierzy. W tym momencie pojawia się główny problem: zgodnie z definicjami macierzy $ E_{i}, G_{i} $, a także wektorów $ f_{i} $ zawierają one różnego rodzaju pochodne (patrz \ref{LSS_v10}). Ze względu na wymiary zagadnienia, a także na dokładność wyznaczanie ich w sposób numeryczny jest niesatysfakcjonujące. Ze względu na iteracyjny charakter układów dynamicznych różniczkowanie symboliczne również nie stanowi rozwiązania.\newline Pomysł polega na zastosowaniu automatycznego rózniczkowania, techniki stanowiącej niejako połączenie wspomnianych dwóch podejść. Bazuje ona na tzw. liczbach dualnych. Ich koncepcja, a także zastosowanie jest zbliżone do wyznaczania pochodnej za pomocą metod różnic skończonych w wariancie z zespolonym zaburzeniem (zob. Rozdział 3.1). Liczba dualna jest bowiem reprezentowana przez parę liczb rzeczywistych $ (a,b)$, co możemy zapisać jako $a + b\epsilon$, gdzie odpowiednik jednostki urojonej, $\epsilon$ (tzw. nilpotent), utożsamiamy z zaburzeniem. Twór ten można sobie wyobrazić jako niezerowy obiekt, taki, że $\epsilon^{2} = 0$ (a więc i $\epsilon^{k} = 0 $ dla $k > 2$). Własność ta jest odwzorowaniem faktu, iż po podzieleniu przez nilpotent oraz przejściu granicznym $ \epsilon \rightarrow 0^{+}$ otrzymujemy zerową wartość o ile $ \epsilon $ był w potędze większej od jedności. Widzimy tu analogię do wspomnianego wariantu metody różnic skończonych – speracja zaburzenia od punktu bieżącego na niezależne twory numeryczne, co w praktyce oznacza brak ograniczeń spowodowanych błędami zaokrągleń. \newline
+Mając tak zdefiniowane liczby dualne można bez trudnu sprawdzić, iż dla wielomianu $ P $ zachodzi $ P(a + b\epsilon) = P(a) + bP’(a)\epsilon$, a więc  $ P(a + \epsilon) = P(a) + P’(a)\epsilon$.  W ogólności funkcje, które mają taką własność określane są mianem przestępnych. Aby więc policzyć pochodną funkcji przestępnej, wystarczy zbudować graf obliczeń (tak jak ma to miejsce w przypadku różniczkowania symbolicznego) z zaimplementowaną arytmetyką liczb dualnych, dzięki czemu ‘za jednym zamachem’ otrzymujemy wartość funkcji w rozważanym punkcie oraz jej pochodną tamże (arytmetyka symboliczna na grafie odpowiadającym funkcji jest dużo prostsza od generowania nowego grafu odpowiadającego jej pochodnej). \newline
+Metoda ta posiada podobną przypadłość do Metody Tangent – jest wrażliwa na funkcje o wielowymiarowej dziedzinie. Dla każdej zmiennej niezależnej trzeba bowiem ‘przejść’ po grafie aby wyznaczyć pochodną względem tej zmiennej (wartość samej funkcji jest redundantnie wyznaczana za każdym takim przejściem).  Również tutaj istnieje podobne rozwiązanie – analog Metody Operatora Sprzężonego (w swojej istocie jest to dokładnie to samo, tj. zadziałanie operatorem dualnym na rozważane przekształcenie) i nazywa się odwrotnym różniczkowaniem automatycznym.\newline
+Konkluzje są tutaj takie same – aby wyznaczyć pochodną w danym punkcie należy wyznaczyć wartość funkcji w tym punkcie, tj. przejście po grafie obliczeniowy w jego naturalnym kierunku, a następnie przejście w drugą stronę. Interesujące jest, iż mechanizm taki jest bardzo popularny w technikach uczenia maszynowego. W szczególności głębokie sieci neuronowe bazują na optymalizacji lokalnej, w której gradient wyznaczany jest wspomnianą metodą – jest to popularny algorytm wstecznej propagacji błędów (ang. \textit{Backpropagation algorithm}). Co więcej techniki automatycznego różniczkowania wstecznego są stosowane w popularnych bibliotekach związanych ze wspomnianym tematem (jako dobry przykład wystarczy wspomnieć otwartą bibliotekę TensorFlow autorstwa Google Brain Team). \newline
 Wracając do postawionego problemu można uznać, iż dysponując odpowiednimi narzędziami możliwe jest zaimplementowanie macierzy w formie funkcji – dalsze kroki procesu optymalizacyjnego przebiegają standardowo, zgodnie z Metodą Gradientów Sprzężonych, która została wykorzystana w niniejszej pracy. Automatyczne różniczkowanie jest wykonywane za pomocą otwartego silnika TAPENADE stworzonego przez grupę INRIA Sophia-Antipolis (zob. Dokumentacja \cite{Tapenade}). Możemy już teraz przejść do analizy wyników symulacji numerycznej przedstawionych w następnym podrozdziale.
 
-\subsubsection{Wyniki symulacji}
+\subsection{Wyniki symulacji}
 Kształt obszaru obliczeniowego został zilustrowany na Rysunku (\ref{Fig27})
 \begin{figure}[H]
 	\includegraphics[scale=1.8]{figures/geometry.png} 
@@ -1521,19 +1529,35 @@ grad_{LSS}\bar{J} &=& 7.57 \\
 \end{equation}
 Kod zaimplementowany w języku C++ jest dostępny na publiczny repozytorium autora \cite{Marek2}.
 \newpage
-\section{Dyskusja wyników oraz wnioski}
-\subsection{Scenariusz pierwszy}
+\chapter{Dyskusja wyników oraz wnioski}
+\section{Scenariusz pierwszy}
 Wyniki symulacji dla układu Lorenza (1963) są zgodne z oczekiwaną wrażliwością funkcji celu. Zauważmy w tym miejscu, że dla przebadanych okresów symulacji wyznaczona w sposób bezpośredni wrażliwość pozostaje równie bezużyteczna (Rysunki (\ref{Fig17}), (\ref{Fig20}), (\ref{Fig21}), (\ref{Fig23}), (\ref{Fig25})). Można stąd wysunąć wniosek, iż nawet jeżeli funkcja celu wizualnie wygląda na ‘wygładzoną’, ostatecznym weryfikatorem przydatności powinna być zawsze wyznaczona numerycznie wraliwość. \newline
 Rysunki (\ref{Fig22})-(\ref{Fig25}) ilustrują, że takowa liczona względem trajektorii cienia jest bardzo stabilna. Dodatkowo zauważmy, iż przebadany został dość obszerny zakres parametrów projektowych. Sugeruje to dużą stabilność metody. 
-\subsection{Scenariusz drugi}
-Na początku zauważmy, że w każdym z przebadanych przypadków przyjęte założenie ergodyczności ma uzasadnienie (dostarczone wyniki nie dają podstaw, aby to założenie odrzucić) – skumulowane spadki ciśnień dążą bowiem asymptotycznie do stałych wartości (Rysunki).  Jest tak nawet pomimo różnych liczb Reynoldsa oraz wynikających z nich jakościowych zmian rozwiązań ilustrowanych poprzez mapy modułów prędkości (Rysunki). \newline
-Funkcja celu (\ref{J_numerical}) dla średniego w czasie spadku ciśnienia ma character paraboliczny, co jest zgodne z danymi literaturowymi. Stanowi to wskazówkę, iż w odpowiadających analizowanym równaniom Boltzmanna równaniach Naviera-Stokesa człon nieliniowy nie mógłby zostać zlinearyzowany bez wprowadzania istotnych błędów. \newline
-Dokładność wyników podsumowuje  poniższa tabela.
-Błąd względny rośnie wraz ze wzrostem liczby Reynoldsa. Obserwacja taka może być uzasadniona tym, że nieliniowości zaczynają dominować dynamikę zachowania rozwiązań i w związku z tym rośnie liczba niestabilnych modów Lyapunova. Rysunek ilustruje wykres błędu względnego w funkcji liczby Reynoldsa.
-Charakter paraboliczny wskazuje potencjalne problemy dla bardzo dużych liczb Reynoldsa. W takich przypadkach konieczne byłoby zastosowanie dłuższych okresów symulacji (poprzedni scenariusz sugeruje, iż taki zabieg ma działanie regularyzujące). \newline
+\section{Scenariusz drugi}
+Na początku zauważmy, że w każdym z przebadanych przypadków przyjęte założenie ergodyczności ma uzasadnienie (dostarczone wyniki nie dają podstaw, aby to założenie odrzucić) – skumulowane spadki ciśnień dążą bowiem asymptotycznie do stałych wartości (Rysunki (\ref{Fig35}), (\ref{Fig40}), (\ref{Fig45}), (\ref{Fig50}), (\ref{Fig55})).  Jest tak nawet pomimo różnych liczb Reynoldsa oraz wynikających z nich jakościowych zmian rozwiązań ilustrowanych poprzez mapy modułów prędkości (Rysunki (\ref{Fig31}),(\ref{Fig32}),(\ref{Fig33}),(\ref{Fig34}), (\ref{Fig36}),(\ref{Fig37}),(\ref{Fig38}), (\ref{Fig39}),(\ref{Fig41}),(\ref{Fig42}),(\ref{Fig43}), (\ref{Fig44}),(\ref{Fig46}),(\ref{Fig47}),(\ref{Fig48}), (\ref{Fig49}),(\ref{Fig51}),(\ref{Fig52}),(\ref{Fig53}), (\ref{Fig54})). \newline
+Funkcja celu (\ref{J_numerical}) dla średniego w czasie spadku ciśnienia ma charakter paraboliczny, co jest zgodne z danymi literaturowymi. Stanowi to wskazówkę, iż w odpowiadających analizowanym równaniom Boltzmanna równaniach Naviera-Stokesa człon nieliniowy nie mógłby zostać zlinearyzowany bez wprowadzania istotnych błędów. \newline
+Dokładność wyników podsumowuje  poniższa tabela (\textbf{Re} oznacza liczbę Reynoldsa, zaś pozostałe oznaczenia pochodzą z Rozdziału 5). \newline
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		\textbf{Re} &$ grad\bar{J} $ & $ grad_{LSS}\bar{J} $ & $\epsilon$\\
+		\hline
+		200 & 5.72 & 5.23 & 0.088\\
+		\hline
+		300 & 6.20 & 5.63 & 0.0919\\
+		\hline
+		400 & 6.99 & 6.12 & 0.1245\\
+		\hline
+		500 & 8.04 & 6.74 & 0.1617\\
+		\hline
+		600 & 9.52 & 7.57 & 0.2048\\	
+		\hline
+	\end{tabular}
+\end{center}
+Błąd względny rośnie wraz ze wzrostem liczby Reynoldsa. Obserwacja taka może być uzasadniona tym, że nieliniowości zaczynają dominować dynamikę zachowania rozwiązań i w związku z tym rośnie liczba niestabilnych modów Lyapunova. Wskazuje to na potencjalne problemy dla bardzo dużych liczb Reynoldsa. W takich przypadkach konieczne byłoby zastosowanie dłuższych okresów symulacji (poprzedni scenariusz sugeruje, iż taki zabieg ma działanie regularyzujące). \newline
 Zauważmy też, że wrażlowości wyznaczone omawianą metodą niedoszacowują wartości referencyjnych. Taki stan rzeczy może być spowodowany skończonym czasem symulacji. Pamiętajmy, że wyznaczona trajektoria cienia pozostaje w bliskim sąsiedztwie trajektorii bazowej, jednakże nie ma gwarancji, że jest ona przez cały okres w tej samej odległości. Dysponujemy jedynie ograniczeniem górnym, które w konkretnych przypadkach może wpływać na dokładność uzyskanych wyników. \newline
 Spostrzegamy na koniec, że wyniki tworzą silnie liniowy trend. Najlepiej dopasowana prosta pokazana na tle wyników (Rysunek (\ref{Fig56})) ilustruję tę uwagę.
-\begin{figure}[H]
+\begin{figure}[h]
 	\includegraphics[scale=0.7]{figures/linear_results.png} 
 	\centering
 	\caption{Najlepiej dopasowana prosta}
@@ -1545,7 +1569,7 @@ r = \frac{cov(X,Y)}{\sigma_{X}\sigma_{Y}},
 \end{equation}
 która wynosi $ r = 0.9899 $ stanowi dodatkowe potwierdzenie ($ X, Y $ oznaczają zmienne losowe, w rozważanym przypadku są to: liczba Reynoldsa oraz wyznaczona wrażliwość, odpowiednio).\newline
 Powyższe uwagi są oczywiście efektem oczekiwanym, wobec parabolicznego charakteru funkcji celu.\newline
-\subsection{Konkluzje}
+\section{Konkluzje}
 Metoda Trajektorii Cienia w zaimplementowanej formie stanowi bardzo obiecujące narzędzie w analizie wrażliwości funkcji opisujących układy chaotyczne. Sam algorytm, chociaż oparty na dość zaawansowanych wynikach z teorii chaosu, ma bardzo intuicyjną interpretację. Sformułowanie w formie zagadnienia minimalizacji formy całkowej z ograniczeniami w postaci prawa rządzącego dynamiką wrażlwości na parameter projektowy jest dobrze określone w przeciwieństwie do wyjściowego problemu, który przyjmuje postać zagadnienia początkowego. Skutkuje to dobrą zbieżnością rozwiązania związanego z nim układu równań. \newline
 Należy również zwrócić uwagę, iż metoda jest w pełni deterministyczna – w żadnym kroku nie są generowane liczby losowe (pseudolosowe), a więc wyniki dla tych samych danych wejściowych pozostają takie same. Odtwarzalność taka jest ważna w kontekście praktycznych zastosowań, a także ułatwia analizę zbieżności metody. Co więcej, wyniki niniejszej pracy pokazują, że rezultaty są numerycznie stabilne – niewielkie zmiany danych wejściowych nie powodują znacznych zmian w wynikach, a sama dokładność jest na stosunkowo wysokim poziomie. \newline
 Dalsze ograniczenia błędów można uzyskać poprzez wydłużenie okresu symulacji, co przeważnie ‘wygładza’ statystyki układu. Wniosek ten jak i możliwość zastosowania opisanej metody dotyczą szerokiego zakresu układów dynamicznych. Należy tutaj jednak stanowczo zaznaczyć, iż konieczne jest, aby układ taki był ergodyczny. Brak takiego założenia skutkuje w ogólności zależnością długookresowych średnich od warunków początkowych, co jest głównym powodem złego uwarunkowania zadania wyjściowego. \newline
